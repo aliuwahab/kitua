@@ -413,9 +413,9 @@ endpoints:
     bodyParameters:
       mobile_number:
         name: mobile_number
-        description: 'Must match the regex /^[0-9]{10,15}$/.'
+        description: "The user's mobile number (10-15 digits). Must match the regex /^[0-9]{10,15}$/."
         required: true
-        example: '5642559314'
+        example: '0541234567'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -423,9 +423,9 @@ endpoints:
         custom: []
       pin:
         name: pin
-        description: 'Must match the regex /^[0-9]+$/. Must be at least 4 characters. Must not be greater than 6 characters.'
+        description: "The user's 4-6 digit PIN. Must match the regex /^[0-9]+$/. Must be at least 4 characters. Must not be greater than 6 characters."
         required: true
-        example: khwa
+        example: '1234'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -433,9 +433,9 @@ endpoints:
         custom: []
       device_id:
         name: device_id
-        description: ''
+        description: 'Unique device identifier.'
         required: true
-        example: architecto
+        example: device-12345-uuid
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -443,9 +443,9 @@ endpoints:
         custom: []
       device_name:
         name: device_name
-        description: 'Must not be greater than 100 characters.'
+        description: 'Human readable device name. Must not be greater than 100 characters.'
         required: false
-        example: 'n'
+        example: "John's iPhone"
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -453,7 +453,7 @@ endpoints:
         custom: []
       device_type:
         name: device_type
-        description: ''
+        description: 'Type of device (android or ios).'
         required: true
         example: ios
         type: string
@@ -465,9 +465,9 @@ endpoints:
         custom: []
       app_version:
         name: app_version
-        description: ''
+        description: 'Application version.'
         required: false
-        example: architecto
+        example: 1.0.0
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -475,9 +475,9 @@ endpoints:
         custom: []
       os_version:
         name: os_version
-        description: ''
+        description: 'Operating system version.'
         required: false
-        example: architecto
+        example: '17.0'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -485,9 +485,9 @@ endpoints:
         custom: []
       device_model:
         name: device_model
-        description: ''
+        description: 'Device model.'
         required: false
-        example: architecto
+        example: 'iPhone 15 Pro'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -495,9 +495,9 @@ endpoints:
         custom: []
       screen_resolution:
         name: screen_resolution
-        description: ''
+        description: 'Screen resolution of the device.'
         required: false
-        example: architecto
+        example: 1179x2556
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -505,25 +505,25 @@ endpoints:
         custom: []
       push_token:
         name: push_token
-        description: ''
+        description: 'Device token for push notifications.'
         required: false
-        example: architecto
+        example: apn-token-xyz123
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
     cleanBodyParameters:
-      mobile_number: '5642559314'
-      pin: khwa
-      device_id: architecto
-      device_name: 'n'
+      mobile_number: '0541234567'
+      pin: '1234'
+      device_id: device-12345-uuid
+      device_name: "John's iPhone"
       device_type: ios
-      app_version: architecto
-      os_version: architecto
-      device_model: architecto
-      screen_resolution: architecto
-      push_token: architecto
+      app_version: 1.0.0
+      os_version: '17.0'
+      device_model: 'iPhone 15 Pro'
+      screen_resolution: 1179x2556
+      push_token: apn-token-xyz123
     fileParameters: []
     responses: []
     responseFields: []

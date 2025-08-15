@@ -29,7 +29,7 @@ endpoints:
     responses:
       -
         status: 200
-        content: '{"status":"ok","service":"Kitua API","version":"1.0.0","timestamp":"2025-08-15T10:49:35.084482Z"}'
+        content: '{"status":"ok","service":"Kitua API","version":"1.0.0","timestamp":"2025-08-15T10:55:15.950764Z"}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json

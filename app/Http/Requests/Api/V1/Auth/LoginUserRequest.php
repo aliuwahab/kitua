@@ -81,6 +81,57 @@ class LoginUserRequest extends FormRequest
     }
 
     /**
+     * Get the body parameters for API documentation.
+     *
+     * @return array<string, mixed>
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'mobile_number' => [
+                'description' => 'The user\'s mobile number (10-15 digits)',
+                'example' => '0541234567',
+            ],
+            'pin' => [
+                'description' => 'The user\'s 4-6 digit PIN',
+                'example' => '1234',
+            ],
+            'device_id' => [
+                'description' => 'Unique device identifier',
+                'example' => 'device-12345-uuid',
+            ],
+            'device_name' => [
+                'description' => 'Human readable device name',
+                'example' => 'John\'s iPhone',
+            ],
+            'device_type' => [
+                'description' => 'Type of device (android or ios)',
+                'example' => 'ios',
+            ],
+            'app_version' => [
+                'description' => 'Application version',
+                'example' => '1.0.0',
+            ],
+            'os_version' => [
+                'description' => 'Operating system version',
+                'example' => '17.0',
+            ],
+            'device_model' => [
+                'description' => 'Device model',
+                'example' => 'iPhone 15 Pro',
+            ],
+            'screen_resolution' => [
+                'description' => 'Screen resolution of the device',
+                'example' => '1179x2556',
+            ],
+            'push_token' => [
+                'description' => 'Device token for push notifications',
+                'example' => 'apn-token-xyz123',
+            ],
+        ];
+    }
+
+    /**
      * Handle a failed validation attempt.
      *
      * @param  \Illuminate\Contracts\Validation\Validator  $validator

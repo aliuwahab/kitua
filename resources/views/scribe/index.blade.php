@@ -767,16 +767,16 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"mobile_number\": \"5642559314\",
-    \"pin\": \"khwa\",
-    \"device_id\": \"architecto\",
-    \"device_name\": \"n\",
+    \"mobile_number\": \"0541234567\",
+    \"pin\": \"1234\",
+    \"device_id\": \"device-12345-uuid\",
+    \"device_name\": \"John\'s iPhone\",
     \"device_type\": \"ios\",
-    \"app_version\": \"architecto\",
-    \"os_version\": \"architecto\",
-    \"device_model\": \"architecto\",
-    \"screen_resolution\": \"architecto\",
-    \"push_token\": \"architecto\"
+    \"app_version\": \"1.0.0\",
+    \"os_version\": \"17.0\",
+    \"device_model\": \"iPhone 15 Pro\",
+    \"screen_resolution\": \"1179x2556\",
+    \"push_token\": \"apn-token-xyz123\"
 }"
 </code></pre></div>
 
@@ -792,16 +792,16 @@ const headers = {
 };
 
 let body = {
-    "mobile_number": "5642559314",
-    "pin": "khwa",
-    "device_id": "architecto",
-    "device_name": "n",
+    "mobile_number": "0541234567",
+    "pin": "1234",
+    "device_id": "device-12345-uuid",
+    "device_name": "John's iPhone",
     "device_type": "ios",
-    "app_version": "architecto",
-    "os_version": "architecto",
-    "device_model": "architecto",
-    "screen_resolution": "architecto",
-    "push_token": "architecto"
+    "app_version": "1.0.0",
+    "os_version": "17.0",
+    "device_model": "iPhone 15 Pro",
+    "screen_resolution": "1179x2556",
+    "push_token": "apn-token-xyz123"
 };
 
 fetch(url, {
@@ -890,10 +890,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="mobile_number"                data-endpoint="POSTapi-v1-auth-login"
-               value="5642559314"
+               value="0541234567"
                data-component="body">
     <br>
-<p>Must match the regex /^[0-9]{10,15}$/. Example: <code>5642559314</code></p>
+<p>The user's mobile number (10-15 digits). Must match the regex /^[0-9]{10,15}$/. Example: <code>0541234567</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>pin</code></b>&nbsp;&nbsp;
@@ -901,10 +901,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="pin"                data-endpoint="POSTapi-v1-auth-login"
-               value="khwa"
+               value="1234"
                data-component="body">
     <br>
-<p>Must match the regex /^[0-9]+$/. Must be at least 4 characters. Must not be greater than 6 characters. Example: <code>khwa</code></p>
+<p>The user's 4-6 digit PIN. Must match the regex /^[0-9]+$/. Must be at least 4 characters. Must not be greater than 6 characters. Example: <code>1234</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>device_id</code></b>&nbsp;&nbsp;
@@ -912,10 +912,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="device_id"                data-endpoint="POSTapi-v1-auth-login"
-               value="architecto"
+               value="device-12345-uuid"
                data-component="body">
     <br>
-<p>Example: <code>architecto</code></p>
+<p>Unique device identifier. Example: <code>device-12345-uuid</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>device_name</code></b>&nbsp;&nbsp;
@@ -923,10 +923,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="device_name"                data-endpoint="POSTapi-v1-auth-login"
-               value="n"
+               value="John's iPhone"
                data-component="body">
     <br>
-<p>Must not be greater than 100 characters. Example: <code>n</code></p>
+<p>Human readable device name. Must not be greater than 100 characters. Example: <code>John's iPhone</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>device_type</code></b>&nbsp;&nbsp;
@@ -937,7 +937,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="ios"
                data-component="body">
     <br>
-<p>Example: <code>ios</code></p>
+<p>Type of device (android or ios). Example: <code>ios</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>android</code></li> <li><code>ios</code></li></ul>
         </div>
@@ -947,10 +947,10 @@ Must be one of:
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="app_version"                data-endpoint="POSTapi-v1-auth-login"
-               value="architecto"
+               value="1.0.0"
                data-component="body">
     <br>
-<p>Example: <code>architecto</code></p>
+<p>Application version. Example: <code>1.0.0</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>os_version</code></b>&nbsp;&nbsp;
@@ -958,10 +958,10 @@ Must be one of:
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="os_version"                data-endpoint="POSTapi-v1-auth-login"
-               value="architecto"
+               value="17.0"
                data-component="body">
     <br>
-<p>Example: <code>architecto</code></p>
+<p>Operating system version. Example: <code>17.0</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>device_model</code></b>&nbsp;&nbsp;
@@ -969,10 +969,10 @@ Must be one of:
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="device_model"                data-endpoint="POSTapi-v1-auth-login"
-               value="architecto"
+               value="iPhone 15 Pro"
                data-component="body">
     <br>
-<p>Example: <code>architecto</code></p>
+<p>Device model. Example: <code>iPhone 15 Pro</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>screen_resolution</code></b>&nbsp;&nbsp;
@@ -980,10 +980,10 @@ Must be one of:
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="screen_resolution"                data-endpoint="POSTapi-v1-auth-login"
-               value="architecto"
+               value="1179x2556"
                data-component="body">
     <br>
-<p>Example: <code>architecto</code></p>
+<p>Screen resolution of the device. Example: <code>1179x2556</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>push_token</code></b>&nbsp;&nbsp;
@@ -991,10 +991,10 @@ Must be one of:
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="push_token"                data-endpoint="POSTapi-v1-auth-login"
-               value="architecto"
+               value="apn-token-xyz123"
                data-component="body">
     <br>
-<p>Example: <code>architecto</code></p>
+<p>Device token for push notifications. Example: <code>apn-token-xyz123</code></p>
         </div>
         </form>
 
@@ -1481,7 +1481,7 @@ access-control-allow-origin: *
     &quot;status&quot;: &quot;ok&quot;,
     &quot;service&quot;: &quot;Kitua API&quot;,
     &quot;version&quot;: &quot;1.0.0&quot;,
-    &quot;timestamp&quot;: &quot;2025-08-15T10:49:35.084482Z&quot;
+    &quot;timestamp&quot;: &quot;2025-08-15T10:55:15.950764Z&quot;
 }</code>
  </pre>
     </span>
