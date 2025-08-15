@@ -3,6 +3,7 @@
 namespace App\Livewire\Auth;
 
 use App\Models\User;
+use App\Models\Country;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -33,6 +34,21 @@ class Register extends Component
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
+        
+        // Get Ghana as default country for web users, or create if doesn't exist
+        $country = Country::firstOrCreate(
+            ['code' => 'GH'],
+            [
+                'name' => 'Ghana',
+                'currency_code' => 'GHS',
+                'currency_symbol' => 'GH₵',
+                'currency_name' => 'Ghana Cedi',
+                'is_active' => true,
+            ]
+        );
+        
+        $validated['country_id'] = $country->id;
+        $validated['user_type'] = 'customer';
 
         event(new Registered(($user = User::create($validated))));
 

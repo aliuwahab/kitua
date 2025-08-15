@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('device_sessions', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $table->string('device_id')->index(); // Unique device identifier
             $table->string('device_name')->nullable(); // User-friendly device name
             $table->string('device_type')->nullable(); // android, ios, web

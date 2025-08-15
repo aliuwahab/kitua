@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\PaymentRequestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -39,9 +40,13 @@ Route::prefix('v1')->group(function () {
             return $request->user()->load(['paymentAccounts', 'activeDeviceSessions']);
         });
         
+        // Payment Requests (Kitua) Routes
+        Route::apiResource('payment-requests', PaymentRequestController::class, [
+            'parameters' => ['payment-requests' => 'uuid']
+        ]);
+        
         // TODO: Add other protected routes here
         // - Payment Accounts management
-        // - Kitua (Payment requests) management
         // - Group Payments management
         // - Transaction history
         // - Device management

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,7 +11,7 @@ use Illuminate\Support\Str;
 
 class DeviceSession extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -80,7 +81,7 @@ class DeviceSession extends Model
     /**
      * Create or update device session
      */
-    public static function createOrUpdateSession(int $userId, array $deviceInfo): self
+    public static function createOrUpdateSession(string $userId, array $deviceInfo): self
     {
         $fingerprint = self::generateFingerprint($deviceInfo);
         $deviceId = $deviceInfo['device_id'] ?? Str::uuid();

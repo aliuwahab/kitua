@@ -84,7 +84,7 @@ class AuthenticationTest extends TestCase
             'first_name' => 'John',
             'surname' => 'Doe',
             'other_names' => 'Michael',
-            'user_type' => 'mobile',
+            'user_type' => 'customer',
             'is_active' => false
         ]);
 

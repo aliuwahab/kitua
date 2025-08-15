@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('mobile_number')->nullable()->unique()->index(); // For mobile app users
             $table->string('email')->nullable()->unique(); // For admin users
             $table->string('first_name');
@@ -24,6 +24,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->enum('user_type', ['mobile', 'admin'])->default('mobile');
             $table->boolean('is_active')->default(true);
+            $table->foreignUuid('country_id')->constrained('countries')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });
@@ -36,7 +37,7 @@ return new class extends Migration
 
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
+            $table->foreignUuid('user_id')->nullable()->index();
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->longText('payload');

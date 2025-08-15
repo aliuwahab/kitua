@@ -8,6 +8,7 @@ use App\Events\Auth\DeviceRegistered;
 use App\Models\User;
 use App\Models\PaymentAccount;
 use App\Models\DeviceSession;
+use App\Models\Country;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -44,15 +45,28 @@ class RegisterUser
         } else {
             // New user - create with pending verification
             return DB::transaction(function () use ($userData, $deviceInfo, $pinHash, $pin, $mobileNumber) {
+                // Get Ghana as default country, or create if doesn't exist
+                $country = Country::firstOrCreate(
+                    ['code' => 'GH'],
+                    [
+                        'name' => 'Ghana',
+                        'currency_code' => 'GHS',
+                        'currency_symbol' => 'GH₵',
+                        'currency_name' => 'Ghana Cedi',
+                        'is_active' => true,
+                    ]
+                );
+                
                 $user = User::create([
                     'mobile_number' => $mobileNumber,
                     'first_name' => $userData['first_name'],
                     'surname' => $userData['surname'],
                     'other_names' => $userData['other_names'] ?? null,
                     'pin' => $pinHash,
-                    'user_type' => 'mobile',
+                    'user_type' => 'customer',
                     'is_active' => false, // Will be activated after PIN verification
                     'mobile_verified_at' => null, // Explicitly set to null until PIN verification
+                    'country_id' => $userData['country_id'] ?? $country->id,
                 ]);
 
                 // Create primary payment account

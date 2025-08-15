@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Models\Country;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -30,11 +31,18 @@ class UserFactory extends Factory
             'surname' => fake()->lastName(),
             'other_names' => fake()->optional()->firstName(),
             'pin' => static::$password ??= Hash::make('123456'),
-            'password' => null, // Mobile users don't have passwords
-            'user_type' => 'mobile',
+            'password' => null, // Customer users don't have passwords
+            'user_type' => 'customer',
             'is_active' => true,
             'mobile_verified_at' => now(),
             'email_verified_at' => null,
+            'country_id' => function () {
+                $ghana = Country::where('code', 'GH')->first();
+                if ($ghana) {
+                    return $ghana->id;
+                }
+                return Country::factory()->create()->id;
+            },
         ];
     }
 
@@ -45,6 +53,22 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'mobile_verified_at' => null,
+        ]);
+    }
+
+    /**
+     * Create a web user (with email and password).
+     */
+    public function web(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'mobile_number' => null,
+            'email' => fake()->unique()->safeEmail(),
+            'pin' => null,
+            'password' => Hash::make('password'),
+            'user_type' => 'customer', // Web customers are still customers
+            'mobile_verified_at' => null,
+            'email_verified_at' => now(),
         ]);
     }
 

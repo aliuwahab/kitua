@@ -242,6 +242,14 @@ class AuthController extends Controller
      *       "first_name": "John",
      *       "surname": "Doe",
      *       "full_name": "John Doe",
+     *       "country": {
+     *         "id": 1,
+     *         "name": "Ghana",
+     *         "code": "GH",
+     *         "currency_code": "GHS",
+     *         "currency_symbol": "₵",
+     *         "currency_name": "Ghana Cedi"
+     *       },
      *       "payment_accounts": [],
      *       "device_sessions": []
      *     }
@@ -252,7 +260,7 @@ class AuthController extends Controller
      */
     public function me(Request $request): JsonResponse
     {
-        $user = $request->user()->load(['paymentAccounts', 'activeDeviceSessions']);
+        $user = $request->user()->load(['paymentAccounts', 'activeDeviceSessions', 'country']);
         return $this->ok('User profile retrieved', ['user' => $user]);
     }
 }
