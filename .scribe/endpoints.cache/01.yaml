@@ -678,6 +678,14 @@ endpoints:
                 "first_name": "John",
                 "surname": "Doe",
                 "full_name": "John Doe",
+                "country": {
+                  "id": 1,
+                  "name": "Ghana",
+                  "code": "GH",
+                  "currency_code": "GHS",
+                  "currency_symbol": "₵",
+                  "currency_name": "Ghana Cedi"
+                },
                 "payment_accounts": [],
                 "device_sessions": []
               }

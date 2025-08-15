@@ -91,7 +91,7 @@ class UpdatePaymentRequestRequest extends FormRequest
             ],
             'image' => [
                 'description' => 'Optional new image attachment (max 5MB, formats: jpeg, png, jpg, gif, webp)',
-                'example' => 'new-image.jpg',
+                'example' => 'No-example',
             ],
             'remove_image' => [
                 'description' => 'Set to true to remove the existing image attachment',

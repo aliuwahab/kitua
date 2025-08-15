@@ -19,21 +19,21 @@ class PaymentRequestController extends Controller
     use ApiResponses;
 
     public function __construct(
-        private CreatePaymentRequest $createPaymentRequest,
-        private UpdatePaymentRequest $updatePaymentRequest,
-        private DeletePaymentRequest $deletePaymentRequest
+        private readonly CreatePaymentRequest $createPaymentRequest,
+        private readonly UpdatePaymentRequest $updatePaymentRequest,
+        private readonly DeletePaymentRequest $deletePaymentRequest
     ) {}
 
     /**
      * Display a listing of payment requests for the authenticated user
-     * 
+     *
      * @group Payment Requests
      * @authenticated
-     * 
+     *
      * @queryParam status string Filter by status (pending, paid, cancelled, expired). Example: pending
      * @queryParam page integer Page number for pagination. Example: 1
      * @queryParam per_page integer Number of items per page (max 50). Example: 15
-     * 
+     *
      * @response 200 {
      *   "data": {
      *     "payment_requests": {
@@ -84,10 +84,11 @@ class PaymentRequestController extends Controller
 
     /**
      * Store a newly created payment request
-     * 
+     *
      * @group Payment Requests
      * @authenticated
-     * 
+     * @no-response-call
+     *
      * @response 201 {
      *   "data": {
      *     "payment_request": {
@@ -113,12 +114,12 @@ class PaymentRequestController extends Controller
     {
         try {
             $data = $request->getPaymentRequestData();
-            
+
             // Add image to data if provided
             if ($request->hasImage()) {
                 $data['image'] = $request->file('image');
             }
-            
+
             $paymentRequest = $this->createPaymentRequest->execute(
                 $request->user(),
                 $data
@@ -134,12 +135,12 @@ class PaymentRequestController extends Controller
 
     /**
      * Display the specified payment request
-     * 
+     *
      * @group Payment Requests
      * @authenticated
-     * 
+     *
      * @urlParam payment_request required The UUID of the payment request. Example: 123e4567-e89b-12d3-a456-426614174000
-     * 
+     *
      * @response 200 {
      *   "data": {
      *     "payment_request": {
@@ -166,7 +167,7 @@ class PaymentRequestController extends Controller
      *   "message": "Payment request retrieved successfully",
      *   "status": 200
      * }
-     * 
+     *
      * @response 404 {
      *   "message": "Payment request not found",
      *   "status": 404
@@ -189,12 +190,13 @@ class PaymentRequestController extends Controller
 
     /**
      * Update the specified payment request
-     * 
+     *
      * @group Payment Requests
      * @authenticated
-     * 
+     * @no-response-call
+     *
      * @urlParam payment_request required The UUID of the payment request. Example: 123e4567-e89b-12d3-a456-426614174000
-     * 
+     *
      * @response 200 {
      *   "data": {
      *     "payment_request": {
@@ -215,7 +217,7 @@ class PaymentRequestController extends Controller
      *   "message": "Payment request updated successfully",
      *   "status": 200
      * }
-     * 
+     *
      * @response 403 {
      *   "message": "Cannot update a paid payment request",
      *   "status": 403
@@ -233,7 +235,7 @@ class PaymentRequestController extends Controller
             }
 
             $data = $request->getPaymentRequestData();
-            
+
             $updatedPaymentRequest = $this->updatePaymentRequest->execute(
                 $paymentRequest,
                 $request->user(),
@@ -254,12 +256,12 @@ class PaymentRequestController extends Controller
 
     /**
      * Remove the specified payment request
-     * 
+     *
      * @group Payment Requests
      * @authenticated
-     * 
+     *
      * @urlParam payment_request required The UUID of the payment request. Example: 123e4567-e89b-12d3-a456-426614174000
-     * 
+     *
      * @response 200 {
      *   "data": {
      *     "deleted_at": "2025-08-15T12:00:00Z"
@@ -267,7 +269,7 @@ class PaymentRequestController extends Controller
      *   "message": "Payment request deleted successfully",
      *   "status": 200
      * }
-     * 
+     *
      * @response 403 {
      *   "message": "Cannot delete a paid payment request",
      *   "status": 403

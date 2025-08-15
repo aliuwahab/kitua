@@ -93,7 +93,7 @@ class CreatePaymentRequestRequest extends FormRequest
             ],
             'image' => [
                 'description' => 'Optional image attachment (max 5MB, formats: jpeg, png, jpg, gif, webp)',
-                'example' => 'image.jpg',
+                'example' => 'No-example',
             ],
         ];
     }

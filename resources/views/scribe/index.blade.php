@@ -104,6 +104,28 @@
                             </li>
                                                                         </ul>
                             </ul>
+                    <ul id="tocify-header-payment-requests" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="payment-requests">
+                    <a href="#payment-requests">Payment Requests</a>
+                </li>
+                                    <ul id="tocify-subheader-payment-requests" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="payment-requests-GETapi-v1-payment-requests">
+                                <a href="#payment-requests-GETapi-v1-payment-requests">Display a listing of payment requests for the authenticated user</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="payment-requests-POSTapi-v1-payment-requests">
+                                <a href="#payment-requests-POSTapi-v1-payment-requests">Store a newly created payment request</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="payment-requests-GETapi-v1-payment-requests--uuid-">
+                                <a href="#payment-requests-GETapi-v1-payment-requests--uuid-">Display the specified payment request</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="payment-requests-PUTapi-v1-payment-requests--uuid-">
+                                <a href="#payment-requests-PUTapi-v1-payment-requests--uuid-">Update the specified payment request</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="payment-requests-DELETEapi-v1-payment-requests--uuid-">
+                                <a href="#payment-requests-DELETEapi-v1-payment-requests--uuid-">Remove the specified payment request</a>
+                            </li>
+                                                                        </ul>
+                            </ul>
             </div>
 
     <ul class="toc-footer" id="toc-footer">
@@ -1331,6 +1353,14 @@ fetch(url, {
             &quot;first_name&quot;: &quot;John&quot;,
             &quot;surname&quot;: &quot;Doe&quot;,
             &quot;full_name&quot;: &quot;John Doe&quot;,
+            &quot;country&quot;: {
+                &quot;id&quot;: 1,
+                &quot;name&quot;: &quot;Ghana&quot;,
+                &quot;code&quot;: &quot;GH&quot;,
+                &quot;currency_code&quot;: &quot;GHS&quot;,
+                &quot;currency_symbol&quot;: &quot;₵&quot;,
+                &quot;currency_name&quot;: &quot;Ghana Cedi&quot;
+            },
             &quot;payment_accounts&quot;: [],
             &quot;device_sessions&quot;: []
         }
@@ -1481,7 +1511,7 @@ access-control-allow-origin: *
     &quot;status&quot;: &quot;ok&quot;,
     &quot;service&quot;: &quot;Kitua API&quot;,
     &quot;version&quot;: &quot;1.0.0&quot;,
-    &quot;timestamp&quot;: &quot;2025-08-15T10:55:15.950764Z&quot;
+    &quot;timestamp&quot;: &quot;2025-08-15T14:46:21.274179Z&quot;
 }</code>
  </pre>
     </span>
@@ -1704,6 +1734,1132 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Example: <code>application/json</code></p>
             </div>
                         </form>
+
+                <h1 id="payment-requests">Payment Requests</h1>
+
+    
+
+                                <h2 id="payment-requests-GETapi-v1-payment-requests">Display a listing of payment requests for the authenticated user</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-v1-payment-requests">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://kitua.test/api/v1/payment-requests?status=pending&amp;page=1&amp;per_page=15" \
+    --header "Authorization: Bearer Bearer {YOUR_TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://kitua.test/api/v1/payment-requests"
+);
+
+const params = {
+    "status": "pending",
+    "page": "1",
+    "per_page": "15",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Authorization": "Bearer Bearer {YOUR_TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-payment-requests">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: {
+        &quot;payment_requests&quot;: {
+            &quot;current_page&quot;: 1,
+            &quot;data&quot;: [
+                {
+                    &quot;id&quot;: 1,
+                    &quot;uuid&quot;: &quot;123e4567-e89b-12d3-a456-426614174000&quot;,
+                    &quot;amount&quot;: &quot;150.50&quot;,
+                    &quot;currency_code&quot;: &quot;GHS&quot;,
+                    &quot;formatted_amount&quot;: &quot;GHS 150.50&quot;,
+                    &quot;purpose&quot;: &quot;Lunch money&quot;,
+                    &quot;description&quot;: &quot;Need money for lunch today&quot;,
+                    &quot;status&quot;: &quot;pending&quot;,
+                    &quot;expires_at&quot;: &quot;2025-08-20T18:00:00Z&quot;,
+                    &quot;is_expired&quot;: false,
+                    &quot;created_at&quot;: &quot;2025-08-15T10:00:00Z&quot;,
+                    &quot;media&quot;: []
+                }
+            ],
+            &quot;total&quot;: 1,
+            &quot;per_page&quot;: 15
+        }
+    },
+    &quot;message&quot;: &quot;Payment requests retrieved successfully&quot;,
+    &quot;status&quot;: 200
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-payment-requests" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-payment-requests"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-payment-requests"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-payment-requests" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-payment-requests">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-v1-payment-requests" data-method="GET"
+      data-path="api/v1/payment-requests"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-payment-requests', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-payment-requests"
+                    onclick="tryItOut('GETapi-v1-payment-requests');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-payment-requests"
+                    onclick="cancelTryOut('GETapi-v1-payment-requests');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-payment-requests"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/payment-requests</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-v1-payment-requests"
+               value="Bearer Bearer {YOUR_TOKEN}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer Bearer {YOUR_TOKEN}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-v1-payment-requests"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-v1-payment-requests"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>status</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="status"                data-endpoint="GETapi-v1-payment-requests"
+               value="pending"
+               data-component="query">
+    <br>
+<p>Filter by status (pending, paid, cancelled, expired). Example: <code>pending</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>page</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="page"                data-endpoint="GETapi-v1-payment-requests"
+               value="1"
+               data-component="query">
+    <br>
+<p>Page number for pagination. Example: <code>1</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>per_page</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="per_page"                data-endpoint="GETapi-v1-payment-requests"
+               value="15"
+               data-component="query">
+    <br>
+<p>Number of items per page (max 50). Example: <code>15</code></p>
+            </div>
+                </form>
+
+                    <h2 id="payment-requests-POSTapi-v1-payment-requests">Store a newly created payment request</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-POSTapi-v1-payment-requests">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://kitua.test/api/v1/payment-requests" \
+    --header "Authorization: Bearer Bearer {YOUR_TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"amount\": 150.5,
+    \"currency_code\": \"GHS\",
+    \"purpose\": \"Lunch money\",
+    \"description\": \"Need money for lunch at the office cafeteria today\",
+    \"is_negotiable\": false,
+    \"expires_at\": \"2025-08-20T18:00:00Z\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://kitua.test/api/v1/payment-requests"
+);
+
+const headers = {
+    "Authorization": "Bearer Bearer {YOUR_TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "amount": 150.5,
+    "currency_code": "GHS",
+    "purpose": "Lunch money",
+    "description": "Need money for lunch at the office cafeteria today",
+    "is_negotiable": false,
+    "expires_at": "2025-08-20T18:00:00Z"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-v1-payment-requests">
+            <blockquote>
+            <p>Example response (201):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: {
+        &quot;payment_request&quot;: {
+            &quot;id&quot;: 1,
+            &quot;uuid&quot;: &quot;123e4567-e89b-12d3-a456-426614174000&quot;,
+            &quot;amount&quot;: &quot;150.50&quot;,
+            &quot;currency_code&quot;: &quot;GHS&quot;,
+            &quot;formatted_amount&quot;: &quot;GHS 150.50&quot;,
+            &quot;purpose&quot;: &quot;Lunch money&quot;,
+            &quot;description&quot;: &quot;Need money for lunch today&quot;,
+            &quot;status&quot;: &quot;pending&quot;,
+            &quot;expires_at&quot;: &quot;2025-08-20T18:00:00Z&quot;,
+            &quot;is_expired&quot;: false,
+            &quot;created_at&quot;: &quot;2025-08-15T10:00:00Z&quot;,
+            &quot;media&quot;: []
+        }
+    },
+    &quot;message&quot;: &quot;Payment request created successfully&quot;,
+    &quot;status&quot;: 201
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-v1-payment-requests" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-v1-payment-requests"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-payment-requests"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-v1-payment-requests" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v1-payment-requests">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-v1-payment-requests" data-method="POST"
+      data-path="api/v1/payment-requests"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-payment-requests', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-v1-payment-requests"
+                    onclick="tryItOut('POSTapi-v1-payment-requests');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-v1-payment-requests"
+                    onclick="cancelTryOut('POSTapi-v1-payment-requests');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-v1-payment-requests"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/v1/payment-requests</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="POSTapi-v1-payment-requests"
+               value="Bearer Bearer {YOUR_TOKEN}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer Bearer {YOUR_TOKEN}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-v1-payment-requests"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-v1-payment-requests"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>amount</code></b>&nbsp;&nbsp;
+<small>number</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="amount"                data-endpoint="POSTapi-v1-payment-requests"
+               value="150.5"
+               data-component="body">
+    <br>
+<p>The amount to request for payment. Must be at least 0.01. Must not be greater than 999999999.99. Example: <code>150.5</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>currency_code</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="currency_code"                data-endpoint="POSTapi-v1-payment-requests"
+               value="GHS"
+               data-component="body">
+    <br>
+<p>ISO 4217 currency code (3 letters). Must match the regex /^[A-Z]{3}$/. Must be 3 characters. Example: <code>GHS</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>purpose</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="purpose"                data-endpoint="POSTapi-v1-payment-requests"
+               value="Lunch money"
+               data-component="body">
+    <br>
+<p>Brief description of what the payment is for. Must not be greater than 255 characters. Example: <code>Lunch money</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>description</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="description"                data-endpoint="POSTapi-v1-payment-requests"
+               value="Need money for lunch at the office cafeteria today"
+               data-component="body">
+    <br>
+<p>Optional detailed description of the payment request. Must not be greater than 1000 characters. Example: <code>Need money for lunch at the office cafeteria today</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>is_negotiable</code></b>&nbsp;&nbsp;
+<small>boolean</small>&nbsp;
+<i>optional</i> &nbsp;
+                <label data-endpoint="POSTapi-v1-payment-requests" style="display: none">
+            <input type="radio" name="is_negotiable"
+                   value="true"
+                   data-endpoint="POSTapi-v1-payment-requests"
+                   data-component="body"             >
+            <code>true</code>
+        </label>
+        <label data-endpoint="POSTapi-v1-payment-requests" style="display: none">
+            <input type="radio" name="is_negotiable"
+                   value="false"
+                   data-endpoint="POSTapi-v1-payment-requests"
+                   data-component="body"             >
+            <code>false</code>
+        </label>
+    <br>
+<p>Whether the payment amount is negotiable (default: false for fixed amount). Example: <code>false</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>expires_at</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="expires_at"                data-endpoint="POSTapi-v1-payment-requests"
+               value="2025-08-20T18:00:00Z"
+               data-component="body">
+    <br>
+<p>Optional expiration date for the payment request (ISO 8601 format). Must be a valid date. Must be a date after <code>now</code>. Example: <code>2025-08-20T18:00:00Z</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>image</code></b>&nbsp;&nbsp;
+<small>file</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="file" style="display: none"
+                              name="image"                data-endpoint="POSTapi-v1-payment-requests"
+               value=""
+               data-component="body">
+    <br>
+<p>Optional image attachment (max 5MB, formats: jpeg, png, jpg, gif, webp). Must be an image. Must not be greater than 5120 kilobytes.</p>
+        </div>
+        </form>
+
+                    <h2 id="payment-requests-GETapi-v1-payment-requests--uuid-">Display the specified payment request</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-v1-payment-requests--uuid-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://kitua.test/api/v1/payment-requests/6ff8f7f6-1eb3-3525-be4a-3932c805afed" \
+    --header "Authorization: Bearer Bearer {YOUR_TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://kitua.test/api/v1/payment-requests/6ff8f7f6-1eb3-3525-be4a-3932c805afed"
+);
+
+const headers = {
+    "Authorization": "Bearer Bearer {YOUR_TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-payment-requests--uuid-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: {
+        &quot;payment_request&quot;: {
+            &quot;id&quot;: 1,
+            &quot;uuid&quot;: &quot;123e4567-e89b-12d3-a456-426614174000&quot;,
+            &quot;amount&quot;: &quot;150.50&quot;,
+            &quot;currency_code&quot;: &quot;GHS&quot;,
+            &quot;formatted_amount&quot;: &quot;GHS 150.50&quot;,
+            &quot;purpose&quot;: &quot;Lunch money&quot;,
+            &quot;description&quot;: &quot;Need money for lunch today&quot;,
+            &quot;status&quot;: &quot;pending&quot;,
+            &quot;expires_at&quot;: &quot;2025-08-20T18:00:00Z&quot;,
+            &quot;is_expired&quot;: false,
+            &quot;created_at&quot;: &quot;2025-08-15T10:00:00Z&quot;,
+            &quot;user&quot;: {
+                &quot;id&quot;: 1,
+                &quot;first_name&quot;: &quot;John&quot;,
+                &quot;surname&quot;: &quot;Doe&quot;,
+                &quot;full_name&quot;: &quot;John Doe&quot;
+            },
+            &quot;media&quot;: []
+        }
+    },
+    &quot;message&quot;: &quot;Payment request retrieved successfully&quot;,
+    &quot;status&quot;: 200
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Payment request not found&quot;,
+    &quot;status&quot;: 404
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-payment-requests--uuid-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-payment-requests--uuid-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-payment-requests--uuid-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-payment-requests--uuid-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-payment-requests--uuid-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-v1-payment-requests--uuid-" data-method="GET"
+      data-path="api/v1/payment-requests/{uuid}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-payment-requests--uuid-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-payment-requests--uuid-"
+                    onclick="tryItOut('GETapi-v1-payment-requests--uuid-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-payment-requests--uuid-"
+                    onclick="cancelTryOut('GETapi-v1-payment-requests--uuid-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-payment-requests--uuid-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/payment-requests/{uuid}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-v1-payment-requests--uuid-"
+               value="Bearer Bearer {YOUR_TOKEN}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer Bearer {YOUR_TOKEN}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-v1-payment-requests--uuid-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-v1-payment-requests--uuid-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>uuid</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="uuid"                data-endpoint="GETapi-v1-payment-requests--uuid-"
+               value="6ff8f7f6-1eb3-3525-be4a-3932c805afed"
+               data-component="url">
+    <br>
+<p>Example: <code>6ff8f7f6-1eb3-3525-be4a-3932c805afed</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>payment_request</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="payment_request"                data-endpoint="GETapi-v1-payment-requests--uuid-"
+               value="123e4567-e89b-12d3-a456-426614174000"
+               data-component="url">
+    <br>
+<p>The UUID of the payment request. Example: <code>123e4567-e89b-12d3-a456-426614174000</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="payment-requests-PUTapi-v1-payment-requests--uuid-">Update the specified payment request</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-PUTapi-v1-payment-requests--uuid-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request PUT \
+    "http://kitua.test/api/v1/payment-requests/6ff8f7f6-1eb3-3525-be4a-3932c805afed" \
+    --header "Authorization: Bearer Bearer {YOUR_TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"amount\": 200,
+    \"currency_code\": \"GHS\",
+    \"purpose\": \"Dinner money\",
+    \"description\": \"Need money for dinner at the restaurant tonight\",
+    \"is_negotiable\": false,
+    \"expires_at\": \"2025-08-22T20:00:00Z\",
+    \"remove_image\": false
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://kitua.test/api/v1/payment-requests/6ff8f7f6-1eb3-3525-be4a-3932c805afed"
+);
+
+const headers = {
+    "Authorization": "Bearer Bearer {YOUR_TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "amount": 200,
+    "currency_code": "GHS",
+    "purpose": "Dinner money",
+    "description": "Need money for dinner at the restaurant tonight",
+    "is_negotiable": false,
+    "expires_at": "2025-08-22T20:00:00Z",
+    "remove_image": false
+};
+
+fetch(url, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-PUTapi-v1-payment-requests--uuid-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: {
+        &quot;payment_request&quot;: {
+            &quot;id&quot;: 1,
+            &quot;uuid&quot;: &quot;123e4567-e89b-12d3-a456-426614174000&quot;,
+            &quot;amount&quot;: &quot;200.00&quot;,
+            &quot;currency_code&quot;: &quot;GHS&quot;,
+            &quot;formatted_amount&quot;: &quot;GHS 200.00&quot;,
+            &quot;purpose&quot;: &quot;Dinner money&quot;,
+            &quot;description&quot;: &quot;Updated - need money for dinner&quot;,
+            &quot;status&quot;: &quot;pending&quot;,
+            &quot;expires_at&quot;: &quot;2025-08-22T20:00:00Z&quot;,
+            &quot;is_expired&quot;: false,
+            &quot;updated_at&quot;: &quot;2025-08-15T11:00:00Z&quot;,
+            &quot;media&quot;: []
+        }
+    },
+    &quot;message&quot;: &quot;Payment request updated successfully&quot;,
+    &quot;status&quot;: 200
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (403):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Cannot update a paid payment request&quot;,
+    &quot;status&quot;: 403
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-PUTapi-v1-payment-requests--uuid-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-PUTapi-v1-payment-requests--uuid-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-PUTapi-v1-payment-requests--uuid-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-PUTapi-v1-payment-requests--uuid-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-PUTapi-v1-payment-requests--uuid-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-PUTapi-v1-payment-requests--uuid-" data-method="PUT"
+      data-path="api/v1/payment-requests/{uuid}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('PUTapi-v1-payment-requests--uuid-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-PUTapi-v1-payment-requests--uuid-"
+                    onclick="tryItOut('PUTapi-v1-payment-requests--uuid-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-PUTapi-v1-payment-requests--uuid-"
+                    onclick="cancelTryOut('PUTapi-v1-payment-requests--uuid-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-PUTapi-v1-payment-requests--uuid-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-darkblue">PUT</small>
+            <b><code>api/v1/payment-requests/{uuid}</code></b>
+        </p>
+            <p>
+            <small class="badge badge-purple">PATCH</small>
+            <b><code>api/v1/payment-requests/{uuid}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="PUTapi-v1-payment-requests--uuid-"
+               value="Bearer Bearer {YOUR_TOKEN}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer Bearer {YOUR_TOKEN}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="PUTapi-v1-payment-requests--uuid-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="PUTapi-v1-payment-requests--uuid-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>uuid</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="uuid"                data-endpoint="PUTapi-v1-payment-requests--uuid-"
+               value="6ff8f7f6-1eb3-3525-be4a-3932c805afed"
+               data-component="url">
+    <br>
+<p>Example: <code>6ff8f7f6-1eb3-3525-be4a-3932c805afed</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>payment_request</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="payment_request"                data-endpoint="PUTapi-v1-payment-requests--uuid-"
+               value="123e4567-e89b-12d3-a456-426614174000"
+               data-component="url">
+    <br>
+<p>The UUID of the payment request. Example: <code>123e4567-e89b-12d3-a456-426614174000</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>amount</code></b>&nbsp;&nbsp;
+<small>number</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="amount"                data-endpoint="PUTapi-v1-payment-requests--uuid-"
+               value="200"
+               data-component="body">
+    <br>
+<p>The amount to request for payment. Must be at least 0.01. Must not be greater than 999999999.99. Example: <code>200</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>currency_code</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="currency_code"                data-endpoint="PUTapi-v1-payment-requests--uuid-"
+               value="GHS"
+               data-component="body">
+    <br>
+<p>ISO 4217 currency code (3 letters). Must match the regex /^[A-Z]{3}$/. Must be 3 characters. Example: <code>GHS</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>purpose</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="purpose"                data-endpoint="PUTapi-v1-payment-requests--uuid-"
+               value="Dinner money"
+               data-component="body">
+    <br>
+<p>Brief description of what the payment is for. Must not be greater than 255 characters. Example: <code>Dinner money</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>description</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="description"                data-endpoint="PUTapi-v1-payment-requests--uuid-"
+               value="Need money for dinner at the restaurant tonight"
+               data-component="body">
+    <br>
+<p>Optional detailed description of the payment request. Must not be greater than 1000 characters. Example: <code>Need money for dinner at the restaurant tonight</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>is_negotiable</code></b>&nbsp;&nbsp;
+<small>boolean</small>&nbsp;
+<i>optional</i> &nbsp;
+                <label data-endpoint="PUTapi-v1-payment-requests--uuid-" style="display: none">
+            <input type="radio" name="is_negotiable"
+                   value="true"
+                   data-endpoint="PUTapi-v1-payment-requests--uuid-"
+                   data-component="body"             >
+            <code>true</code>
+        </label>
+        <label data-endpoint="PUTapi-v1-payment-requests--uuid-" style="display: none">
+            <input type="radio" name="is_negotiable"
+                   value="false"
+                   data-endpoint="PUTapi-v1-payment-requests--uuid-"
+                   data-component="body"             >
+            <code>false</code>
+        </label>
+    <br>
+<p>Whether the payment amount is negotiable. Example: <code>false</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>expires_at</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="expires_at"                data-endpoint="PUTapi-v1-payment-requests--uuid-"
+               value="2025-08-22T20:00:00Z"
+               data-component="body">
+    <br>
+<p>Optional expiration date for the payment request (ISO 8601 format). Must be a valid date. Must be a date after <code>now</code>. Example: <code>2025-08-22T20:00:00Z</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>image</code></b>&nbsp;&nbsp;
+<small>file</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="file" style="display: none"
+                              name="image"                data-endpoint="PUTapi-v1-payment-requests--uuid-"
+               value=""
+               data-component="body">
+    <br>
+<p>Optional new image attachment (max 5MB, formats: jpeg, png, jpg, gif, webp). Must be an image. Must not be greater than 5120 kilobytes.</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>remove_image</code></b>&nbsp;&nbsp;
+<small>boolean</small>&nbsp;
+<i>optional</i> &nbsp;
+                <label data-endpoint="PUTapi-v1-payment-requests--uuid-" style="display: none">
+            <input type="radio" name="remove_image"
+                   value="true"
+                   data-endpoint="PUTapi-v1-payment-requests--uuid-"
+                   data-component="body"             >
+            <code>true</code>
+        </label>
+        <label data-endpoint="PUTapi-v1-payment-requests--uuid-" style="display: none">
+            <input type="radio" name="remove_image"
+                   value="false"
+                   data-endpoint="PUTapi-v1-payment-requests--uuid-"
+                   data-component="body"             >
+            <code>false</code>
+        </label>
+    <br>
+<p>Set to true to remove the existing image attachment. Example: <code>false</code></p>
+        </div>
+        </form>
+
+                    <h2 id="payment-requests-DELETEapi-v1-payment-requests--uuid-">Remove the specified payment request</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-DELETEapi-v1-payment-requests--uuid-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request DELETE \
+    "http://kitua.test/api/v1/payment-requests/6ff8f7f6-1eb3-3525-be4a-3932c805afed" \
+    --header "Authorization: Bearer Bearer {YOUR_TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://kitua.test/api/v1/payment-requests/6ff8f7f6-1eb3-3525-be4a-3932c805afed"
+);
+
+const headers = {
+    "Authorization": "Bearer Bearer {YOUR_TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-DELETEapi-v1-payment-requests--uuid-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: {
+        &quot;deleted_at&quot;: &quot;2025-08-15T12:00:00Z&quot;
+    },
+    &quot;message&quot;: &quot;Payment request deleted successfully&quot;,
+    &quot;status&quot;: 200
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (403):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Cannot delete a paid payment request&quot;,
+    &quot;status&quot;: 403
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-DELETEapi-v1-payment-requests--uuid-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-DELETEapi-v1-payment-requests--uuid-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-DELETEapi-v1-payment-requests--uuid-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-DELETEapi-v1-payment-requests--uuid-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-DELETEapi-v1-payment-requests--uuid-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-DELETEapi-v1-payment-requests--uuid-" data-method="DELETE"
+      data-path="api/v1/payment-requests/{uuid}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-v1-payment-requests--uuid-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-DELETEapi-v1-payment-requests--uuid-"
+                    onclick="tryItOut('DELETEapi-v1-payment-requests--uuid-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-DELETEapi-v1-payment-requests--uuid-"
+                    onclick="cancelTryOut('DELETEapi-v1-payment-requests--uuid-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-DELETEapi-v1-payment-requests--uuid-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-red">DELETE</small>
+            <b><code>api/v1/payment-requests/{uuid}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="DELETEapi-v1-payment-requests--uuid-"
+               value="Bearer Bearer {YOUR_TOKEN}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer Bearer {YOUR_TOKEN}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="DELETEapi-v1-payment-requests--uuid-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="DELETEapi-v1-payment-requests--uuid-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>uuid</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="uuid"                data-endpoint="DELETEapi-v1-payment-requests--uuid-"
+               value="6ff8f7f6-1eb3-3525-be4a-3932c805afed"
+               data-component="url">
+    <br>
+<p>Example: <code>6ff8f7f6-1eb3-3525-be4a-3932c805afed</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>payment_request</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="payment_request"                data-endpoint="DELETEapi-v1-payment-requests--uuid-"
+               value="123e4567-e89b-12d3-a456-426614174000"
+               data-component="url">
+    <br>
+<p>The UUID of the payment request. Example: <code>123e4567-e89b-12d3-a456-426614174000</code></p>
+            </div>
+                    </form>
 
             
 
