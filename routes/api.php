@@ -40,10 +40,21 @@ Route::prefix('v1')->group(function () {
             return $request->user()->load(['paymentAccounts', 'activeDeviceSessions']);
         });
         
-        // Payment Requests (Kitua) Routes
+        // User Resource endpoint for JSON:API compliance
+        Route::get('/users/{uuid}', function (Request $request, $uuid) {
+            // For now, just return the authenticated user regardless of the ID
+            // In a real app, you'd implement proper authorization
+            return $request->user()->load(['paymentAccounts', 'activeDeviceSessions']);
+        })->name('users.show');
+        
+        // Payment Requests (Kitua) Routes - Following masterclass patterns
         Route::apiResource('payment-requests', PaymentRequestController::class, [
             'parameters' => ['payment-requests' => 'uuid']
-        ]);
+        ])->except(['update']);
+        
+        // Separate PUT and PATCH operations (masterclass pattern)
+        Route::put('payment-requests/{uuid}', [PaymentRequestController::class, 'replace']);
+        Route::patch('payment-requests/{uuid}', [PaymentRequestController::class, 'update']);
         
         // TODO: Add other protected routes here
         // - Payment Accounts management

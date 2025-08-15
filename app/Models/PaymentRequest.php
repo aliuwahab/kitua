@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Http\Filters\V1\QueryFilter;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -136,6 +138,14 @@ class PaymentRequest extends Model implements HasMedia
     }
 
     /**
+     * Scope a query to apply filters using QueryFilter
+     */
+    public function scopeFilter(Builder $builder, QueryFilter $filters): Builder
+    {
+        return $filters->apply($builder);
+    }
+
+    /**
      * Register media collections.
      */
     public function registerMediaCollections(): void
@@ -143,6 +153,14 @@ class PaymentRequest extends Model implements HasMedia
         $this->addMediaCollection('images')
               ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/gif', 'image/webp'])
               ->singleFile();
+    }
+
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'id';
     }
 
     /**

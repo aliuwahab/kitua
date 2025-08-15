@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Country;
 use App\Models\PaymentRequest;
 use App\Models\User;
+use App\Permissions\V1\Abilities;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -31,6 +32,25 @@ class PaymentRequestControllerTest extends TestCase
             ]);
         }
     }
+    
+    /**
+     * Create an authenticated user with default abilities
+     */
+    private function createAuthenticatedUser(array $abilities = null): User
+    {
+        $user = User::factory()->create();
+        
+        $abilities = $abilities ?? [
+            Abilities::CreateOwnPaymentRequest,
+            Abilities::ViewOwnPaymentRequest,
+            Abilities::UpdateOwnPaymentRequest,
+            Abilities::DeleteOwnPaymentRequest,
+        ];
+        
+        Sanctum::actingAs($user, $abilities);
+        
+        return $user;
+    }
 
     /** @test */
     public function it_requires_authentication_to_access_payment_requests()
@@ -43,8 +63,7 @@ class PaymentRequestControllerTest extends TestCase
     /** @test */
     public function it_lists_user_payment_requests()
     {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
+        $user = $this->createAuthenticatedUser();
         
         $userRequests = PaymentRequest::factory()->count(3)->create(['user_id' => $user->id]);
         
@@ -56,60 +75,60 @@ class PaymentRequestControllerTest extends TestCase
         
         $response->assertStatus(200)
                  ->assertJsonStructure([
-                     'status',
                      'data' => [
-                         'payment_requests' => [
-                             'data' => [
-                                 '*' => [
-                                     'id',
-                                     'amount',
-                                     'currency_code',
-                                     'purpose',
-                                     'description',
-                                     'is_negotiable',
-                                     'status',
-                                     'expires_at',
-                                     'paid_at',
-                                     'created_at',
-                                     'updated_at',
-                                     'media',
-                                 ]
+                         '*' => [
+                             'type',
+                             'id',
+                             'attributes' => [
+                                 'amount',
+                                 'formattedAmount',
+                                 'currencyCode',
+                                 'purpose',
+                                 'isNegotiable',
+                                 'status',
+                                 'expiresAt',
+                                 'paidAt',
+                                 'isExpired',
+                                 'createdAt',
+                                 'updatedAt',
                              ],
-                             'current_page',
-                             'per_page',
-                             'total',
-                         ],
+                             'relationships',
+                             'links',
+                         ]
                      ],
-                     'message'
+                     'links',
+                     'meta' => [
+                         'current_page',
+                         'per_page',
+                         'total',
+                     ]
                  ])
-                 ->assertJsonCount(3, 'data.payment_requests.data');
+                 ->assertJsonCount(3, 'data');
     }
 
     /** @test */
     public function it_filters_payment_requests_by_status()
     {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
+        $user = $this->createAuthenticatedUser();
         
         PaymentRequest::factory()->count(2)->create(['user_id' => $user->id, 'status' => 'pending']);
         PaymentRequest::factory()->count(1)->paid()->create(['user_id' => $user->id]);
         PaymentRequest::factory()->count(1)->cancelled()->create(['user_id' => $user->id]);
         
-        $response = $this->getJson('/api/v1/payment-requests?status=pending');
+        $response = $this->getJson('/api/v1/payment-requests?filter[status]=pending');
         
         $response->assertStatus(200)
-                 ->assertJsonCount(2, 'data.payment_requests.data');
+                 ->assertJsonCount(2, 'data');
         
-        foreach ($response->json('data.payment_requests.data') as $request) {
-            $this->assertEquals('pending', $request['status']);
+        foreach ($response->json('data') as $request) {
+            $this->assertEquals('pending', $request['attributes']['status']);
         }
     }
 
     /** @test */
     public function it_creates_a_payment_request_successfully()
     {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
+        $user = $this->createAuthenticatedUser();
         
         $data = [
             'amount' => 150.50,
@@ -123,37 +142,37 @@ class PaymentRequestControllerTest extends TestCase
         
         $response->assertStatus(201)
                  ->assertJsonStructure([
-                     'status',
                      'data' => [
-                         'payment_request' => [
-                             'id',
+                         'type',
+                         'id',
+                         'attributes' => [
                              'amount',
-                             'currency_code',
+                             'formattedAmount',
+                             'currencyCode',
                              'purpose',
                              'description',
-                             'is_negotiable',
+                             'isNegotiable',
                              'status',
-                             'expires_at',
-                             'created_at',
-                             'updated_at',
-                             'media',
+                             'expiresAt',
+                             'createdAt',
+                             'updatedAt',
                          ],
-                     ],
-                     'message'
+                         'relationships',
+                         'links'
+                     ]
                  ])
                  ->assertJson([
-                     'status' => 201,
                      'data' => [
-                         'payment_request' => [
-                             'amount' => 150.50,
-                             'currency_code' => 'GHS',
+                         'type' => 'paymentRequest',
+                         'attributes' => [
+                             'amount' => '150.50',
+                             'currencyCode' => 'GHS',
                              'purpose' => 'Lunch money',
                              'description' => 'Need money for lunch today',
-                             'is_negotiable' => false,
+                             'isNegotiable' => null,
                              'status' => 'pending',
                          ],
-                     ],
-                     'message' => 'Payment request created successfully'
+                     ]
                  ]);
         
         $this->assertDatabaseHas('payment_requests', [
@@ -172,8 +191,7 @@ class PaymentRequestControllerTest extends TestCase
     {
         Storage::fake('public');
         
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
+        $user = $this->createAuthenticatedUser();
         
         $image = UploadedFile::fake()->image('receipt.jpg', 800, 600);
         
@@ -189,28 +207,32 @@ class PaymentRequestControllerTest extends TestCase
         
         $response->assertStatus(201)
                  ->assertJsonStructure([
-                     'status',
                      'data' => [
-                         'payment_request' => [
-                             'id',
+                         'type',
+                         'id',
+                         'attributes' => [
                              'amount',
-                             'currency_code',
+                             'formattedAmount',
+                             'currencyCode',
                              'purpose',
                              'description',
                              'status',
-                             'media' => [
-                                 '*' => [
-                                     'id',
-                                     'name',
-                                     'file_name',
-                                     'mime_type',
-                                     'size',
-                                     'original_url',
-                                 ]
-                             ],
                          ],
-                     ],
-                     'message'
+                         'relationships',
+                         'links'
+                     ]
+                 ])
+                 ->assertJson([
+                     'data' => [
+                         'type' => 'paymentRequest',
+                         'attributes' => [
+                             'amount' => '200.00',
+                             'currencyCode' => 'GHS',
+                             'purpose' => 'Groceries',
+                             'description' => 'Grocery shopping receipt',
+                             'status' => 'pending',
+                         ],
+                     ]
                  ]);
         
         $paymentRequest = PaymentRequest::where('user_id', $user->id)->first();
@@ -220,8 +242,7 @@ class PaymentRequestControllerTest extends TestCase
     /** @test */
     public function it_validates_payment_request_creation_data()
     {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
+        $user = $this->createAuthenticatedUser();
         
         $response = $this->postJson('/api/v1/payment-requests', []);
         
@@ -232,8 +253,7 @@ class PaymentRequestControllerTest extends TestCase
     /** @test */
     public function it_shows_a_payment_request_by_uuid()
     {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
+        $user = $this->createAuthenticatedUser();
         
         $paymentRequest = PaymentRequest::factory()->create(['user_id' => $user->id]);
         
@@ -241,49 +261,45 @@ class PaymentRequestControllerTest extends TestCase
         
         $response->assertStatus(200)
                  ->assertJsonStructure([
-                     'status',
                      'data' => [
-                         'payment_request' => [
-                             'id',
+                         'type',
+                         'id',
+                         'attributes' => [
                              'amount',
-                             'currency_code',
+                             'formattedAmount',
+                             'currencyCode',
                              'purpose',
                              'description',
-                             'is_negotiable',
+                             'isNegotiable',
                              'status',
-                             'expires_at',
-                             'paid_at',
-                             'created_at',
-                             'updated_at',
-                             'media',
-                             'user' => [
-                                 'id',
-                                 'first_name',
-                                 'surname',
-                                 'full_name',
-                             ],
+                             'expiresAt',
+                             'paidAt',
+                             'isExpired',
+                             'metadata',
+                             'createdAt',
+                             'updatedAt',
                          ],
-                     ],
-                     'message'
+                         'relationships',
+                         'links'
+                     ]
                  ])
                  ->assertJson([
-                     'status' => 200,
                      'data' => [
-                         'payment_request' => [
-                             'id' => $paymentRequest->id,
+                         'type' => 'paymentRequest',
+                         'id' => $paymentRequest->id,
+                         'attributes' => [
                              'amount' => $paymentRequest->amount,
                              'purpose' => $paymentRequest->purpose,
                          ],
-                     ],
+                     ]
                  ]);
     }
 
     /** @test */
     public function it_prevents_showing_other_users_payment_requests()
     {
-        $user = User::factory()->create();
+        $user = $this->createAuthenticatedUser();
         $otherUser = User::factory()->create();
-        Sanctum::actingAs($user);
         
         $paymentRequest = PaymentRequest::factory()->create(['user_id' => $otherUser->id]);
         
@@ -295,23 +311,24 @@ class PaymentRequestControllerTest extends TestCase
     /** @test */
     public function it_returns_404_for_non_existent_payment_request()
     {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
+        $user = $this->createAuthenticatedUser();
         
         $response = $this->getJson('/api/v1/payment-requests/non-existent-uuid');
         
         $response->assertStatus(404)
-                 ->assertJson([
-                     'status' => 404,
-                     'message' => 'Payment request not found'
+                 ->assertJsonStructure([
+                     'message',
+                     'exception'
+                 ])
+                 ->assertJsonFragment([
+                     'message' => 'No query results for model [App\\Models\\PaymentRequest] non-existent-uuid'
                  ]);
     }
 
     /** @test */
     public function it_updates_a_payment_request_successfully()
     {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
+        $user = $this->createAuthenticatedUser();
         
         $paymentRequest = PaymentRequest::factory()->create([
             'user_id' => $user->id,
@@ -322,24 +339,43 @@ class PaymentRequestControllerTest extends TestCase
         
         $updateData = [
             'amount' => 200.00,
+            'currency_code' => 'GHS',
             'purpose' => 'Updated purpose',
             'description' => 'Updated description',
         ];
         
-        $response = $this->putJson("/api/v1/payment-requests/{$paymentRequest->id}", $updateData);
+        $response = $this->patchJson("/api/v1/payment-requests/{$paymentRequest->id}", $updateData);
         
         $response->assertStatus(200)
-                 ->assertJson([
-                     'status' => 200,
+                 ->assertJsonStructure([
                      'data' => [
-                         'payment_request' => [
-                             'id' => $paymentRequest->id,
-                             'amount' => 200.00,
+                         'type',
+                         'id',
+                         'attributes' => [
+                             'amount',
+                             'formattedAmount',
+                             'currencyCode',
+                             'purpose',
+                             'description',
+                             'isNegotiable',
+                             'status',
+                             'createdAt',
+                             'updatedAt',
+                         ],
+                         'relationships',
+                         'links'
+                     ]
+                 ])
+                 ->assertJson([
+                     'data' => [
+                         'type' => 'paymentRequest',
+                         'id' => $paymentRequest->id,
+                         'attributes' => [
+                             'amount' => '200.00',
                              'purpose' => 'Updated purpose',
                              'description' => 'Updated description',
                          ],
-                     ],
-                     'message' => 'Payment request updated successfully'
+                     ]
                  ]);
         
         $this->assertDatabaseHas('payment_requests', [
@@ -353,17 +389,17 @@ class PaymentRequestControllerTest extends TestCase
     /** @test */
     public function it_prevents_updating_paid_payment_requests()
     {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
+        $user = $this->createAuthenticatedUser();
         
         $paymentRequest = PaymentRequest::factory()->paid()->create(['user_id' => $user->id]);
         
         $updateData = [
             'amount' => 200.00,
+            'currency_code' => 'GHS', 
             'purpose' => 'Updated purpose',
         ];
         
-        $response = $this->putJson("/api/v1/payment-requests/{$paymentRequest->id}", $updateData);
+        $response = $this->patchJson("/api/v1/payment-requests/{$paymentRequest->id}", $updateData);
         
         $response->assertStatus(403)
                  ->assertJson([
@@ -375,17 +411,18 @@ class PaymentRequestControllerTest extends TestCase
     /** @test */
     public function it_prevents_updating_other_users_payment_requests()
     {
-        $user = User::factory()->create();
+        $user = $this->createAuthenticatedUser();
         $otherUser = User::factory()->create();
-        Sanctum::actingAs($user);
         
         $paymentRequest = PaymentRequest::factory()->create(['user_id' => $otherUser->id]);
         
         $updateData = [
+            'amount' => 100.00,
+            'currency_code' => 'GHS',
             'purpose' => 'Hacked purpose',
         ];
         
-        $response = $this->putJson("/api/v1/payment-requests/{$paymentRequest->id}", $updateData);
+        $response = $this->patchJson("/api/v1/payment-requests/{$paymentRequest->id}", $updateData);
         
         $response->assertStatus(404);
     }
@@ -395,8 +432,7 @@ class PaymentRequestControllerTest extends TestCase
     {
         Storage::fake('public');
         
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
+        $user = $this->createAuthenticatedUser();
         
         $paymentRequest = PaymentRequest::factory()->create([
             'user_id' => $user->id,
@@ -406,29 +442,35 @@ class PaymentRequestControllerTest extends TestCase
         $image = UploadedFile::fake()->image('receipt.jpg', 800, 600);
         
         $updateData = [
+            'amount' => $paymentRequest->amount,
+            'currency_code' => $paymentRequest->currency_code,
+            'purpose' => $paymentRequest->purpose,
             'description' => 'Added receipt image',
             'image' => $image,
         ];
         
-        $response = $this->putJson("/api/v1/payment-requests/{$paymentRequest->id}", $updateData);
+        $response = $this->patchJson("/api/v1/payment-requests/{$paymentRequest->id}", $updateData);
         
         $response->assertStatus(200)
                  ->assertJsonStructure([
-                     'status',
                      'data' => [
-                         'payment_request' => [
-                             'media' => [
-                                 '*' => [
-                                     'id',
-                                     'name',
-                                     'file_name',
-                                     'mime_type',
-                                     'size',
-                                     'original_url',
-                                 ]
-                             ],
+                         'type',
+                         'id',
+                         'attributes' => [
+                             'description',
                          ],
-                     ],
+                         'relationships',
+                         'links'
+                     ]
+                 ])
+                 ->assertJson([
+                     'data' => [
+                         'type' => 'paymentRequest',
+                         'id' => $paymentRequest->id,
+                         'attributes' => [
+                             'description' => 'Added receipt image',
+                         ],
+                     ]
                  ]);
         
         $paymentRequest->refresh();
@@ -438,8 +480,7 @@ class PaymentRequestControllerTest extends TestCase
     /** @test */
     public function it_deletes_a_payment_request_successfully()
     {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
+        $user = $this->createAuthenticatedUser();
         
         $paymentRequest = PaymentRequest::factory()->create([
             'user_id' => $user->id,
@@ -469,8 +510,7 @@ class PaymentRequestControllerTest extends TestCase
     /** @test */
     public function it_prevents_deleting_paid_payment_requests()
     {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
+        $user = $this->createAuthenticatedUser();
         
         $paymentRequest = PaymentRequest::factory()->paid()->create(['user_id' => $user->id]);
         
@@ -491,9 +531,8 @@ class PaymentRequestControllerTest extends TestCase
     /** @test */
     public function it_prevents_deleting_other_users_payment_requests()
     {
-        $user = User::factory()->create();
+        $user = $this->createAuthenticatedUser();
         $otherUser = User::factory()->create();
-        Sanctum::actingAs($user);
         
         $paymentRequest = PaymentRequest::factory()->create(['user_id' => $otherUser->id]);
         
@@ -505,8 +544,7 @@ class PaymentRequestControllerTest extends TestCase
     /** @test */
     public function it_handles_validation_errors_gracefully()
     {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
+        $user = $this->createAuthenticatedUser();
         
         $data = [
             'amount' => 'invalid',
@@ -518,24 +556,19 @@ class PaymentRequestControllerTest extends TestCase
         
         $response->assertStatus(422)
                  ->assertJsonStructure([
-                     'status',
                      'message',
                      'errors' => [
                          'amount',
                          'currency_code',
                          'purpose',
                      ]
-                 ])
-                 ->assertJson([
-                     'status' => 422,
                  ]);
     }
 
     /** @test */
     public function it_validates_image_upload_properly()
     {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
+        $user = $this->createAuthenticatedUser();
         
         $invalidFile = UploadedFile::fake()->create('document.pdf', 1000);
         
@@ -555,8 +588,7 @@ class PaymentRequestControllerTest extends TestCase
     /** @test */
     public function it_creates_negotiable_payment_request()
     {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
+        $user = $this->createAuthenticatedUser();
         
         $data = [
             'amount' => 100.00,
@@ -569,19 +601,37 @@ class PaymentRequestControllerTest extends TestCase
         $response = $this->postJson('/api/v1/payment-requests', $data);
         
         $response->assertStatus(201)
-                 ->assertJson([
-                     'status' => 201,
+                 ->assertJsonStructure([
                      'data' => [
-                         'payment_request' => [
-                             'amount' => 100.00,
-                             'currency_code' => 'GHS',
+                         'type',
+                         'id',
+                         'attributes' => [
+                             'amount',
+                             'formattedAmount',
+                             'currencyCode',
+                             'purpose',
+                             'description',
+                             'isNegotiable',
+                             'status',
+                             'createdAt',
+                             'updatedAt',
+                         ],
+                         'relationships',
+                         'links'
+                     ]
+                 ])
+                 ->assertJson([
+                     'data' => [
+                         'type' => 'paymentRequest',
+                         'attributes' => [
+                             'amount' => '100.00',
+                             'currencyCode' => 'GHS',
                              'purpose' => 'Negotiable payment',
                              'description' => 'Amount can be negotiated',
-                             'is_negotiable' => true,
+                             'isNegotiable' => true,
                              'status' => 'pending',
                          ],
-                     ],
-                     'message' => 'Payment request created successfully'
+                     ]
                  ]);
         
         $this->assertDatabaseHas('payment_requests', [
@@ -595,8 +645,7 @@ class PaymentRequestControllerTest extends TestCase
     /** @test */
     public function it_updates_negotiable_status()
     {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
+        $user = $this->createAuthenticatedUser();
         
         $paymentRequest = PaymentRequest::factory()->create([
             'user_id' => $user->id,
@@ -607,25 +656,46 @@ class PaymentRequestControllerTest extends TestCase
         ]);
         
         $updateData = [
+            'amount' => 100.00,
+            'currency_code' => 'GHS',
+            'purpose' => 'Fixed amount initially',
             'is_negotiable' => true,
             'description' => 'Now negotiable',
         ];
         
-        $response = $this->putJson("/api/v1/payment-requests/{$paymentRequest->id}", $updateData);
+        $response = $this->patchJson("/api/v1/payment-requests/{$paymentRequest->id}", $updateData);
         
         $response->assertStatus(200)
-                 ->assertJson([
-                     'status' => 200,
+                 ->assertJsonStructure([
                      'data' => [
-                         'payment_request' => [
-                             'id' => $paymentRequest->id,
-                             'amount' => 100.00,
+                         'type',
+                         'id',
+                         'attributes' => [
+                             'amount',
+                             'formattedAmount',
+                             'currencyCode',
+                             'purpose',
+                             'description',
+                             'isNegotiable',
+                             'status',
+                             'createdAt',
+                             'updatedAt',
+                         ],
+                         'relationships',
+                         'links'
+                     ]
+                 ])
+                 ->assertJson([
+                     'data' => [
+                         'type' => 'paymentRequest',
+                         'id' => $paymentRequest->id,
+                         'attributes' => [
+                             'amount' => '100.00',
                              'purpose' => 'Fixed amount initially',
                              'description' => 'Now negotiable',
-                             'is_negotiable' => true,
+                             'isNegotiable' => true,
                          ],
-                     ],
-                     'message' => 'Payment request updated successfully'
+                     ]
                  ]);
         
         $this->assertDatabaseHas('payment_requests', [
@@ -638,8 +708,7 @@ class PaymentRequestControllerTest extends TestCase
     /** @test */
     public function it_paginates_payment_requests_correctly()
     {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
+        $user = $this->createAuthenticatedUser();
         
         PaymentRequest::factory()->count(15)->create(['user_id' => $user->id]);
         
@@ -648,23 +717,28 @@ class PaymentRequestControllerTest extends TestCase
         $response->assertStatus(200)
                  ->assertJsonStructure([
                      'data' => [
-                         'payment_requests' => [
-                             'data',
-                             'current_page',
-                             'per_page',
-                             'total',
-                             'last_page',
+                         '*' => [
+                             'type',
+                             'id',
+                             'attributes',
+                             'relationships',
+                             'links',
                          ]
+                     ],
+                     'links',
+                     'meta' => [
+                         'current_page',
+                         'per_page',
+                         'total',
+                         'last_page',
                      ]
                  ])
-                 ->assertJsonCount(5, 'data.payment_requests.data')
+                 ->assertJsonCount(5, 'data')
                  ->assertJson([
-                     'data' => [
-                         'payment_requests' => [
-                             'per_page' => 5,
-                             'total' => 15,
-                             'last_page' => 3,
-                         ]
+                     'meta' => [
+                         'per_page' => 5,
+                         'total' => 15,
+                         'last_page' => 3,
                      ]
                  ]);
     }

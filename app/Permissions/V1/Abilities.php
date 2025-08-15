@@ -4,24 +4,56 @@ namespace App\Permissions\V1;
 
 use App\Models\User;
 
-final class Abilities {
-    // Payment Account abilities
-    public const CreatePaymentAccount = 'payment_account:create';
-    public const UpdatePaymentAccount = 'payment_account:update';
-    public const DeletePaymentAccount = 'payment_account:delete';
-    public const ViewPaymentAccount = 'payment_account:view';
+final class Abilities
+{
+    // Payment Request abilities (following masterclass convention)
+    public const CreatePaymentRequest = 'payment-request:create';
+    public const UpdatePaymentRequest = 'payment-request:update';
+    public const ReplacePaymentRequest = 'payment-request:replace';
+    public const DeletePaymentRequest = 'payment-request:delete';
+    public const ViewPaymentRequest = 'payment-request:view';
 
-    // Kitua (Payment Request) abilities
-    public const CreateKitua = 'kitua:create';
-    public const UpdateOwnKitua = 'kitua:own:update';
-    public const DeleteOwnKitua = 'kitua:own:delete';
-    public const ViewOwnKitua = 'kitua:own:view';
+    public const CreateOwnPaymentRequest = 'payment-request:own:create';
+    public const UpdateOwnPaymentRequest = 'payment-request:own:update';
+    public const DeleteOwnPaymentRequest = 'payment-request:own:delete';
+    public const ViewOwnPaymentRequest = 'payment-request:own:view';
+
+    // User abilities
+    public const CreateUser = 'user:create';
+    public const UpdateUser = 'user:update';
+    public const ReplaceUser = 'user:replace';
+    public const DeleteUser = 'user:delete';
+    public const ViewUser = 'user:view';
+
+    public const UpdateOwnUser = 'user:own:update';
+    public const ViewOwnUser = 'user:own:view';
+
+    // Payment Account abilities
+    public const CreatePaymentAccount = 'payment-account:create';
+    public const UpdatePaymentAccount = 'payment-account:update';
+    public const DeletePaymentAccount = 'payment-account:delete';
+    public const ViewPaymentAccount = 'payment-account:view';
+
+    public const CreateOwnPaymentAccount = 'payment-account:own:create';
+    public const UpdateOwnPaymentAccount = 'payment-account:own:update';
+    public const DeleteOwnPaymentAccount = 'payment-account:own:delete';
+    public const ViewOwnPaymentAccount = 'payment-account:own:view';
+
+    // Country abilities (read-only for most users)
+    public const ViewCountry = 'country:view';
+    public const ManageCountry = 'country:manage';
+
+    // Legacy abilities for backward compatibility
+    public const CreateKitua = self::CreateOwnPaymentRequest;
+    public const UpdateOwnKitua = self::UpdateOwnPaymentRequest;
+    public const DeleteOwnKitua = self::DeleteOwnPaymentRequest;
+    public const ViewOwnKitua = self::ViewOwnPaymentRequest;
 
     // Group Payment abilities
-    public const CreateGroupPayment = 'group_payment:create';
-    public const UpdateOwnGroupPayment = 'group_payment:own:update';
-    public const DeleteOwnGroupPayment = 'group_payment:own:delete';
-    public const ViewOwnGroupPayment = 'group_payment:own:view';
+    public const CreateGroupPayment = 'group-payment:create';
+    public const UpdateOwnGroupPayment = 'group-payment:own:update';
+    public const DeleteOwnGroupPayment = 'group-payment:own:delete';
+    public const ViewOwnGroupPayment = 'group-payment:own:view';
 
     // Transaction abilities
     public const ViewOwnTransactions = 'transaction:own:view';
@@ -31,29 +63,50 @@ final class Abilities {
     public const ManageOwnDevices = 'device:own:manage';
     public const RevokeOwnDevices = 'device:own:revoke';
 
-    // Admin abilities
-    public const ViewAllUsers = 'user:view:all';
-    public const CreateUser = 'user:create';
-    public const UpdateUser = 'user:update';
-    public const DeleteUser = 'user:delete';
-    public const ViewAllTransactions = 'transaction:view:all';
-    public const ViewAllKitua = 'kitua:view:all';
-    public const ViewAllGroupPayments = 'group_payment:view:all';
-    public const ManageSystem = 'system:manage';
-
-    public static function getAbilities(User $user): array 
+    /**
+     * Get abilities for a user based on their type and role
+     */
+    public static function getAbilities(User $user): array
     {
-        if ($user->isAdminUser()) {
+        if ($user->user_type === 'admin') {
             return [
-                // Admin has all abilities
+                // Full payment request permissions
+                self::CreatePaymentRequest,
+                self::UpdatePaymentRequest,
+                self::ReplacePaymentRequest,
+                self::DeletePaymentRequest,
+                self::ViewPaymentRequest,
+                
+                // Full user permissions
+                self::CreateUser,
+                self::UpdateUser,
+                self::ReplaceUser,
+                self::DeleteUser,
+                self::ViewUser,
+
+                // Full payment account permissions
                 self::CreatePaymentAccount,
                 self::UpdatePaymentAccount,
                 self::DeletePaymentAccount,
                 self::ViewPaymentAccount,
-                self::CreateKitua,
-                self::UpdateOwnKitua,
-                self::DeleteOwnKitua,
-                self::ViewOwnKitua,
+
+                // Country management
+                self::ViewCountry,
+                self::ManageCountry,
+
+                // Admin can also manage their own resources
+                self::CreateOwnPaymentRequest,
+                self::UpdateOwnPaymentRequest,
+                self::DeleteOwnPaymentRequest,
+                self::ViewOwnPaymentRequest,
+                self::UpdateOwnUser,
+                self::ViewOwnUser,
+                self::CreateOwnPaymentAccount,
+                self::UpdateOwnPaymentAccount,
+                self::DeleteOwnPaymentAccount,
+                self::ViewOwnPaymentAccount,
+                
+                // Legacy and future abilities
                 self::CreateGroupPayment,
                 self::UpdateOwnGroupPayment,
                 self::DeleteOwnGroupPayment,
@@ -62,27 +115,64 @@ final class Abilities {
                 self::CreateTransaction,
                 self::ManageOwnDevices,
                 self::RevokeOwnDevices,
-                // Admin-specific abilities
-                self::ViewAllUsers,
-                self::CreateUser,
-                self::UpdateUser,
-                self::DeleteUser,
-                self::ViewAllTransactions,
-                self::ViewAllKitua,
-                self::ViewAllGroupPayments,
-                self::ManageSystem,
+            ];
+        } elseif ($user->user_type === 'manager') {
+            return [
+                // Can manage all payment requests
+                self::CreatePaymentRequest,
+                self::UpdatePaymentRequest,
+                self::ReplacePaymentRequest,
+                self::DeletePaymentRequest,
+                self::ViewPaymentRequest,
+
+                // Can view all users but not manage them
+                self::ViewUser,
+                self::UpdateOwnUser,
+                self::ViewOwnUser,
+
+                // Can view all payment accounts
+                self::ViewPaymentAccount,
+                self::CreateOwnPaymentAccount,
+                self::UpdateOwnPaymentAccount,
+                self::DeleteOwnPaymentAccount,
+                self::ViewOwnPaymentAccount,
+
+                // Can view countries
+                self::ViewCountry,
+                
+                // Other abilities
+                self::CreateOwnPaymentRequest,
+                self::UpdateOwnPaymentRequest,
+                self::DeleteOwnPaymentRequest,
+                self::ViewOwnPaymentRequest,
+                self::CreateGroupPayment,
+                self::UpdateOwnGroupPayment,
+                self::DeleteOwnGroupPayment,
+                self::ViewOwnGroupPayment,
+                self::ViewOwnTransactions,
+                self::CreateTransaction,
+                self::ManageOwnDevices,
+                self::RevokeOwnDevices,
             ];
         } else {
-            // Mobile users have limited abilities
+            // Regular mobile users - can only manage their own resources
             return [
-                self::CreatePaymentAccount,
-                self::UpdatePaymentAccount,
-                self::DeletePaymentAccount,
-                self::ViewPaymentAccount,
-                self::CreateKitua,
-                self::UpdateOwnKitua,
-                self::DeleteOwnKitua,
-                self::ViewOwnKitua,
+                self::CreateOwnPaymentRequest,
+                self::UpdateOwnPaymentRequest,
+                self::DeleteOwnPaymentRequest,
+                self::ViewOwnPaymentRequest,
+
+                self::UpdateOwnUser,
+                self::ViewOwnUser,
+
+                self::CreateOwnPaymentAccount,
+                self::UpdateOwnPaymentAccount,
+                self::DeleteOwnPaymentAccount,
+                self::ViewOwnPaymentAccount,
+
+                self::ViewCountry,
+                
+                // Other mobile user abilities
                 self::CreateGroupPayment,
                 self::UpdateOwnGroupPayment,
                 self::DeleteOwnGroupPayment,
@@ -93,5 +183,48 @@ final class Abilities {
                 self::RevokeOwnDevices,
             ];
         }
+    }
+
+    /**
+     * Get all available abilities
+     */
+    public static function getAllAbilities(): array
+    {
+        return [
+            self::CreatePaymentRequest,
+            self::UpdatePaymentRequest,
+            self::ReplacePaymentRequest,
+            self::DeletePaymentRequest,
+            self::ViewPaymentRequest,
+            self::CreateOwnPaymentRequest,
+            self::UpdateOwnPaymentRequest,
+            self::DeleteOwnPaymentRequest,
+            self::ViewOwnPaymentRequest,
+            self::CreateUser,
+            self::UpdateUser,
+            self::ReplaceUser,
+            self::DeleteUser,
+            self::ViewUser,
+            self::UpdateOwnUser,
+            self::ViewOwnUser,
+            self::CreatePaymentAccount,
+            self::UpdatePaymentAccount,
+            self::DeletePaymentAccount,
+            self::ViewPaymentAccount,
+            self::CreateOwnPaymentAccount,
+            self::UpdateOwnPaymentAccount,
+            self::DeleteOwnPaymentAccount,
+            self::ViewOwnPaymentAccount,
+            self::ViewCountry,
+            self::ManageCountry,
+            self::CreateGroupPayment,
+            self::UpdateOwnGroupPayment,
+            self::DeleteOwnGroupPayment,
+            self::ViewOwnGroupPayment,
+            self::ViewOwnTransactions,
+            self::CreateTransaction,
+            self::ManageOwnDevices,
+            self::RevokeOwnDevices,
+        ];
     }
 }
