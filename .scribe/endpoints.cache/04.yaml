@@ -312,7 +312,7 @@ endpoints:
         name: is_negotiable
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -379,7 +379,7 @@ endpoints:
       currency_code: bng
       purpose: 'Lunch payment'
       description: 'Payment for team lunch at the cafeteria'
-      is_negotiable: true
+      is_negotiable: false
       status: cancelled
       expires_at: '2025-09-15T12:00:00Z'
       metadata:
@@ -800,7 +800,7 @@ endpoints:
         name: status
         description: ''
         required: false
-        example: cancelled
+        example: paid
         type: string
         enumValues:
           - pending
@@ -856,7 +856,7 @@ endpoints:
       purpose: 'Replaced lunch payment'
       description: 'Completely replaced payment for team lunch'
       is_negotiable: false
-      status: cancelled
+      status: paid
       expires_at: '2025-11-15T12:00:00Z'
       negotiable: false
     fileParameters:

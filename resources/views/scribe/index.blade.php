@@ -141,10 +141,7 @@
                     <a href="#user-profile">User Profile</a>
                 </li>
                                     <ul id="tocify-subheader-user-profile" class="tocify-subheader">
-                                                    <li class="tocify-item level-2" data-unique="user-profile-GETapi-v1-user">
-                                <a href="#user-profile-GETapi-v1-user">Get current user profile (legacy endpoint)</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="user-profile-GETapi-v1-users--uuid-">
+                                                    <li class="tocify-item level-2" data-unique="user-profile-GETapi-v1-users--uuid-">
                                 <a href="#user-profile-GETapi-v1-users--uuid-">Get user by UUID (JSON:API endpoint)</a>
                             </li>
                                                                         </ul>
@@ -2349,7 +2346,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"currency_code\": \"bng\",
     \"purpose\": \"Lunch payment\",
     \"description\": \"Payment for team lunch at the cafeteria\",
-    \"is_negotiable\": true,
+    \"is_negotiable\": false,
     \"status\": \"cancelled\",
     \"expires_at\": \"2025-09-15T12:00:00Z\",
     \"metadata\": {
@@ -2377,7 +2374,7 @@ let body = {
     "currency_code": "bng",
     "purpose": "Lunch payment",
     "description": "Payment for team lunch at the cafeteria",
-    "is_negotiable": true,
+    "is_negotiable": false,
     "status": "cancelled",
     "expires_at": "2025-09-15T12:00:00Z",
     "metadata": {
@@ -2613,7 +2610,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>true</code></p>
+<p>Example: <code>false</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>status</code></b>&nbsp;&nbsp;
@@ -3124,10 +3121,10 @@ Users can only replace their own payment requests, and paid payment requests can
     --form "purpose=Replaced lunch payment"\
     --form "description=Completely replaced payment for team lunch"\
     --form "is_negotiable="\
-    --form "status=cancelled"\
+    --form "status=paid"\
     --form "expires_at=2025-11-15T12:00:00Z"\
     --form "negotiable="\
-    --form "image=@/private/var/folders/bd/x67xzw0s72321v82bxt7z2_40000gp/T/phpTWoorT" </code></pre></div>
+    --form "image=@/private/var/folders/bd/x67xzw0s72321v82bxt7z2_40000gp/T/phpDzVA1A" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -3147,7 +3144,7 @@ body.append('currency_code', 'bng');
 body.append('purpose', 'Replaced lunch payment');
 body.append('description', 'Completely replaced payment for team lunch');
 body.append('is_negotiable', '');
-body.append('status', 'cancelled');
+body.append('status', 'paid');
 body.append('expires_at', '2025-11-15T12:00:00Z');
 body.append('negotiable', '');
 body.append('image', document.querySelector('input[name="image"]').files[0]);
@@ -3406,10 +3403,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="PUTapi-v1-payment-requests--uuid_id-"
-               value="cancelled"
+               value="paid"
                data-component="body">
     <br>
-<p>Example: <code>cancelled</code></p>
+<p>Example: <code>paid</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>pending</code></li> <li><code>paid</code></li> <li><code>cancelled</code></li> <li><code>expired</code></li></ul>
         </div>
@@ -3444,7 +3441,7 @@ Must be one of:
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 2048 kilobytes. Example: <code>/private/var/folders/bd/x67xzw0s72321v82bxt7z2_40000gp/T/phpTWoorT</code></p>
+<p>Must be an image. Must not be greater than 2048 kilobytes. Example: <code>/private/var/folders/bd/x67xzw0s72321v82bxt7z2_40000gp/T/phpDzVA1A</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>negotiable</code></b>&nbsp;&nbsp;
@@ -3880,144 +3877,7 @@ Must be one of:
 
     
 
-                                <h2 id="user-profile-GETapi-v1-user">Get current user profile (legacy endpoint)</h2>
-
-<p>
-<small class="badge badge-darkred">requires authentication</small>
-</p>
-
-
-
-<span id="example-requests-GETapi-v1-user">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/user" \
-    --header "Authorization: Bearer Bearer {YOUR_TOKEN}" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/user"
-);
-
-const headers = {
-    "Authorization": "Bearer Bearer {YOUR_TOKEN}",
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers,
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-GETapi-v1-user">
-            <blockquote>
-            <p>Example response (200):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json" style="max-height: 300px;">{
-    &quot;id&quot;: 1,
-    &quot;mobile_number&quot;: &quot;233244123456&quot;,
-    &quot;first_name&quot;: &quot;John&quot;,
-    &quot;surname&quot;: &quot;Doe&quot;,
-    &quot;full_name&quot;: &quot;John Doe&quot;,
-    &quot;payment_accounts&quot;: [],
-    &quot;active_device_sessions&quot;: []
-}</code>
- </pre>
-    </span>
-<span id="execution-results-GETapi-v1-user" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-GETapi-v1-user"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-v1-user"
-      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
-</span>
-<span id="execution-error-GETapi-v1-user" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-v1-user">
-
-Tip: Check that you&#039;re properly connected to the network.
-If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
-You can check the Dev Tools console for debugging information.</code></pre>
-</span>
-<form id="form-GETapi-v1-user" data-method="GET"
-      data-path="api/v1/user"
-      data-authed="1"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-user', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-v1-user"
-                    onclick="tryItOut('GETapi-v1-user');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-v1-user"
-                    onclick="cancelTryOut('GETapi-v1-user');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-v1-user"
-                    data-initial-text="Send Request 💥"
-                    data-loading-text="⏱ Sending..."
-                    hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-green">GET</small>
-            <b><code>api/v1/user</code></b>
-        </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="GETapi-v1-user"
-               value="Bearer Bearer {YOUR_TOKEN}"
-               data-component="header">
-    <br>
-<p>Example: <code>Bearer Bearer {YOUR_TOKEN}</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-v1-user"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-v1-user"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        </form>
-
-                    <h2 id="user-profile-GETapi-v1-users--uuid-">Get user by UUID (JSON:API endpoint)</h2>
+                                <h2 id="user-profile-GETapi-v1-users--uuid-">Get user by UUID (JSON:API endpoint)</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
