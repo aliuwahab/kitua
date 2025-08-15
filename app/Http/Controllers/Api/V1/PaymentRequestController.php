@@ -49,28 +49,66 @@ class PaymentRequestController extends ApiController
      * @response status=200 scenario="Success" {
      *   "data": [
      *     {
+     *       "type": "paymentRequest",
      *       "id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-     *       "amount": 150,
-     *       "purpose": "Lunch payment",
-     *       "description": "Payment for team lunch",
-     *       "status": "pending",
-     *       "negotiable": false,
-     *       "expires_at": "2025-09-15T12:00:00Z",
-     *       "image_url": "https://kitua.com/storage/images/f47ac10b.jpg",
-     *       "created_at": "2025-08-01T10:15:30Z",
-     *       "updated_at": "2025-08-01T10:15:30Z"
+     *       "attributes": {
+     *         "amount": "150.00",
+     *         "formattedAmount": "GHS 150.00",
+     *         "currencyCode": "GHS",
+     *         "purpose": "Lunch payment",
+     *         "isNegotiable": false,
+     *         "status": "pending",
+     *         "expiresAt": "2025-09-15T12:00:00Z",
+     *         "paidAt": null,
+     *         "isExpired": false,
+     *         "createdAt": "2025-08-01T10:15:30Z",
+     *         "updatedAt": "2025-08-01T10:15:30Z"
+     *       },
+     *       "relationships": {
+     *         "author": {
+     *           "data": {
+     *             "type": "user",
+     *             "id": 1
+     *           },
+     *           "links": {
+     *             "self": "/api/v1/users/1"
+     *           }
+     *         }
+     *       },
+     *       "links": {
+     *         "self": "/api/v1/payment-requests/f47ac10b-58cc-4372-a567-0e02b2c3d479"
+     *       }
      *     },
      *     {
+     *       "type": "paymentRequest",
      *       "id": "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
-     *       "amount": 200,
-     *       "purpose": "Office supplies",
-     *       "description": "Reimbursement for office supplies purchase",
-     *       "status": "paid",
-     *       "negotiable": false,
-     *       "expires_at": null,
-     *       "image_url": null,
-     *       "created_at": "2025-07-28T14:30:45Z",
-     *       "updated_at": "2025-08-01T09:20:15Z"
+     *       "attributes": {
+     *         "amount": "200.00",
+     *         "formattedAmount": "GHS 200.00",
+     *         "currencyCode": "GHS",
+     *         "purpose": "Office supplies",
+     *         "isNegotiable": false,
+     *         "status": "paid",
+     *         "expiresAt": null,
+     *         "paidAt": "2025-08-01T09:20:15Z",
+     *         "isExpired": false,
+     *         "createdAt": "2025-07-28T14:30:45Z",
+     *         "updatedAt": "2025-08-01T09:20:15Z"
+     *       },
+     *       "relationships": {
+     *         "author": {
+     *           "data": {
+     *             "type": "user",
+     *             "id": 2
+     *           },
+     *           "links": {
+     *             "self": "/api/v1/users/2"
+     *           }
+     *         }
+     *       },
+     *       "links": {
+     *         "self": "/api/v1/payment-requests/a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11"
+     *       }
      *     }
      *   ],
      *   "links": {
@@ -129,23 +167,41 @@ class PaymentRequestController extends ApiController
      * 
      * @response status=201 scenario="Created successfully" {
      *   "data": {
+     *     "type": "paymentRequest",
      *     "id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-     *     "amount": 150,
-     *     "purpose": "Lunch payment",
-     *     "description": "Payment for team lunch at the cafeteria",
-     *     "status": "pending",
-     *     "negotiable": false,
-     *     "expires_at": "2025-09-15T12:00:00Z",
-     *     "image_url": "https://kitua.com/storage/images/f47ac10b.jpg",
-     *     "metadata": {
-     *       "restaurant": "Cafe Royal",
-     *       "receipt_number": "RCT-12345"
+     *     "attributes": {
+     *       "amount": "150.00",
+     *       "formattedAmount": "GHS 150.00",
+     *       "currencyCode": "GHS",
+     *       "purpose": "Lunch payment",
+     *       "description": "Payment for team lunch at the cafeteria",
+     *       "isNegotiable": false,
+     *       "status": "pending",
+     *       "expiresAt": "2025-09-15T12:00:00Z",
+     *       "paidAt": null,
+     *       "isExpired": false,
+     *       "metadata": {
+     *         "restaurant": "Cafe Royal",
+     *         "receipt_number": "RCT-12345"
+     *       },
+     *       "createdAt": "2025-08-15T10:15:30Z",
+     *       "updatedAt": "2025-08-15T10:15:30Z"
      *     },
-     *     "created_at": "2025-08-15T10:15:30Z",
-     *     "updated_at": "2025-08-15T10:15:30Z"
-     *   },
-     *   "message": "Payment request created successfully",
-     *   "status": 201
+     *     "relationships": {
+     *       "author": {
+     *         "data": {
+     *           "type": "user",
+     *           "id": 1
+     *         },
+     *         "links": {
+     *           "self": "/api/v1/users/1"
+     *         }
+     *       }
+     *     },
+     *     "links": {
+     *       "self": "/api/v1/payment-requests/f47ac10b-58cc-4372-a567-0e02b2c3d479"
+     *     }
+     *   }
      * }
      * 
      * @response status=422 scenario="Validation error" {
@@ -196,23 +252,41 @@ class PaymentRequestController extends ApiController
      * 
      * @response status=200 scenario="Success" {
      *   "data": {
+     *     "type": "paymentRequest",
      *     "id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-     *     "amount": 150,
-     *     "purpose": "Lunch payment",
-     *     "description": "Payment for team lunch",
-     *     "status": "pending",
-     *     "negotiable": false,
-     *     "expires_at": "2025-09-15T12:00:00Z",
-     *     "image_url": "https://kitua.com/storage/images/f47ac10b.jpg",
-     *     "metadata": {
-     *       "restaurant": "Cafe Royal",
-     *       "receipt_number": "RCT-12345"
+     *     "attributes": {
+     *       "amount": "150.00",
+     *       "formattedAmount": "GHS 150.00",
+     *       "currencyCode": "GHS",
+     *       "purpose": "Lunch payment",
+     *       "description": "Payment for team lunch",
+     *       "isNegotiable": false,
+     *       "status": "pending",
+     *       "expiresAt": "2025-09-15T12:00:00Z",
+     *       "paidAt": null,
+     *       "isExpired": false,
+     *       "metadata": {
+     *         "restaurant": "Cafe Royal",
+     *         "receipt_number": "RCT-12345"
+     *       },
+     *       "createdAt": "2025-08-01T10:15:30Z",
+     *       "updatedAt": "2025-08-01T10:15:30Z"
      *     },
-     *     "created_at": "2025-08-01T10:15:30Z",
-     *     "updated_at": "2025-08-01T10:15:30Z"
-     *   },
-     *   "message": "Payment request retrieved successfully",
-     *   "status": 200
+     *     "relationships": {
+     *       "author": {
+     *         "data": {
+     *           "type": "user",
+     *           "id": 1
+     *         },
+     *         "links": {
+     *           "self": "/api/v1/users/1"
+     *         }
+     *       }
+     *     },
+     *     "links": {
+     *       "self": "/api/v1/payment-requests/f47ac10b-58cc-4372-a567-0e02b2c3d479"
+     *     }
+     *   }
      * }
      * 
      * @response status=404 scenario="Not found" {
@@ -259,23 +333,41 @@ class PaymentRequestController extends ApiController
      * 
      * @response status=200 scenario="Updated successfully" {
      *   "data": {
+     *     "type": "paymentRequest",
      *     "id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-     *     "amount": 200,
-     *     "purpose": "Updated lunch payment",
-     *     "description": "Updated payment for team lunch",
-     *     "status": "pending",
-     *     "negotiable": true,
-     *     "expires_at": "2025-10-15T12:00:00Z",
-     *     "image_url": null,
-     *     "metadata": {
-     *       "restaurant": "Updated Cafe",
-     *       "receipt_number": "RCT-67890"
+     *     "attributes": {
+     *       "amount": "200.00",
+     *       "formattedAmount": "GHS 200.00",
+     *       "currencyCode": "GHS",
+     *       "purpose": "Updated lunch payment",
+     *       "description": "Updated payment for team lunch",
+     *       "isNegotiable": true,
+     *       "status": "pending",
+     *       "expiresAt": "2025-10-15T12:00:00Z",
+     *       "paidAt": null,
+     *       "isExpired": false,
+     *       "metadata": {
+     *         "restaurant": "Updated Cafe",
+     *         "receipt_number": "RCT-67890"
+     *       },
+     *       "createdAt": "2025-08-01T10:15:30Z",
+     *       "updatedAt": "2025-08-15T11:20:45Z"
      *     },
-     *     "created_at": "2025-08-01T10:15:30Z",
-     *     "updated_at": "2025-08-15T11:20:45Z"
-     *   },
-     *   "message": "Payment request updated successfully",
-     *   "status": 200
+     *     "relationships": {
+     *       "author": {
+     *         "data": {
+     *           "type": "user",
+     *           "id": 1
+     *         },
+     *         "links": {
+     *           "self": "/api/v1/users/1"
+     *         }
+     *       }
+     *     },
+     *     "links": {
+     *       "self": "/api/v1/payment-requests/f47ac10b-58cc-4372-a567-0e02b2c3d479"
+     *     }
+     *   }
      * }
      * 
      * @response status=404 scenario="Not found" {
@@ -352,20 +444,38 @@ class PaymentRequestController extends ApiController
      * 
      * @response status=200 scenario="Replaced successfully" {
      *   "data": {
+     *     "type": "paymentRequest",
      *     "id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-     *     "amount": 250,
-     *     "purpose": "Replaced lunch payment",
-     *     "description": "Completely replaced payment for team lunch",
-     *     "status": "pending",
-     *     "negotiable": false,
-     *     "expires_at": "2025-11-15T12:00:00Z",
-     *     "image_url": null,
-     *     "metadata": null,
-     *     "created_at": "2025-08-01T10:15:30Z",
-     *     "updated_at": "2025-08-15T12:30:15Z"
-     *   },
-     *   "message": "Payment request replaced successfully",
-     *   "status": 200
+     *     "attributes": {
+     *       "amount": "250.00",
+     *       "formattedAmount": "GHS 250.00",
+     *       "currencyCode": "GHS",
+     *       "purpose": "Replaced lunch payment",
+     *       "description": "Completely replaced payment for team lunch",
+     *       "isNegotiable": false,
+     *       "status": "pending",
+     *       "expiresAt": "2025-11-15T12:00:00Z",
+     *       "paidAt": null,
+     *       "isExpired": false,
+     *       "metadata": null,
+     *       "createdAt": "2025-08-01T10:15:30Z",
+     *       "updatedAt": "2025-08-15T12:30:15Z"
+     *     },
+     *     "relationships": {
+     *       "author": {
+     *         "data": {
+     *           "type": "user",
+     *           "id": 1
+     *         },
+     *         "links": {
+     *           "self": "/api/v1/users/1"
+     *         }
+     *       }
+     *     },
+     *     "links": {
+     *       "self": "/api/v1/payment-requests/f47ac10b-58cc-4372-a567-0e02b2c3d479"
+     *     }
+     *   }
      * }
      * 
      * @response status=404 scenario="Not found" {

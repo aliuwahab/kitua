@@ -1687,28 +1687,66 @@ fetch(url, {
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: [
         {
+            &quot;type&quot;: &quot;paymentRequest&quot;,
             &quot;id&quot;: &quot;f47ac10b-58cc-4372-a567-0e02b2c3d479&quot;,
-            &quot;amount&quot;: 150,
-            &quot;purpose&quot;: &quot;Lunch payment&quot;,
-            &quot;description&quot;: &quot;Payment for team lunch&quot;,
-            &quot;status&quot;: &quot;pending&quot;,
-            &quot;negotiable&quot;: false,
-            &quot;expires_at&quot;: &quot;2025-09-15T12:00:00Z&quot;,
-            &quot;image_url&quot;: &quot;https://kitua.com/storage/images/f47ac10b.jpg&quot;,
-            &quot;created_at&quot;: &quot;2025-08-01T10:15:30Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-08-01T10:15:30Z&quot;
+            &quot;attributes&quot;: {
+                &quot;amount&quot;: &quot;150.00&quot;,
+                &quot;formattedAmount&quot;: &quot;GHS 150.00&quot;,
+                &quot;currencyCode&quot;: &quot;GHS&quot;,
+                &quot;purpose&quot;: &quot;Lunch payment&quot;,
+                &quot;isNegotiable&quot;: false,
+                &quot;status&quot;: &quot;pending&quot;,
+                &quot;expiresAt&quot;: &quot;2025-09-15T12:00:00Z&quot;,
+                &quot;paidAt&quot;: null,
+                &quot;isExpired&quot;: false,
+                &quot;createdAt&quot;: &quot;2025-08-01T10:15:30Z&quot;,
+                &quot;updatedAt&quot;: &quot;2025-08-01T10:15:30Z&quot;
+            },
+            &quot;relationships&quot;: {
+                &quot;author&quot;: {
+                    &quot;data&quot;: {
+                        &quot;type&quot;: &quot;user&quot;,
+                        &quot;id&quot;: 1
+                    },
+                    &quot;links&quot;: {
+                        &quot;self&quot;: &quot;/api/v1/users/1&quot;
+                    }
+                }
+            },
+            &quot;links&quot;: {
+                &quot;self&quot;: &quot;/api/v1/payment-requests/f47ac10b-58cc-4372-a567-0e02b2c3d479&quot;
+            }
         },
         {
+            &quot;type&quot;: &quot;paymentRequest&quot;,
             &quot;id&quot;: &quot;a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11&quot;,
-            &quot;amount&quot;: 200,
-            &quot;purpose&quot;: &quot;Office supplies&quot;,
-            &quot;description&quot;: &quot;Reimbursement for office supplies purchase&quot;,
-            &quot;status&quot;: &quot;paid&quot;,
-            &quot;negotiable&quot;: false,
-            &quot;expires_at&quot;: null,
-            &quot;image_url&quot;: null,
-            &quot;created_at&quot;: &quot;2025-07-28T14:30:45Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-08-01T09:20:15Z&quot;
+            &quot;attributes&quot;: {
+                &quot;amount&quot;: &quot;200.00&quot;,
+                &quot;formattedAmount&quot;: &quot;GHS 200.00&quot;,
+                &quot;currencyCode&quot;: &quot;GHS&quot;,
+                &quot;purpose&quot;: &quot;Office supplies&quot;,
+                &quot;isNegotiable&quot;: false,
+                &quot;status&quot;: &quot;paid&quot;,
+                &quot;expiresAt&quot;: null,
+                &quot;paidAt&quot;: &quot;2025-08-01T09:20:15Z&quot;,
+                &quot;isExpired&quot;: false,
+                &quot;createdAt&quot;: &quot;2025-07-28T14:30:45Z&quot;,
+                &quot;updatedAt&quot;: &quot;2025-08-01T09:20:15Z&quot;
+            },
+            &quot;relationships&quot;: {
+                &quot;author&quot;: {
+                    &quot;data&quot;: {
+                        &quot;type&quot;: &quot;user&quot;,
+                        &quot;id&quot;: 2
+                    },
+                    &quot;links&quot;: {
+                        &quot;self&quot;: &quot;/api/v1/users/2&quot;
+                    }
+                }
+            },
+            &quot;links&quot;: {
+                &quot;self&quot;: &quot;/api/v1/payment-requests/a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11&quot;
+            }
         }
     ],
     &quot;links&quot;: {
@@ -1956,7 +1994,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"purpose\": \"Lunch payment\",
     \"description\": \"Payment for team lunch at the cafeteria\",
     \"is_negotiable\": true,
-    \"status\": \"pending\",
+    \"status\": \"expired\",
     \"expires_at\": \"2025-09-15T12:00:00Z\",
     \"metadata\": {
         \"restaurant\": \"Cafe Royal\",
@@ -1984,7 +2022,7 @@ let body = {
     "purpose": "Lunch payment",
     "description": "Payment for team lunch at the cafeteria",
     "is_negotiable": true,
-    "status": "pending",
+    "status": "expired",
     "expires_at": "2025-09-15T12:00:00Z",
     "metadata": {
         "restaurant": "Cafe Royal",
@@ -2009,23 +2047,41 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
+        &quot;type&quot;: &quot;paymentRequest&quot;,
         &quot;id&quot;: &quot;f47ac10b-58cc-4372-a567-0e02b2c3d479&quot;,
-        &quot;amount&quot;: 150,
-        &quot;purpose&quot;: &quot;Lunch payment&quot;,
-        &quot;description&quot;: &quot;Payment for team lunch at the cafeteria&quot;,
-        &quot;status&quot;: &quot;pending&quot;,
-        &quot;negotiable&quot;: false,
-        &quot;expires_at&quot;: &quot;2025-09-15T12:00:00Z&quot;,
-        &quot;image_url&quot;: &quot;https://kitua.com/storage/images/f47ac10b.jpg&quot;,
-        &quot;metadata&quot;: {
-            &quot;restaurant&quot;: &quot;Cafe Royal&quot;,
-            &quot;receipt_number&quot;: &quot;RCT-12345&quot;
+        &quot;attributes&quot;: {
+            &quot;amount&quot;: &quot;150.00&quot;,
+            &quot;formattedAmount&quot;: &quot;GHS 150.00&quot;,
+            &quot;currencyCode&quot;: &quot;GHS&quot;,
+            &quot;purpose&quot;: &quot;Lunch payment&quot;,
+            &quot;description&quot;: &quot;Payment for team lunch at the cafeteria&quot;,
+            &quot;isNegotiable&quot;: false,
+            &quot;status&quot;: &quot;pending&quot;,
+            &quot;expiresAt&quot;: &quot;2025-09-15T12:00:00Z&quot;,
+            &quot;paidAt&quot;: null,
+            &quot;isExpired&quot;: false,
+            &quot;metadata&quot;: {
+                &quot;restaurant&quot;: &quot;Cafe Royal&quot;,
+                &quot;receipt_number&quot;: &quot;RCT-12345&quot;
+            },
+            &quot;createdAt&quot;: &quot;2025-08-15T10:15:30Z&quot;,
+            &quot;updatedAt&quot;: &quot;2025-08-15T10:15:30Z&quot;
         },
-        &quot;created_at&quot;: &quot;2025-08-15T10:15:30Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-08-15T10:15:30Z&quot;
-    },
-    &quot;message&quot;: &quot;Payment request created successfully&quot;,
-    &quot;status&quot;: 201
+        &quot;relationships&quot;: {
+            &quot;author&quot;: {
+                &quot;data&quot;: {
+                    &quot;type&quot;: &quot;user&quot;,
+                    &quot;id&quot;: 1
+                },
+                &quot;links&quot;: {
+                    &quot;self&quot;: &quot;/api/v1/users/1&quot;
+                }
+            }
+        },
+        &quot;links&quot;: {
+            &quot;self&quot;: &quot;/api/v1/payment-requests/f47ac10b-58cc-4372-a567-0e02b2c3d479&quot;
+        }
+    }
 }</code>
  </pre>
             <blockquote>
@@ -2209,10 +2265,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="POSTapi-v1-payment-requests"
-               value="pending"
+               value="expired"
                data-component="body">
     <br>
-<p>Example: <code>pending</code></p>
+<p>Example: <code>expired</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>pending</code></li> <li><code>paid</code></li> <li><code>cancelled</code></li> <li><code>expired</code></li></ul>
         </div>
@@ -2324,23 +2380,41 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
+        &quot;type&quot;: &quot;paymentRequest&quot;,
         &quot;id&quot;: &quot;f47ac10b-58cc-4372-a567-0e02b2c3d479&quot;,
-        &quot;amount&quot;: 150,
-        &quot;purpose&quot;: &quot;Lunch payment&quot;,
-        &quot;description&quot;: &quot;Payment for team lunch&quot;,
-        &quot;status&quot;: &quot;pending&quot;,
-        &quot;negotiable&quot;: false,
-        &quot;expires_at&quot;: &quot;2025-09-15T12:00:00Z&quot;,
-        &quot;image_url&quot;: &quot;https://kitua.com/storage/images/f47ac10b.jpg&quot;,
-        &quot;metadata&quot;: {
-            &quot;restaurant&quot;: &quot;Cafe Royal&quot;,
-            &quot;receipt_number&quot;: &quot;RCT-12345&quot;
+        &quot;attributes&quot;: {
+            &quot;amount&quot;: &quot;150.00&quot;,
+            &quot;formattedAmount&quot;: &quot;GHS 150.00&quot;,
+            &quot;currencyCode&quot;: &quot;GHS&quot;,
+            &quot;purpose&quot;: &quot;Lunch payment&quot;,
+            &quot;description&quot;: &quot;Payment for team lunch&quot;,
+            &quot;isNegotiable&quot;: false,
+            &quot;status&quot;: &quot;pending&quot;,
+            &quot;expiresAt&quot;: &quot;2025-09-15T12:00:00Z&quot;,
+            &quot;paidAt&quot;: null,
+            &quot;isExpired&quot;: false,
+            &quot;metadata&quot;: {
+                &quot;restaurant&quot;: &quot;Cafe Royal&quot;,
+                &quot;receipt_number&quot;: &quot;RCT-12345&quot;
+            },
+            &quot;createdAt&quot;: &quot;2025-08-01T10:15:30Z&quot;,
+            &quot;updatedAt&quot;: &quot;2025-08-01T10:15:30Z&quot;
         },
-        &quot;created_at&quot;: &quot;2025-08-01T10:15:30Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-08-01T10:15:30Z&quot;
-    },
-    &quot;message&quot;: &quot;Payment request retrieved successfully&quot;,
-    &quot;status&quot;: 200
+        &quot;relationships&quot;: {
+            &quot;author&quot;: {
+                &quot;data&quot;: {
+                    &quot;type&quot;: &quot;user&quot;,
+                    &quot;id&quot;: 1
+                },
+                &quot;links&quot;: {
+                    &quot;self&quot;: &quot;/api/v1/users/1&quot;
+                }
+            }
+        },
+        &quot;links&quot;: {
+            &quot;self&quot;: &quot;/api/v1/payment-requests/f47ac10b-58cc-4372-a567-0e02b2c3d479&quot;
+        }
+    }
 }</code>
  </pre>
             <blockquote>
@@ -2693,11 +2767,11 @@ Users can only replace their own payment requests, and paid payment requests can
     --form "currency_code=bng"\
     --form "purpose=Replaced lunch payment"\
     --form "description=Completely replaced payment for team lunch"\
-    --form "is_negotiable=1"\
-    --form "status=paid"\
+    --form "is_negotiable="\
+    --form "status=pending"\
     --form "expires_at=2025-11-15T12:00:00Z"\
     --form "negotiable="\
-    --form "image=@/private/var/folders/bd/x67xzw0s72321v82bxt7z2_40000gp/T/phplJYudT" </code></pre></div>
+    --form "image=@/private/var/folders/bd/x67xzw0s72321v82bxt7z2_40000gp/T/phpcpdkLV" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -2716,8 +2790,8 @@ body.append('amount', '250');
 body.append('currency_code', 'bng');
 body.append('purpose', 'Replaced lunch payment');
 body.append('description', 'Completely replaced payment for team lunch');
-body.append('is_negotiable', '1');
-body.append('status', 'paid');
+body.append('is_negotiable', '');
+body.append('status', 'pending');
 body.append('expires_at', '2025-11-15T12:00:00Z');
 body.append('negotiable', '');
 body.append('image', document.querySelector('input[name="image"]').files[0]);
@@ -2738,20 +2812,38 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
+        &quot;type&quot;: &quot;paymentRequest&quot;,
         &quot;id&quot;: &quot;f47ac10b-58cc-4372-a567-0e02b2c3d479&quot;,
-        &quot;amount&quot;: 250,
-        &quot;purpose&quot;: &quot;Replaced lunch payment&quot;,
-        &quot;description&quot;: &quot;Completely replaced payment for team lunch&quot;,
-        &quot;status&quot;: &quot;pending&quot;,
-        &quot;negotiable&quot;: false,
-        &quot;expires_at&quot;: &quot;2025-11-15T12:00:00Z&quot;,
-        &quot;image_url&quot;: null,
-        &quot;metadata&quot;: null,
-        &quot;created_at&quot;: &quot;2025-08-01T10:15:30Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-08-15T12:30:15Z&quot;
-    },
-    &quot;message&quot;: &quot;Payment request replaced successfully&quot;,
-    &quot;status&quot;: 200
+        &quot;attributes&quot;: {
+            &quot;amount&quot;: &quot;250.00&quot;,
+            &quot;formattedAmount&quot;: &quot;GHS 250.00&quot;,
+            &quot;currencyCode&quot;: &quot;GHS&quot;,
+            &quot;purpose&quot;: &quot;Replaced lunch payment&quot;,
+            &quot;description&quot;: &quot;Completely replaced payment for team lunch&quot;,
+            &quot;isNegotiable&quot;: false,
+            &quot;status&quot;: &quot;pending&quot;,
+            &quot;expiresAt&quot;: &quot;2025-11-15T12:00:00Z&quot;,
+            &quot;paidAt&quot;: null,
+            &quot;isExpired&quot;: false,
+            &quot;metadata&quot;: null,
+            &quot;createdAt&quot;: &quot;2025-08-01T10:15:30Z&quot;,
+            &quot;updatedAt&quot;: &quot;2025-08-15T12:30:15Z&quot;
+        },
+        &quot;relationships&quot;: {
+            &quot;author&quot;: {
+                &quot;data&quot;: {
+                    &quot;type&quot;: &quot;user&quot;,
+                    &quot;id&quot;: 1
+                },
+                &quot;links&quot;: {
+                    &quot;self&quot;: &quot;/api/v1/users/1&quot;
+                }
+            }
+        },
+        &quot;links&quot;: {
+            &quot;self&quot;: &quot;/api/v1/payment-requests/f47ac10b-58cc-4372-a567-0e02b2c3d479&quot;
+        }
+    }
 }</code>
  </pre>
             <blockquote>
@@ -2950,7 +3042,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>true</code></p>
+<p>Example: <code>false</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>status</code></b>&nbsp;&nbsp;
@@ -2958,10 +3050,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="PUTapi-v1-payment-requests--uuid_id-"
-               value="paid"
+               value="pending"
                data-component="body">
     <br>
-<p>Example: <code>paid</code></p>
+<p>Example: <code>pending</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>pending</code></li> <li><code>paid</code></li> <li><code>cancelled</code></li> <li><code>expired</code></li></ul>
         </div>
@@ -2996,7 +3088,7 @@ Must be one of:
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 2048 kilobytes. Example: <code>/private/var/folders/bd/x67xzw0s72321v82bxt7z2_40000gp/T/phplJYudT</code></p>
+<p>Must be an image. Must not be greater than 2048 kilobytes. Example: <code>/private/var/folders/bd/x67xzw0s72321v82bxt7z2_40000gp/T/phpcpdkLV</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>negotiable</code></b>&nbsp;&nbsp;
@@ -3046,7 +3138,7 @@ Users can only update their own payment requests, and paid payment requests cann
     \"purpose\": \"Updated lunch payment\",
     \"description\": \"Updated payment for team lunch\",
     \"is_negotiable\": true,
-    \"status\": \"expired\",
+    \"status\": \"cancelled\",
     \"expires_at\": \"2025-10-15T12:00:00Z\",
     \"metadata\": {
         \"restaurant\": \"Updated Cafe\",
@@ -3075,7 +3167,7 @@ let body = {
     "purpose": "Updated lunch payment",
     "description": "Updated payment for team lunch",
     "is_negotiable": true,
-    "status": "expired",
+    "status": "cancelled",
     "expires_at": "2025-10-15T12:00:00Z",
     "metadata": {
         "restaurant": "Updated Cafe",
@@ -3101,23 +3193,41 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
+        &quot;type&quot;: &quot;paymentRequest&quot;,
         &quot;id&quot;: &quot;f47ac10b-58cc-4372-a567-0e02b2c3d479&quot;,
-        &quot;amount&quot;: 200,
-        &quot;purpose&quot;: &quot;Updated lunch payment&quot;,
-        &quot;description&quot;: &quot;Updated payment for team lunch&quot;,
-        &quot;status&quot;: &quot;pending&quot;,
-        &quot;negotiable&quot;: true,
-        &quot;expires_at&quot;: &quot;2025-10-15T12:00:00Z&quot;,
-        &quot;image_url&quot;: null,
-        &quot;metadata&quot;: {
-            &quot;restaurant&quot;: &quot;Updated Cafe&quot;,
-            &quot;receipt_number&quot;: &quot;RCT-67890&quot;
+        &quot;attributes&quot;: {
+            &quot;amount&quot;: &quot;200.00&quot;,
+            &quot;formattedAmount&quot;: &quot;GHS 200.00&quot;,
+            &quot;currencyCode&quot;: &quot;GHS&quot;,
+            &quot;purpose&quot;: &quot;Updated lunch payment&quot;,
+            &quot;description&quot;: &quot;Updated payment for team lunch&quot;,
+            &quot;isNegotiable&quot;: true,
+            &quot;status&quot;: &quot;pending&quot;,
+            &quot;expiresAt&quot;: &quot;2025-10-15T12:00:00Z&quot;,
+            &quot;paidAt&quot;: null,
+            &quot;isExpired&quot;: false,
+            &quot;metadata&quot;: {
+                &quot;restaurant&quot;: &quot;Updated Cafe&quot;,
+                &quot;receipt_number&quot;: &quot;RCT-67890&quot;
+            },
+            &quot;createdAt&quot;: &quot;2025-08-01T10:15:30Z&quot;,
+            &quot;updatedAt&quot;: &quot;2025-08-15T11:20:45Z&quot;
         },
-        &quot;created_at&quot;: &quot;2025-08-01T10:15:30Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-08-15T11:20:45Z&quot;
-    },
-    &quot;message&quot;: &quot;Payment request updated successfully&quot;,
-    &quot;status&quot;: 200
+        &quot;relationships&quot;: {
+            &quot;author&quot;: {
+                &quot;data&quot;: {
+                    &quot;type&quot;: &quot;user&quot;,
+                    &quot;id&quot;: 1
+                },
+                &quot;links&quot;: {
+                    &quot;self&quot;: &quot;/api/v1/users/1&quot;
+                }
+            }
+        },
+        &quot;links&quot;: {
+            &quot;self&quot;: &quot;/api/v1/payment-requests/f47ac10b-58cc-4372-a567-0e02b2c3d479&quot;
+        }
+    }
 }</code>
  </pre>
             <blockquote>
@@ -3326,10 +3436,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="PATCHapi-v1-payment-requests--uuid_id-"
-               value="expired"
+               value="cancelled"
                data-component="body">
     <br>
-<p>Example: <code>expired</code></p>
+<p>Example: <code>cancelled</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>pending</code></li> <li><code>paid</code></li> <li><code>cancelled</code></li> <li><code>expired</code></li></ul>
         </div>
