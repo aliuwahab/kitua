@@ -1761,7 +1761,7 @@ fetch(url, {
                 &quot;name&quot;: &quot;Ghana&quot;,
                 &quot;code&quot;: &quot;GH&quot;,
                 &quot;currencyCode&quot;: &quot;GHS&quot;,
-                &quot;currencySymbol&quot;: &quot;₵&quot;,
+                &quot;currencySymbol&quot;: &quot;GH₵&quot;,
                 &quot;currencyName&quot;: &quot;Ghana Cedi&quot;,
                 &quot;isActive&quot;: true,
                 &quot;createdAt&quot;: &quot;2025-08-15T10:15:30.000Z&quot;,
@@ -1970,7 +1970,7 @@ fetch(url, {
             &quot;name&quot;: &quot;Ghana&quot;,
             &quot;code&quot;: &quot;GH&quot;,
             &quot;currencyCode&quot;: &quot;GHS&quot;,
-            &quot;currencySymbol&quot;: &quot;₵&quot;,
+            &quot;currencySymbol&quot;: &quot;GH₵&quot;,
             &quot;currencyName&quot;: &quot;Ghana Cedi&quot;,
             &quot;isActive&quot;: true,
             &quot;createdAt&quot;: &quot;2025-08-15T10:15:30.000Z&quot;,
@@ -2590,7 +2590,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"purpose\": \"Lunch payment\",
     \"description\": \"Payment for team lunch at the cafeteria\",
     \"is_negotiable\": true,
-    \"status\": \"expired\",
+    \"status\": \"pending\",
     \"expires_at\": \"2025-09-15T12:00:00Z\",
     \"metadata\": {
         \"restaurant\": \"Cafe Royal\",
@@ -2618,7 +2618,7 @@ let body = {
     "purpose": "Lunch payment",
     "description": "Payment for team lunch at the cafeteria",
     "is_negotiable": true,
-    "status": "expired",
+    "status": "pending",
     "expires_at": "2025-09-15T12:00:00Z",
     "metadata": {
         "restaurant": "Cafe Royal",
@@ -2861,10 +2861,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="POSTapi-v1-payment-requests"
-               value="expired"
+               value="pending"
                data-component="body">
     <br>
-<p>Example: <code>expired</code></p>
+<p>Example: <code>pending</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>pending</code></li> <li><code>paid</code></li> <li><code>cancelled</code></li> <li><code>expired</code></li></ul>
         </div>
@@ -3363,11 +3363,11 @@ Users can only replace their own payment requests, and paid payment requests can
     --form "currency_code=bng"\
     --form "purpose=Replaced lunch payment"\
     --form "description=Completely replaced payment for team lunch"\
-    --form "is_negotiable="\
-    --form "status=paid"\
+    --form "is_negotiable=1"\
+    --form "status=pending"\
     --form "expires_at=2025-11-15T12:00:00Z"\
     --form "negotiable="\
-    --form "image=@/private/var/folders/bd/x67xzw0s72321v82bxt7z2_40000gp/T/phpv8ypqB" </code></pre></div>
+    --form "image=@/private/var/folders/bd/x67xzw0s72321v82bxt7z2_40000gp/T/php35qyVz" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -3386,8 +3386,8 @@ body.append('amount', '250');
 body.append('currency_code', 'bng');
 body.append('purpose', 'Replaced lunch payment');
 body.append('description', 'Completely replaced payment for team lunch');
-body.append('is_negotiable', '');
-body.append('status', 'paid');
+body.append('is_negotiable', '1');
+body.append('status', 'pending');
 body.append('expires_at', '2025-11-15T12:00:00Z');
 body.append('negotiable', '');
 body.append('image', document.querySelector('input[name="image"]').files[0]);
@@ -3638,7 +3638,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>false</code></p>
+<p>Example: <code>true</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>status</code></b>&nbsp;&nbsp;
@@ -3646,10 +3646,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="PUTapi-v1-payment-requests--uuid_id-"
-               value="paid"
+               value="pending"
                data-component="body">
     <br>
-<p>Example: <code>paid</code></p>
+<p>Example: <code>pending</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>pending</code></li> <li><code>paid</code></li> <li><code>cancelled</code></li> <li><code>expired</code></li></ul>
         </div>
@@ -3684,7 +3684,7 @@ Must be one of:
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 2048 kilobytes. Example: <code>/private/var/folders/bd/x67xzw0s72321v82bxt7z2_40000gp/T/phpv8ypqB</code></p>
+<p>Must be an image. Must not be greater than 2048 kilobytes. Example: <code>/private/var/folders/bd/x67xzw0s72321v82bxt7z2_40000gp/T/php35qyVz</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>negotiable</code></b>&nbsp;&nbsp;
@@ -3734,7 +3734,7 @@ Users can only update their own payment requests, and paid payment requests cann
     \"purpose\": \"Updated lunch payment\",
     \"description\": \"Updated payment for team lunch\",
     \"is_negotiable\": false,
-    \"status\": \"paid\",
+    \"status\": \"pending\",
     \"expires_at\": \"2025-10-15T12:00:00Z\",
     \"metadata\": {
         \"restaurant\": \"Updated Cafe\",
@@ -3763,7 +3763,7 @@ let body = {
     "purpose": "Updated lunch payment",
     "description": "Updated payment for team lunch",
     "is_negotiable": false,
-    "status": "paid",
+    "status": "pending",
     "expires_at": "2025-10-15T12:00:00Z",
     "metadata": {
         "restaurant": "Updated Cafe",
@@ -4032,10 +4032,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="PATCHapi-v1-payment-requests--uuid_id-"
-               value="paid"
+               value="pending"
                data-component="body">
     <br>
-<p>Example: <code>paid</code></p>
+<p>Example: <code>pending</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>pending</code></li> <li><code>paid</code></li> <li><code>cancelled</code></li> <li><code>expired</code></li></ul>
         </div>

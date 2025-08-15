@@ -320,7 +320,7 @@ endpoints:
         name: status
         description: ''
         required: false
-        example: expired
+        example: pending
         type: string
         enumValues:
           - pending
@@ -378,7 +378,7 @@ endpoints:
       purpose: 'Lunch payment'
       description: 'Payment for team lunch at the cafeteria'
       is_negotiable: true
-      status: expired
+      status: pending
       expires_at: '2025-09-15T12:00:00Z'
       metadata:
         restaurant: 'Cafe Royal'
@@ -788,7 +788,7 @@ endpoints:
         name: is_negotiable
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -798,7 +798,7 @@ endpoints:
         name: status
         description: ''
         required: false
-        example: paid
+        example: pending
         type: string
         enumValues:
           - pending
@@ -853,8 +853,8 @@ endpoints:
       currency_code: bng
       purpose: 'Replaced lunch payment'
       description: 'Completely replaced payment for team lunch'
-      is_negotiable: false
-      status: paid
+      is_negotiable: true
+      status: pending
       expires_at: '2025-11-15T12:00:00Z'
       negotiable: false
     fileParameters:
@@ -1035,7 +1035,7 @@ endpoints:
         name: status
         description: ''
         required: false
-        example: paid
+        example: pending
         type: string
         enumValues:
           - pending
@@ -1103,7 +1103,7 @@ endpoints:
       purpose: 'Updated lunch payment'
       description: 'Updated payment for team lunch'
       is_negotiable: false
-      status: paid
+      status: pending
       expires_at: '2025-10-15T12:00:00Z'
       metadata:
         restaurant: 'Updated Cafe'
