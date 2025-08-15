@@ -91,13 +91,16 @@
                             </li>
                                                                         </ul>
                             </ul>
-                    <ul id="tocify-header-endpoints" class="tocify-header">
-                <li class="tocify-item level-1" data-unique="endpoints">
-                    <a href="#endpoints">Endpoints</a>
+                    <ul id="tocify-header-general" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="general">
+                    <a href="#general">General</a>
                 </li>
-                                    <ul id="tocify-subheader-endpoints" class="tocify-subheader">
-                                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-countries--id-">
-                                <a href="#endpoints-GETapi-v1-countries--id-">GET api/v1/countries/{id}</a>
+                                    <ul id="tocify-subheader-general" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="general-GETapi-v1-countries">
+                                <a href="#general-GETapi-v1-countries">Get all countries</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="general-GETapi-v1-countries--id-">
+                                <a href="#general-GETapi-v1-countries--id-">Get country by ID</a>
                             </li>
                                                                         </ul>
                             </ul>
@@ -1696,17 +1699,234 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         </form>
 
-                <h1 id="endpoints">Endpoints</h1>
+                <h1 id="general">General</h1>
 
     
 
-                                <h2 id="endpoints-GETapi-v1-countries--id-">GET api/v1/countries/{id}</h2>
+                                <h2 id="general-GETapi-v1-countries">Get all countries</h2>
 
 <p>
-<small class="badge badge-darkred">requires authentication</small>
 </p>
 
+<p>Retrieve a list of all available countries with their details including currency information.
+Only active countries are returned by default.</p>
 
+<span id="example-requests-GETapi-v1-countries">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost/api/v1/countries?active=1&amp;search=Ghana" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/v1/countries"
+);
+
+const params = {
+    "active": "1",
+    "search": "Ghana",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-countries">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: [
+        {
+            &quot;type&quot;: &quot;country&quot;,
+            &quot;id&quot;: &quot;9d2f8b10-1234-4567-8901-123456789abc&quot;,
+            &quot;attributes&quot;: {
+                &quot;name&quot;: &quot;Ghana&quot;,
+                &quot;code&quot;: &quot;GH&quot;,
+                &quot;currencyCode&quot;: &quot;GHS&quot;,
+                &quot;currencySymbol&quot;: &quot;₵&quot;,
+                &quot;currencyName&quot;: &quot;Ghana Cedi&quot;,
+                &quot;isActive&quot;: true,
+                &quot;createdAt&quot;: &quot;2025-08-15T10:15:30.000Z&quot;,
+                &quot;updatedAt&quot;: &quot;2025-08-15T10:15:30.000Z&quot;
+            },
+            &quot;links&quot;: {
+                &quot;self&quot;: &quot;http://localhost/api/v1/countries/9d2f8b10-1234-4567-8901-123456789abc&quot;
+            }
+        },
+        {
+            &quot;type&quot;: &quot;country&quot;,
+            &quot;id&quot;: &quot;9d2f8b10-1234-4567-8901-123456789def&quot;,
+            &quot;attributes&quot;: {
+                &quot;name&quot;: &quot;Nigeria&quot;,
+                &quot;code&quot;: &quot;NG&quot;,
+                &quot;currencyCode&quot;: &quot;NGN&quot;,
+                &quot;currencySymbol&quot;: &quot;₦&quot;,
+                &quot;currencyName&quot;: &quot;Nigerian Naira&quot;,
+                &quot;isActive&quot;: true,
+                &quot;createdAt&quot;: &quot;2025-08-15T10:15:30.000Z&quot;,
+                &quot;updatedAt&quot;: &quot;2025-08-15T10:15:30.000Z&quot;
+            },
+            &quot;links&quot;: {
+                &quot;self&quot;: &quot;http://localhost/api/v1/countries/9d2f8b10-1234-4567-8901-123456789def&quot;
+            }
+        }
+    ],
+    &quot;meta&quot;: {
+        &quot;total&quot;: 2,
+        &quot;count&quot;: 2
+    },
+    &quot;links&quot;: {
+        &quot;self&quot;: &quot;http://localhost/api/v1/countries&quot;
+    },
+    &quot;message&quot;: &quot;Countries retrieved successfully&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (200, Empty result):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: [],
+    &quot;meta&quot;: {
+        &quot;total&quot;: 0,
+        &quot;count&quot;: 0
+    },
+    &quot;links&quot;: {
+        &quot;self&quot;: &quot;http://localhost/api/v1/countries&quot;
+    },
+    &quot;message&quot;: &quot;Countries retrieved successfully&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-countries" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-countries"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-countries"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-countries" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-countries">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-v1-countries" data-method="GET"
+      data-path="api/v1/countries"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-countries', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-countries"
+                    onclick="tryItOut('GETapi-v1-countries');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-countries"
+                    onclick="cancelTryOut('GETapi-v1-countries');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-countries"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/countries</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-v1-countries"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-v1-countries"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>active</code></b>&nbsp;&nbsp;
+<small>boolean</small>&nbsp;
+<i>optional</i> &nbsp;
+                <label data-endpoint="GETapi-v1-countries" style="display: none">
+            <input type="radio" name="active"
+                   value="1"
+                   data-endpoint="GETapi-v1-countries"
+                   data-component="query"             >
+            <code>true</code>
+        </label>
+        <label data-endpoint="GETapi-v1-countries" style="display: none">
+            <input type="radio" name="active"
+                   value="0"
+                   data-endpoint="GETapi-v1-countries"
+                   data-component="query"             >
+            <code>false</code>
+        </label>
+    <br>
+<p>Filter by active status. Default: true. Example: <code>true</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>search</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="search"                data-endpoint="GETapi-v1-countries"
+               value="Ghana"
+               data-component="query">
+    <br>
+<p>Search countries by name or code. Example: <code>Ghana</code></p>
+            </div>
+                </form>
+
+                    <h2 id="general-GETapi-v1-countries--id-">Get country by ID</h2>
+
+<p>
+</p>
+
+<p>Retrieve detailed information about a specific country by its UUID.</p>
 
 <span id="example-requests-GETapi-v1-countries--id-">
 <blockquote>Example request:</blockquote>
@@ -1714,19 +1934,17 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/countries/architecto" \
-    --header "Authorization: Bearer Bearer {YOUR_TOKEN}" \
+    --get "http://localhost/api/v1/countries/bcb7245f-37e3-4e91-b7f1-ca382cf13e13" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/countries/architecto"
+    "http://localhost/api/v1/countries/bcb7245f-37e3-4e91-b7f1-ca382cf13e13"
 );
 
 const headers = {
-    "Authorization": "Bearer Bearer {YOUR_TOKEN}",
     "Content-Type": "application/json",
     "Accept": "application/json",
 };
@@ -1740,19 +1958,44 @@ fetch(url, {
 
 <span id="example-responses-GETapi-v1-countries--id-">
             <blockquote>
-            <p>Example response (401):</p>
+            <p>Example response (200):</p>
         </blockquote>
-                <details class="annotation">
-            <summary style="cursor: pointer;">
-                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
-            </summary>
-            <pre><code class="language-http">cache-control: no-cache, private
-content-type: application/json
-access-control-allow-origin: *
- </code></pre></details>         <pre>
+                <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Unauthenticated.&quot;
+    &quot;data&quot;: {
+        &quot;type&quot;: &quot;country&quot;,
+        &quot;id&quot;: &quot;9d2f8b10-1234-4567-8901-123456789abc&quot;,
+        &quot;attributes&quot;: {
+            &quot;name&quot;: &quot;Ghana&quot;,
+            &quot;code&quot;: &quot;GH&quot;,
+            &quot;currencyCode&quot;: &quot;GHS&quot;,
+            &quot;currencySymbol&quot;: &quot;₵&quot;,
+            &quot;currencyName&quot;: &quot;Ghana Cedi&quot;,
+            &quot;isActive&quot;: true,
+            &quot;createdAt&quot;: &quot;2025-08-15T10:15:30.000Z&quot;,
+            &quot;updatedAt&quot;: &quot;2025-08-15T10:15:30.000Z&quot;
+        },
+        &quot;links&quot;: {
+            &quot;self&quot;: &quot;http://localhost/api/v1/countries/9d2f8b10-1234-4567-8901-123456789abc&quot;
+        }
+    },
+    &quot;message&quot;: &quot;Country retrieved successfully&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Country not found&quot;,
+    &quot;errors&quot;: {
+        &quot;country&quot;: [
+            &quot;The specified country could not be found.&quot;
+        ]
+    },
+    &quot;status&quot;: &quot;error&quot;
 }</code>
  </pre>
     </span>
@@ -1773,7 +2016,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 </span>
 <form id="form-GETapi-v1-countries--id-" data-method="GET"
       data-path="api/v1/countries/{id}"
-      data-authed="1"
+      data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
@@ -1804,17 +2047,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="GETapi-v1-countries--id-"
-               value="Bearer Bearer {YOUR_TOKEN}"
-               data-component="header">
-    <br>
-<p>Example: <code>Bearer Bearer {YOUR_TOKEN}</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
 &nbsp;
  &nbsp;
@@ -1843,10 +2075,21 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="id"                data-endpoint="GETapi-v1-countries--id-"
-               value="architecto"
+               value="bcb7245f-37e3-4e91-b7f1-ca382cf13e13"
                data-component="url">
     <br>
-<p>The ID of the country. Example: <code>architecto</code></p>
+<p>The ID of the country. Example: <code>bcb7245f-37e3-4e91-b7f1-ca382cf13e13</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>country</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="country"                data-endpoint="GETapi-v1-countries--id-"
+               value="9d2f8b10-1234-4567-8901-123456789abc"
+               data-component="url">
+    <br>
+<p>The UUID of the country. Example: <code>9d2f8b10-1234-4567-8901-123456789abc</code></p>
             </div>
                     </form>
 
@@ -2346,8 +2589,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"currency_code\": \"bng\",
     \"purpose\": \"Lunch payment\",
     \"description\": \"Payment for team lunch at the cafeteria\",
-    \"is_negotiable\": false,
-    \"status\": \"cancelled\",
+    \"is_negotiable\": true,
+    \"status\": \"expired\",
     \"expires_at\": \"2025-09-15T12:00:00Z\",
     \"metadata\": {
         \"restaurant\": \"Cafe Royal\",
@@ -2374,8 +2617,8 @@ let body = {
     "currency_code": "bng",
     "purpose": "Lunch payment",
     "description": "Payment for team lunch at the cafeteria",
-    "is_negotiable": false,
-    "status": "cancelled",
+    "is_negotiable": true,
+    "status": "expired",
     "expires_at": "2025-09-15T12:00:00Z",
     "metadata": {
         "restaurant": "Cafe Royal",
@@ -2610,7 +2853,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>false</code></p>
+<p>Example: <code>true</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>status</code></b>&nbsp;&nbsp;
@@ -2618,10 +2861,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="POSTapi-v1-payment-requests"
-               value="cancelled"
+               value="expired"
                data-component="body">
     <br>
-<p>Example: <code>cancelled</code></p>
+<p>Example: <code>expired</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>pending</code></li> <li><code>paid</code></li> <li><code>cancelled</code></li> <li><code>expired</code></li></ul>
         </div>
@@ -3124,7 +3367,7 @@ Users can only replace their own payment requests, and paid payment requests can
     --form "status=paid"\
     --form "expires_at=2025-11-15T12:00:00Z"\
     --form "negotiable="\
-    --form "image=@/private/var/folders/bd/x67xzw0s72321v82bxt7z2_40000gp/T/phpDzVA1A" </code></pre></div>
+    --form "image=@/private/var/folders/bd/x67xzw0s72321v82bxt7z2_40000gp/T/phpv8ypqB" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -3441,7 +3684,7 @@ Must be one of:
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 2048 kilobytes. Example: <code>/private/var/folders/bd/x67xzw0s72321v82bxt7z2_40000gp/T/phpDzVA1A</code></p>
+<p>Must be an image. Must not be greater than 2048 kilobytes. Example: <code>/private/var/folders/bd/x67xzw0s72321v82bxt7z2_40000gp/T/phpv8ypqB</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>negotiable</code></b>&nbsp;&nbsp;
@@ -3490,8 +3733,8 @@ Users can only update their own payment requests, and paid payment requests cann
     \"currency_code\": \"bng\",
     \"purpose\": \"Updated lunch payment\",
     \"description\": \"Updated payment for team lunch\",
-    \"is_negotiable\": true,
-    \"status\": \"expired\",
+    \"is_negotiable\": false,
+    \"status\": \"paid\",
     \"expires_at\": \"2025-10-15T12:00:00Z\",
     \"metadata\": {
         \"restaurant\": \"Updated Cafe\",
@@ -3519,8 +3762,8 @@ let body = {
     "currency_code": "bng",
     "purpose": "Updated lunch payment",
     "description": "Updated payment for team lunch",
-    "is_negotiable": true,
-    "status": "expired",
+    "is_negotiable": false,
+    "status": "paid",
     "expires_at": "2025-10-15T12:00:00Z",
     "metadata": {
         "restaurant": "Updated Cafe",
@@ -3781,7 +4024,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>true</code></p>
+<p>Example: <code>false</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>status</code></b>&nbsp;&nbsp;
@@ -3789,10 +4032,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="PATCHapi-v1-payment-requests--uuid_id-"
-               value="expired"
+               value="paid"
                data-component="body">
     <br>
-<p>Example: <code>expired</code></p>
+<p>Example: <code>paid</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>pending</code></li> <li><code>paid</code></li> <li><code>cancelled</code></li> <li><code>expired</code></li></ul>
         </div>

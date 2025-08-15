@@ -1,16 +1,16 @@
-name: Endpoints
+name: 'User Profile'
 description: ''
 endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/v1/countries/{id}'
+    uri: 'api/v1/users/{uuid}'
     metadata:
-      groupName: Endpoints
+      groupName: 'User Profile'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: ''
+      title: 'Get user by UUID (JSON:API endpoint)'
       description: ''
       authenticated: true
       deprecated: false
@@ -20,18 +20,18 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      id:
-        name: id
-        description: 'The ID of the country.'
+      uuid:
+        name: uuid
+        description: 'The UUID of the user. Currently returns authenticated user data.'
         required: true
-        example: architecto
+        example: f47ac10b-58cc-4372-a567-0e02b2c3d479
         type: string
         enumValues: []
-        exampleWasSpecified: false
+        exampleWasSpecified: true
         nullable: false
         custom: []
     cleanUrlParameters:
-      id: architecto
+      uuid: f47ac10b-58cc-4372-a567-0e02b2c3d479
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -39,13 +39,19 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
+        status: 200
+        content: |-
+          {
+            "id": 1,
+            "mobile_number": "233244123456",
+            "first_name": "John",
+            "surname": "Doe",
+            "full_name": "John Doe",
+            "payment_accounts": [],
+            "active_device_sessions": []
+          }
+        headers: []
+        description: ''
         custom: []
     responseFields: []
     auth:

@@ -20,11 +20,9 @@ class CountryResource extends JsonResource
             'attributes' => [
                 'name' => $this->name,
                 'code' => $this->code,
-                'dialingCode' => $this->dialing_code,
                 'currencyCode' => $this->currency_code,
                 'currencySymbol' => $this->currency_symbol,
                 'currencyName' => $this->currency_name,
-                'flag' => $this->flag,
                 'isActive' => $this->is_active,
                 'createdAt' => $this->created_at->toISOString(),
                 'updatedAt' => $this->updated_at->toISOString(),

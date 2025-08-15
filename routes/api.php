@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\CountryController;
 use App\Http\Controllers\Api\V1\PaymentRequestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +40,10 @@ Route::prefix('v1')->group(function () {
         Route::post('/login', [AuthController::class, 'login'])->name('login');
     });
 
+    // Public Routes (No Authentication Required)
+    Route::get('/countries', [CountryController::class, 'index'])->name('countries.index');
+    Route::get('/countries/{country}', [CountryController::class, 'show'])->name('countries.show');
+
     // Protected Routes (Authenticated)
     Route::middleware('auth:sanctum')->group(function () {
 
@@ -73,17 +78,6 @@ Route::prefix('v1')->group(function () {
             return $request->user()->load(['paymentAccounts', 'activeDeviceSessions']);
         })->name('users.show');
 
-        // Countries route for resource linking
-        Route::get('/countries/{country}', function (Request $request, $country) {
-            // For now, return a basic country structure
-            // In a real app, you'd implement proper country lookup
-            return response()->json([
-                'id' => $country,
-                'name' => 'Ghana',
-                'code' => 'GH',
-                'currency_code' => 'GHS'
-            ]);
-        })->name('countries.show');
 
         // Payment Requests (Kitua) Routes - Following masterclass patterns
         Route::apiResource('payment-requests', PaymentRequestController::class, [
