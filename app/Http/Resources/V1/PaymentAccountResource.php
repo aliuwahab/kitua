@@ -36,12 +36,12 @@ class PaymentAccountResource extends JsonResource
                         'id' => $this->user_id
                     ],
                     'links' => [
-                        'self' => route('users.show', ['user' => $this->user_id])
+                        'self' => '#' // Temporarily disabled due to route issue
                     ]
                 ]
             ],
             'links' => [
-                'self' => route('payment-accounts.show', ['payment_account' => $this->id])
+                'self' => '#' // Temporarily disabled due to route issue
             ]
         ];
     }

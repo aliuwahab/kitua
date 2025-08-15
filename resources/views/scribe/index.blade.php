@@ -91,6 +91,16 @@
                             </li>
                                                                         </ul>
                             </ul>
+                    <ul id="tocify-header-endpoints" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="endpoints">
+                    <a href="#endpoints">Endpoints</a>
+                </li>
+                                    <ul id="tocify-subheader-endpoints" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-countries--id-">
+                                <a href="#endpoints-GETapi-v1-countries--id-">GET api/v1/countries/{id}</a>
+                            </li>
+                                                                        </ul>
+                            </ul>
                     <ul id="tocify-header-health-check" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="health-check">
                     <a href="#health-check">Health Check</a>
@@ -255,12 +265,20 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;user_exists&quot;: false,
-        &quot;mobile_number&quot;: &quot;233244123456&quot;,
-        &quot;message&quot;: &quot;Registration PIN sent to your mobile number&quot;,
-        &quot;pin&quot;: &quot;123456&quot;
+        &quot;type&quot;: &quot;registration&quot;,
+        &quot;id&quot;: &quot;689f7aae2da9f&quot;,
+        &quot;attributes&quot;: {
+            &quot;userExists&quot;: false,
+            &quot;mobileNumber&quot;: &quot;233244123456&quot;,
+            &quot;message&quot;: &quot;Registration PIN sent to your mobile number&quot;,
+            &quot;pin&quot;: &quot;250964&quot;
+        },
+        &quot;links&quot;: {
+            &quot;verifyPin&quot;: &quot;http://localhost/api/v1/auth/verify-pin&quot;,
+            &quot;login&quot;: &quot;http://localhost/api/v1/auth/login&quot;
+        }
     },
-    &quot;message&quot;: &quot;PIN sent successfully&quot;,
+    &quot;message&quot;: &quot;Registration PIN sent to your mobile number&quot;,
     &quot;status&quot;: 200
 }</code>
  </pre>
@@ -565,28 +583,108 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;user&quot;: {
-            &quot;id&quot;: 1,
-            &quot;mobile_number&quot;: &quot;233244123456&quot;,
-            &quot;first_name&quot;: &quot;John&quot;,
-            &quot;surname&quot;: &quot;Doe&quot;,
-            &quot;full_name&quot;: &quot;John Doe&quot;,
-            &quot;user_type&quot;: &quot;mobile&quot;,
-            &quot;is_active&quot;: true,
-            &quot;payment_accounts&quot;: [
-                {
-                    &quot;id&quot;: 1,
-                    &quot;account_type&quot;: &quot;momo&quot;,
-                    &quot;account_number&quot;: &quot;233244123456&quot;,
-                    &quot;provider&quot;: &quot;MTN&quot;,
-                    &quot;is_primary&quot;: true,
-                    &quot;is_verified&quot;: false
-                }
-            ]
+        &quot;type&quot;: &quot;authentication&quot;,
+        &quot;id&quot;: &quot;0198aef7-7dd4-73f5-b45b-ffa0e2f2cd76&quot;,
+        &quot;attributes&quot;: {
+            &quot;token&quot;: &quot;1|1U35ymFSmoMn02wdjtQNVALwbJhHw2epENTb7a1Bbeb73e31&quot;,
+            &quot;isNewUser&quot;: true,
+            &quot;isNewDevice&quot;: true,
+            &quot;userExists&quot;: null,
+            &quot;mobileNumber&quot;: &quot;233244123456&quot;,
+            &quot;message&quot;: null,
+            &quot;pin&quot;: null
         },
-        &quot;token&quot;: &quot;1|xyz789token123&quot;,
-        &quot;is_new_user&quot;: true,
-        &quot;is_new_device&quot;: true
+        &quot;relationships&quot;: {
+            &quot;user&quot;: {
+                &quot;data&quot;: {
+                    &quot;type&quot;: &quot;user&quot;,
+                    &quot;id&quot;: &quot;0198aef7-7dd4-73f5-b45b-ffa0e2f2cd76&quot;
+                },
+                &quot;links&quot;: {
+                    &quot;self&quot;: &quot;#&quot;
+                }
+            }
+        },
+        &quot;includes&quot;: {
+            &quot;user&quot;: {
+                &quot;type&quot;: &quot;user&quot;,
+                &quot;id&quot;: &quot;0198aef7-7dd4-73f5-b45b-ffa0e2f2cd76&quot;,
+                &quot;attributes&quot;: {
+                    &quot;mobileNumber&quot;: &quot;233244123456&quot;,
+                    &quot;firstName&quot;: &quot;John&quot;,
+                    &quot;surname&quot;: &quot;Doe&quot;,
+                    &quot;otherNames&quot;: null,
+                    &quot;fullName&quot;: &quot;John Doe&quot;,
+                    &quot;userType&quot;: &quot;customer&quot;,
+                    &quot;isActive&quot;: true,
+                    &quot;emailVerifiedAt&quot;: null,
+                    &quot;createdAt&quot;: &quot;2025-08-15T18:21:51.000000Z&quot;,
+                    &quot;updatedAt&quot;: &quot;2025-08-15T18:21:51.000000Z&quot;
+                },
+                &quot;relationships&quot;: {
+                    &quot;country&quot;: {
+                        &quot;data&quot;: {
+                            &quot;type&quot;: &quot;country&quot;,
+                            &quot;id&quot;: &quot;53c153e8-9d2d-4b60-9844-985e6e2c7db2&quot;
+                        },
+                        &quot;links&quot;: {
+                            &quot;self&quot;: &quot;http://localhost/api/v1/countries/53c153e8-9d2d-4b60-9844-985e6e2c7db2&quot;
+                        }
+                    },
+                    &quot;paymentAccounts&quot;: {
+                        &quot;data&quot;: [
+                            {
+                                &quot;type&quot;: &quot;paymentAccount&quot;,
+                                &quot;id&quot;: &quot;0198aef7-7dd6-7097-830d-fabd3845c8b7&quot;
+                            }
+                        ],
+                        &quot;links&quot;: {
+                            &quot;related&quot;: &quot;#&quot;
+                        }
+                    }
+                },
+                &quot;includes&quot;: {
+                    &quot;paymentAccounts&quot;: [
+                        {
+                            &quot;type&quot;: &quot;paymentAccount&quot;,
+                            &quot;id&quot;: &quot;0198aef7-7dd6-7097-830d-fabd3845c8b7&quot;,
+                            &quot;attributes&quot;: {
+                                &quot;accountType&quot;: &quot;momo&quot;,
+                                &quot;accountNumber&quot;: &quot;233244123456&quot;,
+                                &quot;accountName&quot;: &quot;John Doe&quot;,
+                                &quot;provider&quot;: null,
+                                &quot;isPrimary&quot;: true,
+                                &quot;isVerified&quot;: false,
+                                &quot;isActive&quot;: null,
+                                &quot;verifiedAt&quot;: null,
+                                &quot;createdAt&quot;: &quot;2025-08-15T18:21:51.000000Z&quot;,
+                                &quot;updatedAt&quot;: &quot;2025-08-15T18:21:51.000000Z&quot;
+                            },
+                            &quot;relationships&quot;: {
+                                &quot;user&quot;: {
+                                    &quot;data&quot;: {
+                                        &quot;type&quot;: &quot;user&quot;,
+                                        &quot;id&quot;: &quot;0198aef7-7dd4-73f5-b45b-ffa0e2f2cd76&quot;
+                                    },
+                                    &quot;links&quot;: {
+                                        &quot;self&quot;: &quot;#&quot;
+                                    }
+                                }
+                            },
+                            &quot;links&quot;: {
+                                &quot;self&quot;: &quot;#&quot;
+                            }
+                        }
+                    ]
+                },
+                &quot;links&quot;: {
+                    &quot;self&quot;: &quot;#&quot;
+                }
+            }
+        },
+        &quot;links&quot;: {
+            &quot;self&quot;: &quot;#&quot;
+        }
     },
     &quot;message&quot;: &quot;Authentication successful&quot;,
     &quot;status&quot;: 200
@@ -855,21 +953,46 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;user&quot;: {
-            &quot;id&quot;: 1,
-            &quot;mobile_number&quot;: &quot;233244123456&quot;,
-            &quot;first_name&quot;: &quot;John&quot;,
-            &quot;surname&quot;: &quot;Doe&quot;,
-            &quot;full_name&quot;: &quot;John Doe&quot;,
-            &quot;user_type&quot;: &quot;mobile&quot;,
-            &quot;is_active&quot;: true
+        &quot;type&quot;: &quot;authentication&quot;,
+        &quot;id&quot;: 1,
+        &quot;attributes&quot;: {
+            &quot;token&quot;: &quot;1|xyz789token123&quot;,
+            &quot;isNewUser&quot;: false,
+            &quot;isNewDevice&quot;: false,
+            &quot;userExists&quot;: null,
+            &quot;mobileNumber&quot;: &quot;233244123456&quot;,
+            &quot;message&quot;: null,
+            &quot;pin&quot;: null
         },
-        &quot;token&quot;: &quot;1|xyz789token123&quot;,
-        &quot;is_new_user&quot;: false,
-        &quot;is_new_device&quot;: false
-    },
-    &quot;message&quot;: &quot;Login successful&quot;,
-    &quot;status&quot;: 200
+        &quot;relationships&quot;: {
+            &quot;user&quot;: {
+                &quot;data&quot;: {
+                    &quot;type&quot;: &quot;user&quot;,
+                    &quot;id&quot;: 1
+                },
+                &quot;links&quot;: {
+                    &quot;self&quot;: &quot;/api/v1/users/1&quot;
+                }
+            }
+        },
+        &quot;includes&quot;: {
+            &quot;user&quot;: {
+                &quot;type&quot;: &quot;user&quot;,
+                &quot;id&quot;: 1,
+                &quot;attributes&quot;: {
+                    &quot;mobileNumber&quot;: &quot;233244123456&quot;,
+                    &quot;firstName&quot;: &quot;John&quot;,
+                    &quot;surname&quot;: &quot;Doe&quot;,
+                    &quot;fullName&quot;: &quot;John Doe&quot;,
+                    &quot;userType&quot;: &quot;customer&quot;,
+                    &quot;isActive&quot;: true
+                }
+            }
+        },
+        &quot;links&quot;: {
+            &quot;self&quot;: &quot;/api/v1/users/1&quot;
+        }
+    }
 }</code>
  </pre>
             <blockquote>
@@ -1111,16 +1234,36 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;user&quot;: {
-            &quot;id&quot;: 1,
-            &quot;mobile_number&quot;: &quot;233244123456&quot;,
-            &quot;first_name&quot;: &quot;John&quot;
+        &quot;type&quot;: &quot;logout&quot;,
+        &quot;id&quot;: &quot;66c8f91a8f4d3&quot;,
+        &quot;attributes&quot;: {
+            &quot;reason&quot;: &quot;user_initiated&quot;,
+            &quot;loggedOutAt&quot;: &quot;2025-08-15T08:45:00Z&quot;,
+            &quot;deviceSessionsCount&quot;: null,
+            &quot;message&quot;: &quot;Logged out successfully&quot;
         },
-        &quot;reason&quot;: &quot;user_initiated&quot;,
-        &quot;logged_out_at&quot;: &quot;2025-08-15T08:45:00Z&quot;
-    },
-    &quot;message&quot;: &quot;Logged out successfully&quot;,
-    &quot;status&quot;: 200
+        &quot;relationships&quot;: {
+            &quot;user&quot;: {
+                &quot;data&quot;: {
+                    &quot;type&quot;: &quot;user&quot;,
+                    &quot;id&quot;: 1
+                },
+                &quot;links&quot;: {
+                    &quot;self&quot;: &quot;/api/v1/users/1&quot;
+                }
+            }
+        },
+        &quot;includes&quot;: {
+            &quot;user&quot;: {
+                &quot;type&quot;: &quot;user&quot;,
+                &quot;id&quot;: 1,
+                &quot;attributes&quot;: {
+                    &quot;mobileNumber&quot;: &quot;233244123456&quot;,
+                    &quot;firstName&quot;: &quot;John&quot;
+                }
+            }
+        }
+    }
 }</code>
  </pre>
     </span>
@@ -1252,15 +1395,35 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;user&quot;: {
-            &quot;id&quot;: 1,
-            &quot;mobile_number&quot;: &quot;233244123456&quot;
+        &quot;type&quot;: &quot;logout&quot;,
+        &quot;id&quot;: &quot;66c8f91a8f4d3&quot;,
+        &quot;attributes&quot;: {
+            &quot;reason&quot;: &quot;user_initiated&quot;,
+            &quot;loggedOutAt&quot;: &quot;2025-08-15T08:45:00Z&quot;,
+            &quot;deviceSessionsCount&quot;: 3,
+            &quot;message&quot;: &quot;Logged out from all devices&quot;
         },
-        &quot;device_sessions_count&quot;: 3,
-        &quot;reason&quot;: &quot;user_initiated&quot;
-    },
-    &quot;message&quot;: &quot;Logged out from all devices&quot;,
-    &quot;status&quot;: 200
+        &quot;relationships&quot;: {
+            &quot;user&quot;: {
+                &quot;data&quot;: {
+                    &quot;type&quot;: &quot;user&quot;,
+                    &quot;id&quot;: 1
+                },
+                &quot;links&quot;: {
+                    &quot;self&quot;: &quot;/api/v1/users/1&quot;
+                }
+            }
+        },
+        &quot;includes&quot;: {
+            &quot;user&quot;: {
+                &quot;type&quot;: &quot;user&quot;,
+                &quot;id&quot;: 1,
+                &quot;attributes&quot;: {
+                    &quot;mobileNumber&quot;: &quot;233244123456&quot;
+                }
+            }
+        }
+    }
 }</code>
  </pre>
     </span>
@@ -1392,25 +1555,64 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;user&quot;: {
-            &quot;id&quot;: 1,
-            &quot;mobile_number&quot;: &quot;233244123456&quot;,
-            &quot;first_name&quot;: &quot;John&quot;,
-            &quot;surname&quot;: &quot;Doe&quot;,
-            &quot;full_name&quot;: &quot;John Doe&quot;,
+        &quot;type&quot;: &quot;user&quot;,
+        &quot;id&quot;: &quot;0198aef7-c446-7064-aa5b-f97eec114ba2&quot;,
+        &quot;attributes&quot;: {
+            &quot;mobileNumber&quot;: &quot;233337138993&quot;,
+            &quot;firstName&quot;: &quot;Camren&quot;,
+            &quot;surname&quot;: &quot;Simonis&quot;,
+            &quot;otherNames&quot;: &quot;Jarrell&quot;,
+            &quot;fullName&quot;: &quot;Camren Simonis Jarrell&quot;,
+            &quot;userType&quot;: &quot;customer&quot;,
+            &quot;isActive&quot;: true,
+            &quot;emailVerifiedAt&quot;: null,
+            &quot;createdAt&quot;: &quot;2025-08-15T18:22:09.000000Z&quot;,
+            &quot;updatedAt&quot;: &quot;2025-08-15T18:22:09.000000Z&quot;
+        },
+        &quot;relationships&quot;: {
             &quot;country&quot;: {
-                &quot;id&quot;: 1,
-                &quot;name&quot;: &quot;Ghana&quot;,
-                &quot;code&quot;: &quot;GH&quot;,
-                &quot;currency_code&quot;: &quot;GHS&quot;,
-                &quot;currency_symbol&quot;: &quot;₵&quot;,
-                &quot;currency_name&quot;: &quot;Ghana Cedi&quot;
+                &quot;data&quot;: {
+                    &quot;type&quot;: &quot;country&quot;,
+                    &quot;id&quot;: &quot;cdcd6ddb-7bd2-4775-a1c4-0d565510c79f&quot;
+                },
+                &quot;links&quot;: {
+                    &quot;self&quot;: &quot;http://localhost/api/v1/countries/cdcd6ddb-7bd2-4775-a1c4-0d565510c79f&quot;
+                }
             },
-            &quot;payment_accounts&quot;: [],
-            &quot;device_sessions&quot;: []
+            &quot;paymentAccounts&quot;: {
+                &quot;data&quot;: [],
+                &quot;links&quot;: {
+                    &quot;related&quot;: &quot;#&quot;
+                }
+            }
+        },
+        &quot;includes&quot;: {
+            &quot;country&quot;: {
+                &quot;type&quot;: &quot;country&quot;,
+                &quot;id&quot;: &quot;cdcd6ddb-7bd2-4775-a1c4-0d565510c79f&quot;,
+                &quot;attributes&quot;: {
+                    &quot;name&quot;: &quot;Ghana&quot;,
+                    &quot;code&quot;: &quot;GH&quot;,
+                    &quot;dialingCode&quot;: null,
+                    &quot;currencyCode&quot;: &quot;GHS&quot;,
+                    &quot;currencySymbol&quot;: &quot;GH₵&quot;,
+                    &quot;currencyName&quot;: &quot;Ghana Cedi&quot;,
+                    &quot;flag&quot;: null,
+                    &quot;isActive&quot;: true,
+                    &quot;createdAt&quot;: &quot;2025-08-15T18:22:09.000000Z&quot;,
+                    &quot;updatedAt&quot;: &quot;2025-08-15T18:22:09.000000Z&quot;
+                },
+                &quot;links&quot;: {
+                    &quot;self&quot;: &quot;http://localhost/api/v1/countries/cdcd6ddb-7bd2-4775-a1c4-0d565510c79f&quot;
+                }
+            },
+            &quot;paymentAccounts&quot;: []
+        },
+        &quot;links&quot;: {
+            &quot;self&quot;: &quot;#&quot;
         }
     },
-    &quot;message&quot;: &quot;User profile retrieved&quot;,
+    &quot;message&quot;: &quot;User profile retrieved successfully&quot;,
     &quot;status&quot;: 200
 }</code>
  </pre>
@@ -1496,6 +1698,160 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Example: <code>application/json</code></p>
             </div>
                         </form>
+
+                <h1 id="endpoints">Endpoints</h1>
+
+    
+
+                                <h2 id="endpoints-GETapi-v1-countries--id-">GET api/v1/countries/{id}</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-v1-countries--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost/api/v1/countries/architecto" \
+    --header "Authorization: Bearer Bearer {YOUR_TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/v1/countries/architecto"
+);
+
+const headers = {
+    "Authorization": "Bearer Bearer {YOUR_TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-countries--id-">
+            <blockquote>
+            <p>Example response (401):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+access-control-allow-origin: *
+ </code></pre></details>         <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Unauthenticated.&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-countries--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-countries--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-countries--id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-countries--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-countries--id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-v1-countries--id-" data-method="GET"
+      data-path="api/v1/countries/{id}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-countries--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-countries--id-"
+                    onclick="tryItOut('GETapi-v1-countries--id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-countries--id-"
+                    onclick="cancelTryOut('GETapi-v1-countries--id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-countries--id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/countries/{id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-v1-countries--id-"
+               value="Bearer Bearer {YOUR_TOKEN}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer Bearer {YOUR_TOKEN}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-v1-countries--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-v1-countries--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="id"                data-endpoint="GETapi-v1-countries--id-"
+               value="architecto"
+               data-component="url">
+    <br>
+<p>The ID of the country. Example: <code>architecto</code></p>
+            </div>
+                    </form>
 
                 <h1 id="health-check">Health Check</h1>
 
@@ -1994,7 +2350,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"purpose\": \"Lunch payment\",
     \"description\": \"Payment for team lunch at the cafeteria\",
     \"is_negotiable\": true,
-    \"status\": \"expired\",
+    \"status\": \"cancelled\",
     \"expires_at\": \"2025-09-15T12:00:00Z\",
     \"metadata\": {
         \"restaurant\": \"Cafe Royal\",
@@ -2022,7 +2378,7 @@ let body = {
     "purpose": "Lunch payment",
     "description": "Payment for team lunch at the cafeteria",
     "is_negotiable": true,
-    "status": "expired",
+    "status": "cancelled",
     "expires_at": "2025-09-15T12:00:00Z",
     "metadata": {
         "restaurant": "Cafe Royal",
@@ -2265,10 +2621,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="POSTapi-v1-payment-requests"
-               value="expired"
+               value="cancelled"
                data-component="body">
     <br>
-<p>Example: <code>expired</code></p>
+<p>Example: <code>cancelled</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>pending</code></li> <li><code>paid</code></li> <li><code>cancelled</code></li> <li><code>expired</code></li></ul>
         </div>
@@ -2768,10 +3124,10 @@ Users can only replace their own payment requests, and paid payment requests can
     --form "purpose=Replaced lunch payment"\
     --form "description=Completely replaced payment for team lunch"\
     --form "is_negotiable="\
-    --form "status=pending"\
+    --form "status=cancelled"\
     --form "expires_at=2025-11-15T12:00:00Z"\
     --form "negotiable="\
-    --form "image=@/private/var/folders/bd/x67xzw0s72321v82bxt7z2_40000gp/T/phpcpdkLV" </code></pre></div>
+    --form "image=@/private/var/folders/bd/x67xzw0s72321v82bxt7z2_40000gp/T/phpTWoorT" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -2791,7 +3147,7 @@ body.append('currency_code', 'bng');
 body.append('purpose', 'Replaced lunch payment');
 body.append('description', 'Completely replaced payment for team lunch');
 body.append('is_negotiable', '');
-body.append('status', 'pending');
+body.append('status', 'cancelled');
 body.append('expires_at', '2025-11-15T12:00:00Z');
 body.append('negotiable', '');
 body.append('image', document.querySelector('input[name="image"]').files[0]);
@@ -3050,10 +3406,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="PUTapi-v1-payment-requests--uuid_id-"
-               value="pending"
+               value="cancelled"
                data-component="body">
     <br>
-<p>Example: <code>pending</code></p>
+<p>Example: <code>cancelled</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>pending</code></li> <li><code>paid</code></li> <li><code>cancelled</code></li> <li><code>expired</code></li></ul>
         </div>
@@ -3088,7 +3444,7 @@ Must be one of:
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 2048 kilobytes. Example: <code>/private/var/folders/bd/x67xzw0s72321v82bxt7z2_40000gp/T/phpcpdkLV</code></p>
+<p>Must be an image. Must not be greater than 2048 kilobytes. Example: <code>/private/var/folders/bd/x67xzw0s72321v82bxt7z2_40000gp/T/phpTWoorT</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>negotiable</code></b>&nbsp;&nbsp;
@@ -3138,7 +3494,7 @@ Users can only update their own payment requests, and paid payment requests cann
     \"purpose\": \"Updated lunch payment\",
     \"description\": \"Updated payment for team lunch\",
     \"is_negotiable\": true,
-    \"status\": \"cancelled\",
+    \"status\": \"expired\",
     \"expires_at\": \"2025-10-15T12:00:00Z\",
     \"metadata\": {
         \"restaurant\": \"Updated Cafe\",
@@ -3167,7 +3523,7 @@ let body = {
     "purpose": "Updated lunch payment",
     "description": "Updated payment for team lunch",
     "is_negotiable": true,
-    "status": "cancelled",
+    "status": "expired",
     "expires_at": "2025-10-15T12:00:00Z",
     "metadata": {
         "restaurant": "Updated Cafe",
@@ -3436,10 +3792,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="PATCHapi-v1-payment-requests--uuid_id-"
-               value="cancelled"
+               value="expired"
                data-component="body">
     <br>
-<p>Example: <code>cancelled</code></p>
+<p>Example: <code>expired</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>pending</code></li> <li><code>paid</code></li> <li><code>cancelled</code></li> <li><code>expired</code></li></ul>
         </div>

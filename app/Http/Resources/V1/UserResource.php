@@ -37,7 +37,7 @@ class UserResource extends JsonResource
                     ]),
                     'links' => [
                         'self' => $this->when($this->country_id, 
-                            route('countries.show', ['country' => $this->country_id])
+                            route('countries.show', $this->country_id)
                         )
                     ]
                 ],
@@ -47,7 +47,7 @@ class UserResource extends JsonResource
                         'id' => $account->id
                     ]),
                     'links' => [
-                        'related' => route('users.payment-accounts.index', ['user' => $this->id])
+                        'related' => '#' // route('users.payment-accounts.index', $this->id)
                     ]
                 ]
             ],
@@ -56,7 +56,7 @@ class UserResource extends JsonResource
                 'paymentAccounts' => PaymentAccountResource::collection($this->whenLoaded('paymentAccounts'))
             ],
             'links' => [
-                'self' => route('users.show', ['user' => $this->id])
+                'self' => '#' // Temporarily disabled due to route issue
             ]
         ];
     }

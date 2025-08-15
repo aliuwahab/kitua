@@ -26,7 +26,7 @@ class AuthenticationTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'status',
-                'service', 
+                'service',
                 'version',
                 'timestamp'
             ])
@@ -62,20 +62,28 @@ class AuthenticationTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
-                    'user_exists',
-                    'mobile_number',
-                    'message',
-                    'pin'
+                    'type',
+                    'id',
+                    'attributes' => [
+                        'userExists',
+                        'mobileNumber',
+                        'message',
+                        'pin'
+                    ],
+                    'links'
                 ],
                 'message',
                 'status'
             ])
             ->assertJson([
                 'data' => [
-                    'user_exists' => false,
-                    'mobile_number' => '233244123456'
+                    'type' => 'registration',
+                    'attributes' => [
+                        'userExists' => false,
+                        'mobileNumber' => '233244123456'
+                    ]
                 ],
-                'message' => 'PIN sent successfully'
+                'message' => 'Registration PIN sent to your mobile number'
             ]);
 
         // Assert user was created but inactive
@@ -120,8 +128,11 @@ class AuthenticationTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'data' => [
-                    'user_exists' => true,
-                    'mobile_number' => '233244123456'
+                    'type' => 'registration',
+                    'attributes' => [
+                        'userExists' => true,
+                        'mobileNumber' => '233244123456'
+                    ]
                 ]
             ]);
 
@@ -146,7 +157,7 @@ class AuthenticationTest extends TestCase
         ];
 
         $registerResponse = $this->postJson('/api/v1/auth/register', $userData);
-        $pin = $registerResponse->json('data.pin');
+        $pin = $registerResponse->json('data.attributes.pin');
 
         // Now verify PIN
         $verifyData = [
@@ -163,33 +174,30 @@ class AuthenticationTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
-                    'user' => [
-                        'id',
-                        'mobile_number',
-                        'first_name',
-                        'surname',
-                        'full_name',
-                        'user_type',
-                        'is_active',
-                        'payment_accounts',
-                        'device_sessions'
+                    'type',
+                    'id',
+                    'attributes' => [
+                        'token',
+                        'isNewUser',
+                        'isNewDevice'
                     ],
-                    'token',
-                    'is_new_user',
-                    'is_new_device'
+                    'relationships' => [
+                        'user'
+                    ],
+                    'includes' => [
+                        'user'
+                    ]
                 ],
                 'message',
                 'status'
             ])
             ->assertJson([
                 'data' => [
-                    'user' => [
-                        'mobile_number' => '233244123456',
-                        'first_name' => 'John',
-                        'is_active' => true
-                    ],
-                    'is_new_user' => true,
-                    'is_new_device' => true
+                    'type' => 'authentication',
+                    'attributes' => [
+                        'isNewUser' => true,
+                        'isNewDevice' => true
+                    ]
                 ],
                 'message' => 'Authentication successful'
             ]);
@@ -277,7 +285,12 @@ class AuthenticationTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJson([
-                'data' => ['user_exists' => true]
+                'data' => [
+                    'type' => 'registration',
+                    'attributes' => [
+                        'userExists' => true
+                    ]
+                ]
             ]);
     }
 
@@ -330,13 +343,18 @@ class AuthenticationTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
-                    'user' => [
-                        'id',
-                        'mobile_number',
-                        'first_name',
+                    'type',
+                    'id',
+                    'attributes' => [
+                        'mobileNumber',
+                        'firstName',
                         'surname',
-                        'payment_accounts',
-                        'active_device_sessions'
+                        'fullName',
+                        'userType',
+                        'isActive'
+                    ],
+                    'relationships' => [
+                        'paymentAccounts'
                     ]
                 ],
                 'message'
@@ -369,7 +387,31 @@ class AuthenticationTest extends TestCase
             ->postJson('/api/v1/auth/logout');
 
         $response->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => [
+                    'type',
+                    'id',
+                    'attributes' => [
+                        'reason',
+                        'loggedOutAt',
+                        'message'
+                    ],
+                    'relationships' => [
+                        'user'
+                    ],
+                    'includes' => [
+                        'user'
+                    ]
+                ],
+                'message'
+            ])
             ->assertJson([
+                'data' => [
+                    'type' => 'logout',
+                    'attributes' => [
+                        'reason' => 'user_initiated'
+                    ]
+                ],
                 'message' => 'Logged out successfully'
             ]);
 
@@ -385,7 +427,7 @@ class AuthenticationTest extends TestCase
         Event::fake();
 
         $user = User::factory()->create();
-        
+
         // Create multiple tokens and device sessions
         $user->createToken('token1');
         $user->createToken('token2');
@@ -401,10 +443,22 @@ class AuthenticationTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
-                    'user',
-                    'device_sessions_count',
-                    'reason'
-                ]
+                    'type',
+                    'id',
+                    'attributes' => [
+                        'reason',
+                        'loggedOutAt',
+                        'deviceSessionsCount',
+                        'message'
+                    ],
+                    'relationships' => [
+                        'user'
+                    ],
+                    'includes' => [
+                        'user'
+                    ]
+                ],
+                'message'
             ]);
 
         // All tokens should be deleted
@@ -430,7 +484,7 @@ class AuthenticationTest extends TestCase
 
         // Register
         $registerResponse = $this->postJson('/api/v1/auth/register', $userData);
-        $pin = $registerResponse->json('data.pin');
+        $pin = $registerResponse->json('data.attributes.pin');
 
         // Complete registration
         $verifyData = array_merge($userData, ['pin' => $pin]);
@@ -496,7 +550,7 @@ class AuthenticationTest extends TestCase
             ->assertStatus(422)
             ->assertJsonValidationErrors(['mobile_number', 'first_name', 'surname', 'device_id', 'device_type']);
 
-        // Test verify-pin endpoint  
+        // Test verify-pin endpoint
         $this->postJson('/api/v1/auth/verify-pin', [])
             ->assertStatus(422)
             ->assertJsonValidationErrors(['mobile_number', 'pin', 'device_id', 'device_type']);

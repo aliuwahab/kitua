@@ -33,20 +33,20 @@ Route::get('/health', function () {
 Route::prefix('v1')->group(function () {
     
     // Authentication Routes (Unauthenticated)
-    Route::prefix('auth')->group(function () {
-        Route::post('/register', [AuthController::class, 'register']);
-        Route::post('/verify-pin', [AuthController::class, 'verifyPin']);
-        Route::post('/login', [AuthController::class, 'login']); // Alternative endpoint
+    Route::prefix('auth')->name('api.v1.auth.')->group(function () {
+        Route::post('/register', [AuthController::class, 'register'])->name('register');
+        Route::post('/verify-pin', [AuthController::class, 'verifyPin'])->name('verify-pin');
+        Route::post('/login', [AuthController::class, 'login'])->name('login');
     });
     
     // Protected Routes (Authenticated)
     Route::middleware('auth:sanctum')->group(function () {
         
         // Authentication Routes
-        Route::prefix('auth')->group(function () {
-            Route::post('/logout', [AuthController::class, 'logout']);
-            Route::post('/logout-all', [AuthController::class, 'logoutAll']);
-            Route::get('/me', [AuthController::class, 'me']);
+        Route::prefix('auth')->name('api.v1.auth.')->group(function () {
+            Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+            Route::post('/logout-all', [AuthController::class, 'logoutAll'])->name('logout-all');
+            Route::get('/me', [AuthController::class, 'me'])->name('me');
         });
         
         /**
@@ -92,6 +92,18 @@ Route::prefix('v1')->group(function () {
             // In a real app, you'd implement proper authorization
             return $request->user()->load(['paymentAccounts', 'activeDeviceSessions']);
         })->name('users.show');
+        
+        // Countries route for resource linking
+        Route::get('/countries/{country}', function (Request $request, $country) {
+            // For now, return a basic country structure
+            // In a real app, you'd implement proper country lookup
+            return response()->json([
+                'id' => $country,
+                'name' => 'Ghana',
+                'code' => 'GH',
+                'currency_code' => 'GHS'
+            ]);
+        })->name('countries.show');
         
         // Payment Requests (Kitua) Routes - Following masterclass patterns
         Route::apiResource('payment-requests', PaymentRequestController::class, [
