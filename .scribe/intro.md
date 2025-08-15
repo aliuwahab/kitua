@@ -3,7 +3,7 @@
 REST API for Kitua mobile payment app supporting group payments and individual payment requests
 
 <aside>
-    <strong>Base URL</strong>: <code>http://kitua.test</code>
+    <strong>Base URL</strong>: <code>http://localhost</code>
 </aside>
 
     This documentation covers the Kitua Mobile Payment API, which provides endpoints for user authentication, payment accounts, group payments, and individual payment requests.

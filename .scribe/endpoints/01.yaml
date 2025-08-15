@@ -413,119 +413,151 @@ endpoints:
     bodyParameters:
       mobile_number:
         name: mobile_number
-        description: "The user's mobile number (10-15 digits). Must match the regex /^[0-9]{10,15}$/."
+        description: 'Mobile number used for login.'
         required: true
-        example: '0541234567'
+        example: '233244123456'
         type: string
         enumValues: []
-        exampleWasSpecified: false
+        exampleWasSpecified: true
         nullable: false
         custom: []
       pin:
         name: pin
-        description: "The user's 4-6 digit PIN. Must match the regex /^[0-9]+$/. Must be at least 4 characters. Must not be greater than 6 characters."
+        description: '6-digit PIN for authentication.'
         required: true
-        example: '1234'
+        example: '123456'
         type: string
         enumValues: []
-        exampleWasSpecified: false
+        exampleWasSpecified: true
         nullable: false
         custom: []
       device_id:
         name: device_id
         description: 'Unique device identifier.'
         required: true
-        example: device-12345-uuid
+        example: ABC123
         type: string
         enumValues: []
-        exampleWasSpecified: false
+        exampleWasSpecified: true
         nullable: false
         custom: []
       device_name:
         name: device_name
-        description: 'Human readable device name. Must not be greater than 100 characters.'
+        description: 'optional User-friendly device name.'
         required: false
         example: "John's iPhone"
         type: string
         enumValues: []
-        exampleWasSpecified: false
+        exampleWasSpecified: true
         nullable: true
         custom: []
       device_type:
         name: device_type
-        description: 'Type of device (android or ios).'
+        description: 'Device type (android/ios).'
         required: true
-        example: ios
+        example: android
         type: string
-        enumValues:
-          - android
-          - ios
-        exampleWasSpecified: false
+        enumValues: []
+        exampleWasSpecified: true
         nullable: false
         custom: []
       app_version:
         name: app_version
-        description: 'Application version.'
+        description: 'optional App version.'
         required: false
         example: 1.0.0
         type: string
         enumValues: []
-        exampleWasSpecified: false
+        exampleWasSpecified: true
         nullable: true
         custom: []
       os_version:
         name: os_version
-        description: 'Operating system version.'
+        description: 'optional OS version.'
         required: false
-        example: '17.0'
+        example: 'Android 12'
         type: string
         enumValues: []
-        exampleWasSpecified: false
+        exampleWasSpecified: true
         nullable: true
         custom: []
       device_model:
         name: device_model
-        description: 'Device model.'
+        description: 'optional Device model.'
         required: false
-        example: 'iPhone 15 Pro'
+        example: 'Samsung Galaxy S21'
         type: string
         enumValues: []
-        exampleWasSpecified: false
+        exampleWasSpecified: true
         nullable: true
         custom: []
       screen_resolution:
         name: screen_resolution
-        description: 'Screen resolution of the device.'
+        description: 'optional Screen resolution.'
         required: false
-        example: 1179x2556
+        example: 1080x2340
         type: string
         enumValues: []
-        exampleWasSpecified: false
+        exampleWasSpecified: true
         nullable: true
         custom: []
       push_token:
         name: push_token
-        description: 'Device token for push notifications.'
+        description: 'optional Firebase push token for notifications.'
         required: false
-        example: apn-token-xyz123
+        example: architecto
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
     cleanBodyParameters:
-      mobile_number: '0541234567'
-      pin: '1234'
-      device_id: device-12345-uuid
+      mobile_number: '233244123456'
+      pin: '123456'
+      device_id: ABC123
       device_name: "John's iPhone"
-      device_type: ios
+      device_type: android
       app_version: 1.0.0
-      os_version: '17.0'
-      device_model: 'iPhone 15 Pro'
-      screen_resolution: 1179x2556
-      push_token: apn-token-xyz123
+      os_version: 'Android 12'
+      device_model: 'Samsung Galaxy S21'
+      screen_resolution: 1080x2340
+      push_token: architecto
     fileParameters: []
-    responses: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "data": {
+              "user": {
+                "id": 1,
+                "mobile_number": "233244123456",
+                "first_name": "John",
+                "surname": "Doe",
+                "full_name": "John Doe",
+                "user_type": "mobile",
+                "is_active": true
+              },
+              "token": "1|xyz789token123",
+              "is_new_user": false,
+              "is_new_device": false
+            },
+            "message": "Login successful",
+            "status": 200
+          }
+        headers: []
+        description: 'Login successful'
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "message": "Invalid PIN or mobile number",
+            "status": 422
+          }
+        headers: []
+        description: 'Invalid credentials'
+        custom: []
     responseFields: []
     auth: []
     controller: null

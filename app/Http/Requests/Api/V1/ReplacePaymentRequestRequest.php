@@ -26,6 +26,35 @@ class ReplacePaymentRequestRequest extends BasePaymentRequestRequest
     }
 
     /**
+     * Get Scribe body parameters for documentation
+     */
+    public function bodyParameters()
+    {
+        return [
+            'amount' => [
+                'description' => 'The amount of the payment request',
+                'example' => 250,
+            ],
+            'purpose' => [
+                'description' => 'The purpose of the payment request',
+                'example' => 'Replaced lunch payment',
+            ],
+            'description' => [
+                'description' => 'A longer description of the payment request',
+                'example' => 'Completely replaced payment for team lunch',
+            ],
+            'expires_at' => [
+                'description' => 'The date and time when the payment request expires',
+                'example' => '2025-11-15T12:00:00Z',
+            ],
+            'negotiable' => [
+                'description' => 'Whether the amount is negotiable',
+                'example' => false,
+            ],
+        ];
+    }
+
+    /**
      * Get payment request data for replacing
      */
     public function getPaymentRequestData(): array

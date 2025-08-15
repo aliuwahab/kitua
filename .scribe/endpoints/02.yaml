@@ -1,118 +1,16 @@
-name: 'Payment Requests'
+name: 'User Profile'
 description: ''
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/payment-requests
+    uri: api/v1/user
     metadata:
-      groupName: 'Payment Requests'
+      groupName: 'User Profile'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Display a listing of payment requests for the authenticated user'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer Bearer {YOUR_TOKEN}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters:
-      status:
-        name: status
-        description: 'Filter by status (pending, paid, cancelled, expired).'
-        required: false
-        example: pending
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      page:
-        name: page
-        description: 'Page number for pagination.'
-        required: false
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      per_page:
-        name: per_page
-        description: 'Number of items per page (max 50).'
-        required: false
-        example: 15
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanQueryParameters:
-      status: pending
-      page: 1
-      per_page: 15
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 200
-        content: |-
-          {
-            "data": {
-              "payment_requests": {
-                "current_page": 1,
-                "data": [
-                  {
-                    "id": 1,
-                    "uuid": "123e4567-e89b-12d3-a456-426614174000",
-                    "amount": "150.50",
-                    "currency_code": "GHS",
-                    "formatted_amount": "GHS 150.50",
-                    "purpose": "Lunch money",
-                    "description": "Need money for lunch today",
-                    "status": "pending",
-                    "expires_at": "2025-08-20T18:00:00Z",
-                    "is_expired": false,
-                    "created_at": "2025-08-15T10:00:00Z",
-                    "media": []
-                  }
-                ],
-                "total": 1,
-                "per_page": 15,
-                "current_page": 1
-              }
-            },
-            "message": "Payment requests retrieved successfully",
-            "status": 200
-          }
-        headers: []
-        description: ''
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - POST
-    uri: api/v1/payment-requests
-    metadata:
-      groupName: 'Payment Requests'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Store a newly created payment request'
+      title: 'Get current user profile (legacy endpoint)'
       description: ''
       authenticated: true
       deprecated: false
@@ -125,108 +23,21 @@ endpoints:
     cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters:
-      amount:
-        name: amount
-        description: 'The amount to request for payment. Must be at least 0.01. Must not be greater than 999999999.99.'
-        required: true
-        example: 150.5
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      currency_code:
-        name: currency_code
-        description: 'ISO 4217 currency code (3 letters). Must match the regex /^[A-Z]{3}$/. Must be 3 characters.'
-        required: true
-        example: GHS
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      purpose:
-        name: purpose
-        description: 'Brief description of what the payment is for. Must not be greater than 255 characters.'
-        required: true
-        example: 'Lunch money'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      description:
-        name: description
-        description: 'Optional detailed description of the payment request. Must not be greater than 1000 characters.'
-        required: false
-        example: 'Need money for lunch at the office cafeteria today'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      is_negotiable:
-        name: is_negotiable
-        description: 'Whether the payment amount is negotiable (default: false for fixed amount).'
-        required: false
-        example: false
-        type: boolean
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      expires_at:
-        name: expires_at
-        description: 'Optional expiration date for the payment request (ISO 8601 format). Must be a valid date. Must be a date after <code>now</code>.'
-        required: false
-        example: '2025-08-20T18:00:00Z'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      image:
-        name: image
-        description: 'Optional image attachment (max 5MB, formats: jpeg, png, jpg, gif, webp). Must be an image. Must not be greater than 5120 kilobytes.'
-        required: false
-        example: null
-        type: file
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-    cleanBodyParameters:
-      amount: 150.5
-      currency_code: GHS
-      purpose: 'Lunch money'
-      description: 'Need money for lunch at the office cafeteria today'
-      is_negotiable: false
-      expires_at: '2025-08-20T18:00:00Z'
+    bodyParameters: []
+    cleanBodyParameters: []
     fileParameters: []
     responses:
       -
-        status: 201
+        status: 200
         content: |-
           {
-            "data": {
-              "payment_request": {
-                "id": 1,
-                "uuid": "123e4567-e89b-12d3-a456-426614174000",
-                "amount": "150.50",
-                "currency_code": "GHS",
-                "formatted_amount": "GHS 150.50",
-                "purpose": "Lunch money",
-                "description": "Need money for lunch today",
-                "status": "pending",
-                "expires_at": "2025-08-20T18:00:00Z",
-                "is_expired": false,
-                "created_at": "2025-08-15T10:00:00Z",
-                "media": []
-              }
-            },
-            "message": "Payment request created successfully",
-            "status": 201
+            "id": 1,
+            "mobile_number": "233244123456",
+            "first_name": "John",
+            "surname": "Doe",
+            "full_name": "John Doe",
+            "payment_accounts": [],
+            "active_device_sessions": []
           }
         headers: []
         description: ''
@@ -243,13 +54,13 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/v1/payment-requests/{uuid}'
+    uri: 'api/v1/users/{uuid}'
     metadata:
-      groupName: 'Payment Requests'
+      groupName: 'User Profile'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Display the specified payment request'
+      title: 'Get user by UUID (JSON:API endpoint)'
       description: ''
       authenticated: true
       deprecated: false
@@ -261,27 +72,16 @@ endpoints:
     urlParameters:
       uuid:
         name: uuid
-        description: ''
+        description: 'The UUID of the user. Currently returns authenticated user data.'
         required: true
-        example: 6ff8f7f6-1eb3-3525-be4a-3932c805afed
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      payment_request:
-        name: payment_request
-        description: 'The UUID of the payment request.'
-        required: true
-        example: 123e4567-e89b-12d3-a456-426614174000
+        example: f47ac10b-58cc-4372-a567-0e02b2c3d479
         type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         custom: []
     cleanUrlParameters:
-      uuid: 6ff8f7f6-1eb3-3525-be4a-3932c805afed
-      payment_request: 123e4567-e89b-12d3-a456-426614174000
+      uuid: f47ac10b-58cc-4372-a567-0e02b2c3d479
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -292,301 +92,13 @@ endpoints:
         status: 200
         content: |-
           {
-            "data": {
-              "payment_request": {
-                "id": 1,
-                "uuid": "123e4567-e89b-12d3-a456-426614174000",
-                "amount": "150.50",
-                "currency_code": "GHS",
-                "formatted_amount": "GHS 150.50",
-                "purpose": "Lunch money",
-                "description": "Need money for lunch today",
-                "status": "pending",
-                "expires_at": "2025-08-20T18:00:00Z",
-                "is_expired": false,
-                "created_at": "2025-08-15T10:00:00Z",
-                "user": {
-                  "id": 1,
-                  "first_name": "John",
-                  "surname": "Doe",
-                  "full_name": "John Doe"
-                },
-                "media": []
-              }
-            },
-            "message": "Payment request retrieved successfully",
-            "status": 200
-          }
-        headers: []
-        description: ''
-        custom: []
-      -
-        status: 404
-        content: |-
-          {
-            "message": "Payment request not found",
-            "status": 404
-          }
-        headers: []
-        description: ''
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - PUT
-      - PATCH
-    uri: 'api/v1/payment-requests/{uuid}'
-    metadata:
-      groupName: 'Payment Requests'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Update the specified payment request'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer Bearer {YOUR_TOKEN}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      uuid:
-        name: uuid
-        description: ''
-        required: true
-        example: 6ff8f7f6-1eb3-3525-be4a-3932c805afed
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      payment_request:
-        name: payment_request
-        description: 'The UUID of the payment request.'
-        required: true
-        example: 123e4567-e89b-12d3-a456-426614174000
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      uuid: 6ff8f7f6-1eb3-3525-be4a-3932c805afed
-      payment_request: 123e4567-e89b-12d3-a456-426614174000
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      amount:
-        name: amount
-        description: 'The amount to request for payment. Must be at least 0.01. Must not be greater than 999999999.99.'
-        required: false
-        example: 200.0
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      currency_code:
-        name: currency_code
-        description: 'ISO 4217 currency code (3 letters). Must match the regex /^[A-Z]{3}$/. Must be 3 characters.'
-        required: false
-        example: GHS
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      purpose:
-        name: purpose
-        description: 'Brief description of what the payment is for. Must not be greater than 255 characters.'
-        required: false
-        example: 'Dinner money'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      description:
-        name: description
-        description: 'Optional detailed description of the payment request. Must not be greater than 1000 characters.'
-        required: false
-        example: 'Need money for dinner at the restaurant tonight'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      is_negotiable:
-        name: is_negotiable
-        description: 'Whether the payment amount is negotiable.'
-        required: false
-        example: false
-        type: boolean
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      expires_at:
-        name: expires_at
-        description: 'Optional expiration date for the payment request (ISO 8601 format). Must be a valid date. Must be a date after <code>now</code>.'
-        required: false
-        example: '2025-08-22T20:00:00Z'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      image:
-        name: image
-        description: 'Optional new image attachment (max 5MB, formats: jpeg, png, jpg, gif, webp). Must be an image. Must not be greater than 5120 kilobytes.'
-        required: false
-        example: null
-        type: file
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      remove_image:
-        name: remove_image
-        description: 'Set to true to remove the existing image attachment.'
-        required: false
-        example: false
-        type: boolean
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanBodyParameters:
-      amount: 200.0
-      currency_code: GHS
-      purpose: 'Dinner money'
-      description: 'Need money for dinner at the restaurant tonight'
-      is_negotiable: false
-      expires_at: '2025-08-22T20:00:00Z'
-      remove_image: false
-    fileParameters: []
-    responses:
-      -
-        status: 200
-        content: |-
-          {
-            "data": {
-              "payment_request": {
-                "id": 1,
-                "uuid": "123e4567-e89b-12d3-a456-426614174000",
-                "amount": "200.00",
-                "currency_code": "GHS",
-                "formatted_amount": "GHS 200.00",
-                "purpose": "Dinner money",
-                "description": "Updated - need money for dinner",
-                "status": "pending",
-                "expires_at": "2025-08-22T20:00:00Z",
-                "is_expired": false,
-                "updated_at": "2025-08-15T11:00:00Z",
-                "media": []
-              }
-            },
-            "message": "Payment request updated successfully",
-            "status": 200
-          }
-        headers: []
-        description: ''
-        custom: []
-      -
-        status: 403
-        content: |-
-          {
-            "message": "Cannot update a paid payment request",
-            "status": 403
-          }
-        headers: []
-        description: ''
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - DELETE
-    uri: 'api/v1/payment-requests/{uuid}'
-    metadata:
-      groupName: 'Payment Requests'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Remove the specified payment request'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer Bearer {YOUR_TOKEN}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      uuid:
-        name: uuid
-        description: ''
-        required: true
-        example: 6ff8f7f6-1eb3-3525-be4a-3932c805afed
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      payment_request:
-        name: payment_request
-        description: 'The UUID of the payment request.'
-        required: true
-        example: 123e4567-e89b-12d3-a456-426614174000
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      uuid: 6ff8f7f6-1eb3-3525-be4a-3932c805afed
-      payment_request: 123e4567-e89b-12d3-a456-426614174000
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 200
-        content: |-
-          {
-            "data": {
-              "deleted_at": "2025-08-15T12:00:00Z"
-            },
-            "message": "Payment request deleted successfully",
-            "status": 200
-          }
-        headers: []
-        description: ''
-        custom: []
-      -
-        status: 403
-        content: |-
-          {
-            "message": "Cannot delete a paid payment request",
-            "status": 403
+            "id": 1,
+            "mobile_number": "233244123456",
+            "first_name": "John",
+            "surname": "Doe",
+            "full_name": "John Doe",
+            "payment_accounts": [],
+            "active_device_sessions": []
           }
         headers: []
         description: ''

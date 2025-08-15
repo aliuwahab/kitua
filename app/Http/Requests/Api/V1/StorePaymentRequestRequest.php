@@ -30,6 +30,42 @@ class StorePaymentRequestRequest extends BasePaymentRequestRequest
     }
 
     /**
+     * Get Scribe body parameters for documentation
+     */
+    public function bodyParameters()
+    {
+        return [
+            'amount' => [
+                'description' => 'The amount of the payment request',
+                'example' => 150,
+            ],
+            'purpose' => [
+                'description' => 'The purpose of the payment request (max 100 characters)',
+                'example' => 'Lunch payment',
+            ],
+            'description' => [
+                'description' => 'A longer description of the payment request',
+                'example' => 'Payment for team lunch at the cafeteria',
+            ],
+            'expires_at' => [
+                'description' => 'The date and time when the payment request expires. If not provided, defaults to 30 days from creation.',
+                'example' => '2025-09-15T12:00:00Z',
+            ],
+            'metadata' => [
+                'description' => 'Additional metadata for the payment request as JSON object',
+                'example' => '{"restaurant":"Cafe Royal","receipt_number":"RCT-12345"}',
+            ],
+            'negotiable' => [
+                'description' => 'Whether the amount is negotiable. Default is false.',
+                'example' => false,
+            ],
+            'image' => [
+                'description' => 'An image to attach to the payment request (jpg, png, gif, webp). Maximum size: 2MB.',
+            ],
+        ];
+    }
+
+    /**
      * Get payment request data for creating
      */
     public function getPaymentRequestData(): array

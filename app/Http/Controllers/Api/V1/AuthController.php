@@ -151,6 +151,41 @@ class AuthController extends Controller
      * 
      * This endpoint is provided for apps that want separate login/register flows,
      * but internally it uses the same unified flow as the register endpoint.
+     * 
+     * @bodyParam mobile_number string required Mobile number used for login. Example: 233244123456
+     * @bodyParam pin string required 6-digit PIN for authentication. Example: 123456
+     * @bodyParam device_id string required Unique device identifier. Example: ABC123
+     * @bodyParam device_name string optional User-friendly device name. Example: John's iPhone
+     * @bodyParam device_type string required Device type (android/ios). Example: android
+     * @bodyParam app_version string optional App version. Example: 1.0.0
+     * @bodyParam os_version string optional OS version. Example: Android 12
+     * @bodyParam device_model string optional Device model. Example: Samsung Galaxy S21
+     * @bodyParam screen_resolution string optional Screen resolution. Example: 1080x2340
+     * @bodyParam push_token string optional Firebase push token for notifications.
+     * 
+     * @response 200 scenario="Login successful" {
+     *   "data": {
+     *     "user": {
+     *       "id": 1,
+     *       "mobile_number": "233244123456",
+     *       "first_name": "John",
+     *       "surname": "Doe",
+     *       "full_name": "John Doe",
+     *       "user_type": "mobile",
+     *       "is_active": true
+     *     },
+     *     "token": "1|xyz789token123",
+     *     "is_new_user": false,
+     *     "is_new_device": false
+     *   },
+     *   "message": "Login successful",
+     *   "status": 200
+     * }
+     * 
+     * @response 422 scenario="Invalid credentials" {
+     *   "message": "Invalid PIN or mobile number",
+     *   "status": 422
+     * }
      */
     public function login(LoginUserRequest $request): JsonResponse
     {

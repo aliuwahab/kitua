@@ -1,4 +1,4 @@
-name: Endpoints
+name: 'Health Check'
 description: ''
 endpoints:
   -
@@ -6,17 +6,16 @@ endpoints:
       - GET
     uri: api/health
     metadata:
-      groupName: Endpoints
+      groupName: 'Health Check'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: true
+      title: 'API Health Check'
+      description: 'Check the health status of the API service.'
+      authenticated: false
       deprecated: false
       custom: []
     headers:
-      Authorization: 'Bearer Bearer {YOUR_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -29,62 +28,18 @@ endpoints:
     responses:
       -
         status: 200
-        content: '{"status":"ok","service":"Kitua API","version":"1.0.0","timestamp":"2025-08-15T14:46:21.274179Z"}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
+        content: |-
+          {
+            "status": "ok",
+            "service": "Kitua API",
+            "version": "1.0.0",
+            "timestamp": "2025-08-15T10:15:30Z"
+          }
+        headers: []
+        description: ''
         custom: []
     responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/user
-    metadata:
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer Bearer {YOUR_TOKEN}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    auth: []
     controller: null
     method: null
     route: null

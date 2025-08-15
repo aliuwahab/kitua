@@ -5,7 +5,21 @@ use App\Http\Controllers\Api\V1\PaymentRequestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-// Health check
+/**
+ * API Health Check
+ * 
+ * Check the health status of the API service.
+ * 
+ * @group Health Check
+ * @unauthenticated
+ * 
+ * @response 200 {
+ *   "status": "ok",
+ *   "service": "Kitua API",
+ *   "version": "1.0.0",
+ *   "timestamp": "2025-08-15T10:15:30Z"
+ * }
+ */
 Route::get('/health', function () {
     return response()->json([
         'status' => 'ok',
@@ -35,12 +49,44 @@ Route::prefix('v1')->group(function () {
             Route::get('/me', [AuthController::class, 'me']);
         });
         
-        // User Profile (legacy endpoint)
+        /**
+         * Get current user profile (legacy endpoint)
+         * 
+         * @group User Profile
+         * @authenticated
+         * 
+         * @response 200 {
+         *   "id": 1,
+         *   "mobile_number": "233244123456",
+         *   "first_name": "John",
+         *   "surname": "Doe",
+         *   "full_name": "John Doe",
+         *   "payment_accounts": [],
+         *   "active_device_sessions": []
+         * }
+         */
         Route::get('/user', function (Request $request) {
             return $request->user()->load(['paymentAccounts', 'activeDeviceSessions']);
         });
         
-        // User Resource endpoint for JSON:API compliance
+        /**
+         * Get user by UUID (JSON:API endpoint)
+         * 
+         * @group User Profile
+         * @authenticated
+         * 
+         * @urlParam uuid string required The UUID of the user. Currently returns authenticated user data. Example: f47ac10b-58cc-4372-a567-0e02b2c3d479
+         * 
+         * @response 200 {
+         *   "id": 1,
+         *   "mobile_number": "233244123456",
+         *   "first_name": "John",
+         *   "surname": "Doe",
+         *   "full_name": "John Doe",
+         *   "payment_accounts": [],
+         *   "active_device_sessions": []
+         * }
+         */
         Route::get('/users/{uuid}', function (Request $request, $uuid) {
             // For now, just return the authenticated user regardless of the ID
             // In a real app, you'd implement proper authorization
