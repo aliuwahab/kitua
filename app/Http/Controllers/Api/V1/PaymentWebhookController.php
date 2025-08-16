@@ -142,6 +142,22 @@ class PaymentWebhookController extends Controller
      * 
      * @urlParam provider string required The payment provider name. Example: paystack
      * @urlParam event string required The event type (payment.success, payment.failed, etc.). Example: payment.success
+     * 
+     * @response status=200 scenario="Event webhook processed successfully" {
+     *   "status": "success",
+     *   "message": "Webhook processed successfully",
+     *   "payment_id": "9d2f8e1a-5c3b-4a7d-8f9e-1a2b3c4d5e6f"
+     * }
+     * 
+     * @response status=400 scenario="Invalid webhook data" {
+     *   "status": "error",
+     *   "message": "Invalid webhook data"
+     * }
+     * 
+     * @response status=404 scenario="Unknown provider" {
+     *   "status": "error",
+     *   "message": "Unknown payment provider"
+     * }
      */
     public function handleEvent(Request $request, string $provider, string $event): JsonResponse
     {

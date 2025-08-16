@@ -121,6 +121,40 @@ class SettlePaymentRequest extends FormRequest
     }
 
     /**
+     * Get the body parameters for API documentation.
+     * This method is used by Scribe to generate better API documentation.
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'payment_method' => [
+                'description' => 'The payment method to use for the transaction.',
+                'example' => 'mobile_money',
+            ],
+            'phone_number' => [
+                'description' => 'The phone number for mobile money payments (required for mobile_money/momo).',
+                'example' => '+233201234567',
+            ],
+            'amount' => [
+                'description' => 'Custom amount for negotiable payment requests. If not provided, uses the original request amount.',
+                'example' => 120.50,
+            ],
+            'account_number' => [
+                'description' => 'Account number for bank transfers.',
+                'example' => '1234567890',
+            ],
+            'callback_url' => [
+                'description' => 'URL to redirect the user to after payment completion.',
+                'example' => 'https://myapp.com/payment/callback',
+            ],
+            'metadata' => [
+                'description' => 'Additional metadata for the payment.',
+                'example' => ['note' => 'Payment for lunch', 'order_id' => 'ORD-123'],
+            ],
+        ];
+    }
+
+    /**
      * Configure the validator instance.
      */
     public function withValidator($validator)

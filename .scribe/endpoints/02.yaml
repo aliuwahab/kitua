@@ -147,7 +147,7 @@ endpoints:
         name: id
         description: 'The ID of the country.'
         required: true
-        example: bcb7245f-37e3-4e91-b7f1-ca382cf13e13
+        example: 3359e0e1-e154-41f8-b0c1-b976eb7cb467
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -164,7 +164,7 @@ endpoints:
         nullable: false
         custom: []
     cleanUrlParameters:
-      id: bcb7245f-37e3-4e91-b7f1-ca382cf13e13
+      id: 3359e0e1-e154-41f8-b0c1-b976eb7cb467
       country: 9d2f8b10-1234-4567-8901-123456789abc
     queryParameters: []
     cleanQueryParameters: []

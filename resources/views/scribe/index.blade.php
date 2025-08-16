@@ -137,6 +137,25 @@
                                                                                 <li class="tocify-item level-2" data-unique="payment-requests-PATCHapi-v1-payment-requests--uuid_id-">
                                 <a href="#payment-requests-PATCHapi-v1-payment-requests--uuid_id-">Update Payment Request</a>
                             </li>
+                                                                                <li class="tocify-item level-2" data-unique="payment-requests-POSTapi-v1-payment-requests--uuid_id--settle">
+                                <a href="#payment-requests-POSTapi-v1-payment-requests--uuid_id--settle">Settle a payment request</a>
+                            </li>
+                                                                        </ul>
+                            </ul>
+                    <ul id="tocify-header-payment-webhooks" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="payment-webhooks">
+                    <a href="#payment-webhooks">Payment Webhooks</a>
+                </li>
+                                    <ul id="tocify-subheader-payment-webhooks" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="payment-webhooks-POSTapi-v1-webhooks-payment--provider-">
+                                <a href="#payment-webhooks-POSTapi-v1-webhooks-payment--provider-">Handle payment webhook from providers.</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="payment-webhooks-POSTapi-v1-webhooks-payment--provider---event-">
+                                <a href="#payment-webhooks-POSTapi-v1-webhooks-payment--provider---event-">Handle specific webhook events (if providers support it).</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="payment-webhooks-POSTapi-v1-webhooks-payment--provider--test">
+                                <a href="#payment-webhooks-POSTapi-v1-webhooks-payment--provider--test">Test webhook endpoint for development.</a>
+                            </li>
                                                                         </ul>
                             </ul>
                     <ul id="tocify-header-user-profile" class="tocify-header">
@@ -158,7 +177,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: August 15, 2025</li>
+        <li>Last updated: August 16, 2025</li>
     </ul>
 </div>
 
@@ -1934,14 +1953,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/countries/bcb7245f-37e3-4e91-b7f1-ca382cf13e13" \
+    --get "http://localhost/api/v1/countries/3359e0e1-e154-41f8-b0c1-b976eb7cb467" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/countries/bcb7245f-37e3-4e91-b7f1-ca382cf13e13"
+    "http://localhost/api/v1/countries/3359e0e1-e154-41f8-b0c1-b976eb7cb467"
 );
 
 const headers = {
@@ -2075,10 +2094,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="id"                data-endpoint="GETapi-v1-countries--id-"
-               value="bcb7245f-37e3-4e91-b7f1-ca382cf13e13"
+               value="3359e0e1-e154-41f8-b0c1-b976eb7cb467"
                data-component="url">
     <br>
-<p>The ID of the country. Example: <code>bcb7245f-37e3-4e91-b7f1-ca382cf13e13</code></p>
+<p>The ID of the country. Example: <code>3359e0e1-e154-41f8-b0c1-b976eb7cb467</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>country</code></b>&nbsp;&nbsp;
@@ -2589,8 +2608,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"currency_code\": \"bng\",
     \"purpose\": \"Lunch payment\",
     \"description\": \"Payment for team lunch at the cafeteria\",
-    \"is_negotiable\": true,
-    \"status\": \"pending\",
+    \"is_negotiable\": false,
+    \"status\": \"cancelled\",
     \"expires_at\": \"2025-09-15T12:00:00Z\",
     \"metadata\": {
         \"restaurant\": \"Cafe Royal\",
@@ -2617,8 +2636,8 @@ let body = {
     "currency_code": "bng",
     "purpose": "Lunch payment",
     "description": "Payment for team lunch at the cafeteria",
-    "is_negotiable": true,
-    "status": "pending",
+    "is_negotiable": false,
+    "status": "cancelled",
     "expires_at": "2025-09-15T12:00:00Z",
     "metadata": {
         "restaurant": "Cafe Royal",
@@ -2853,7 +2872,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>true</code></p>
+<p>Example: <code>false</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>status</code></b>&nbsp;&nbsp;
@@ -2861,10 +2880,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="POSTapi-v1-payment-requests"
-               value="pending"
+               value="cancelled"
                data-component="body">
     <br>
-<p>Example: <code>pending</code></p>
+<p>Example: <code>cancelled</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>pending</code></li> <li><code>paid</code></li> <li><code>cancelled</code></li> <li><code>expired</code></li></ul>
         </div>
@@ -2938,7 +2957,7 @@ Must be one of:
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/payment-requests/architecto?include=author" \
+    --get "http://localhost/api/v1/payment-requests/0198b21f-6d55-73d3-8c88-a05996bba329?include=author" \
     --header "Authorization: Bearer Bearer {YOUR_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -2946,7 +2965,7 @@ Must be one of:
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/payment-requests/architecto"
+    "http://localhost/api/v1/payment-requests/0198b21f-6d55-73d3-8c88-a05996bba329"
 );
 
 const params = {
@@ -3121,10 +3140,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="uuid_id"                data-endpoint="GETapi-v1-payment-requests--uuid_id-"
-               value="architecto"
+               value="0198b21f-6d55-73d3-8c88-a05996bba329"
                data-component="url">
     <br>
-<p>The ID of the uuid. Example: <code>architecto</code></p>
+<p>The ID of the uuid. Example: <code>0198b21f-6d55-73d3-8c88-a05996bba329</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>uuid</code></b>&nbsp;&nbsp;
@@ -3166,7 +3185,7 @@ and paid payment requests cannot be deleted.</p>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://localhost/api/v1/payment-requests/architecto" \
+    "http://localhost/api/v1/payment-requests/0198b21f-6d55-73d3-8c88-a05996bba329" \
     --header "Authorization: Bearer Bearer {YOUR_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3174,7 +3193,7 @@ and paid payment requests cannot be deleted.</p>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/payment-requests/architecto"
+    "http://localhost/api/v1/payment-requests/0198b21f-6d55-73d3-8c88-a05996bba329"
 );
 
 const headers = {
@@ -3322,10 +3341,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="uuid_id"                data-endpoint="DELETEapi-v1-payment-requests--uuid_id-"
-               value="architecto"
+               value="0198b21f-6d55-73d3-8c88-a05996bba329"
                data-component="url">
     <br>
-<p>The ID of the uuid. Example: <code>architecto</code></p>
+<p>The ID of the uuid. Example: <code>0198b21f-6d55-73d3-8c88-a05996bba329</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>uuid</code></b>&nbsp;&nbsp;
@@ -3355,7 +3374,7 @@ Users can only replace their own payment requests, and paid payment requests can
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "http://localhost/api/v1/payment-requests/architecto" \
+    "http://localhost/api/v1/payment-requests/0198b21f-6d55-73d3-8c88-a05996bba329" \
     --header "Authorization: Bearer Bearer {YOUR_TOKEN}" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
@@ -3364,15 +3383,15 @@ Users can only replace their own payment requests, and paid payment requests can
     --form "purpose=Replaced lunch payment"\
     --form "description=Completely replaced payment for team lunch"\
     --form "is_negotiable=1"\
-    --form "status=pending"\
+    --form "status=paid"\
     --form "expires_at=2025-11-15T12:00:00Z"\
     --form "negotiable="\
-    --form "image=@/private/var/folders/bd/x67xzw0s72321v82bxt7z2_40000gp/T/php35qyVz" </code></pre></div>
+    --form "image=@/private/var/folders/bd/x67xzw0s72321v82bxt7z2_40000gp/T/phpec8lwR" </code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/payment-requests/architecto"
+    "http://localhost/api/v1/payment-requests/0198b21f-6d55-73d3-8c88-a05996bba329"
 );
 
 const headers = {
@@ -3387,7 +3406,7 @@ body.append('currency_code', 'bng');
 body.append('purpose', 'Replaced lunch payment');
 body.append('description', 'Completely replaced payment for team lunch');
 body.append('is_negotiable', '1');
-body.append('status', 'pending');
+body.append('status', 'paid');
 body.append('expires_at', '2025-11-15T12:00:00Z');
 body.append('negotiable', '');
 body.append('image', document.querySelector('input[name="image"]').files[0]);
@@ -3558,10 +3577,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="uuid_id"                data-endpoint="PUTapi-v1-payment-requests--uuid_id-"
-               value="architecto"
+               value="0198b21f-6d55-73d3-8c88-a05996bba329"
                data-component="url">
     <br>
-<p>The ID of the uuid. Example: <code>architecto</code></p>
+<p>The ID of the uuid. Example: <code>0198b21f-6d55-73d3-8c88-a05996bba329</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>uuid</code></b>&nbsp;&nbsp;
@@ -3646,10 +3665,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="PUTapi-v1-payment-requests--uuid_id-"
-               value="pending"
+               value="paid"
                data-component="body">
     <br>
-<p>Example: <code>pending</code></p>
+<p>Example: <code>paid</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>pending</code></li> <li><code>paid</code></li> <li><code>cancelled</code></li> <li><code>expired</code></li></ul>
         </div>
@@ -3684,7 +3703,7 @@ Must be one of:
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 2048 kilobytes. Example: <code>/private/var/folders/bd/x67xzw0s72321v82bxt7z2_40000gp/T/php35qyVz</code></p>
+<p>Must be an image. Must not be greater than 2048 kilobytes. Example: <code>/private/var/folders/bd/x67xzw0s72321v82bxt7z2_40000gp/T/phpec8lwR</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>negotiable</code></b>&nbsp;&nbsp;
@@ -3724,7 +3743,7 @@ Users can only update their own payment requests, and paid payment requests cann
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PATCH \
-    "http://localhost/api/v1/payment-requests/architecto" \
+    "http://localhost/api/v1/payment-requests/0198b21f-6d55-73d3-8c88-a05996bba329" \
     --header "Authorization: Bearer Bearer {YOUR_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -3748,7 +3767,7 @@ Users can only update their own payment requests, and paid payment requests cann
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/payment-requests/architecto"
+    "http://localhost/api/v1/payment-requests/0198b21f-6d55-73d3-8c88-a05996bba329"
 );
 
 const headers = {
@@ -3944,10 +3963,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="uuid_id"                data-endpoint="PATCHapi-v1-payment-requests--uuid_id-"
-               value="architecto"
+               value="0198b21f-6d55-73d3-8c88-a05996bba329"
                data-component="url">
     <br>
-<p>The ID of the uuid. Example: <code>architecto</code></p>
+<p>The ID of the uuid. Example: <code>0198b21f-6d55-73d3-8c88-a05996bba329</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>uuid</code></b>&nbsp;&nbsp;
@@ -4113,6 +4132,885 @@ Must be one of:
         </label>
     <br>
 <p>optional Whether the amount is negotiable. Example: <code>true</code></p>
+        </div>
+        </form>
+
+                    <h2 id="payment-requests-POSTapi-v1-payment-requests--uuid_id--settle">Settle a payment request</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>Initiate payment for a specific payment request. This creates a payment record
+and initiates the payment process with the selected payment provider.</p>
+
+<span id="example-requests-POSTapi-v1-payment-requests--uuid_id--settle">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost/api/v1/payment-requests/0198b21f-6d55-73d3-8c88-a05996bba329/settle" \
+    --header "Authorization: Bearer Bearer {YOUR_TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"amount\": \"120.50\",
+    \"payment_method\": \"mobile_money\",
+    \"phone_number\": \"+233201234567\",
+    \"account_number\": \"1234567890\",
+    \"callback_url\": \"https:\\/\\/myapp.com\\/payment\\/callback\",
+    \"metadata\": {
+        \"note\": \"Payment for lunch\"
+    }
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/v1/payment-requests/0198b21f-6d55-73d3-8c88-a05996bba329/settle"
+);
+
+const headers = {
+    "Authorization": "Bearer Bearer {YOUR_TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "amount": "120.50",
+    "payment_method": "mobile_money",
+    "phone_number": "+233201234567",
+    "account_number": "1234567890",
+    "callback_url": "https:\/\/myapp.com\/payment\/callback",
+    "metadata": {
+        "note": "Payment for lunch"
+    }
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-v1-payment-requests--uuid_id--settle">
+            <blockquote>
+            <p>Example response (200, Settlement initiated successfully):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: {
+        &quot;type&quot;: &quot;payment&quot;,
+        &quot;id&quot;: &quot;9d2f8e1a-5c3b-4a7d-8f9e-1a2b3c4d5e6f&quot;,
+        &quot;attributes&quot;: {
+            &quot;amount&quot;: &quot;150.00&quot;,
+            &quot;formattedAmount&quot;: &quot;GHS 150.00&quot;,
+            &quot;currencyCode&quot;: &quot;GHS&quot;,
+            &quot;status&quot;: &quot;processing&quot;,
+            &quot;paymentMethod&quot;: &quot;mobile_money&quot;,
+            &quot;phoneNumber&quot;: &quot;+233201234567&quot;,
+            &quot;provider&quot;: &quot;dummy&quot;,
+            &quot;providerReference&quot;: &quot;DUMMY_abc123_1692179400&quot;,
+            &quot;authorizationUrl&quot;: &quot;https://dummy-payment.test/pay?reference=DUMMY_abc123_1692179400&amp;payment_id=9d2f8e1a-5c3b-4a7d-8f9e-1a2b3c4d5e6f&quot;,
+            &quot;accessCode&quot;: &quot;dummy_access_92179400&quot;,
+            &quot;isCompleted&quot;: false,
+            &quot;isFailed&quot;: false,
+            &quot;isPending&quot;: true,
+            &quot;initiatedAt&quot;: &quot;2025-08-16T08:30:00Z&quot;,
+            &quot;createdAt&quot;: &quot;2025-08-16T08:30:00Z&quot;,
+            &quot;updatedAt&quot;: &quot;2025-08-16T08:30:00Z&quot;
+        },
+        &quot;relationships&quot;: {
+            &quot;user&quot;: {
+                &quot;data&quot;: {
+                    &quot;type&quot;: &quot;user&quot;,
+                    &quot;id&quot;: 2
+                },
+                &quot;links&quot;: {
+                    &quot;self&quot;: &quot;/api/v1/users/2&quot;
+                }
+            },
+            &quot;paymentRequest&quot;: {
+                &quot;data&quot;: {
+                    &quot;type&quot;: &quot;paymentRequest&quot;,
+                    &quot;id&quot;: &quot;f47ac10b-58cc-4372-a567-0e02b2c3d479&quot;
+                },
+                &quot;links&quot;: {
+                    &quot;self&quot;: &quot;/api/v1/payment-requests/f47ac10b-58cc-4372-a567-0e02b2c3d479&quot;
+                }
+            }
+        },
+        &quot;links&quot;: {
+            &quot;self&quot;: &quot;/api/v1/payments/9d2f8e1a-5c3b-4a7d-8f9e-1a2b3c4d5e6f&quot;
+        }
+    },
+    &quot;message&quot;: &quot;Payment settlement initiated successfully&quot;,
+    &quot;status&quot;: 200
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (403, Cannot settle own payment request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;You cannot pay your own payment request&quot;,
+    &quot;status&quot;: 403
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, Payment request not found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Payment request not found&quot;,
+    &quot;status&quot;: 404
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (410, Payment request expired):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Payment request has expired&quot;,
+    &quot;status&quot;: 410
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422, Validation error):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Validation failed&quot;,
+    &quot;errors&quot;: {
+        &quot;payment_method&quot;: [
+            &quot;Payment method is required.&quot;
+        ],
+        &quot;phone_number&quot;: [
+            &quot;Phone number is required for mobile money payments.&quot;
+        ]
+    },
+    &quot;status&quot;: 422
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-v1-payment-requests--uuid_id--settle" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-v1-payment-requests--uuid_id--settle"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-payment-requests--uuid_id--settle"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-v1-payment-requests--uuid_id--settle" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v1-payment-requests--uuid_id--settle">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-v1-payment-requests--uuid_id--settle" data-method="POST"
+      data-path="api/v1/payment-requests/{uuid_id}/settle"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-payment-requests--uuid_id--settle', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-v1-payment-requests--uuid_id--settle"
+                    onclick="tryItOut('POSTapi-v1-payment-requests--uuid_id--settle');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-v1-payment-requests--uuid_id--settle"
+                    onclick="cancelTryOut('POSTapi-v1-payment-requests--uuid_id--settle');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-v1-payment-requests--uuid_id--settle"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/v1/payment-requests/{uuid_id}/settle</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="POSTapi-v1-payment-requests--uuid_id--settle"
+               value="Bearer Bearer {YOUR_TOKEN}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer Bearer {YOUR_TOKEN}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-v1-payment-requests--uuid_id--settle"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-v1-payment-requests--uuid_id--settle"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>uuid_id</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="uuid_id"                data-endpoint="POSTapi-v1-payment-requests--uuid_id--settle"
+               value="0198b21f-6d55-73d3-8c88-a05996bba329"
+               data-component="url">
+    <br>
+<p>The ID of the uuid. Example: <code>0198b21f-6d55-73d3-8c88-a05996bba329</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>uuid</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="uuid"                data-endpoint="POSTapi-v1-payment-requests--uuid_id--settle"
+               value="f47ac10b-58cc-4372-a567-0e02b2c3d479"
+               data-component="url">
+    <br>
+<p>The UUID of the payment request to settle. Example: <code>f47ac10b-58cc-4372-a567-0e02b2c3d479</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>amount</code></b>&nbsp;&nbsp;
+<small>numeric</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="amount"                data-endpoint="POSTapi-v1-payment-requests--uuid_id--settle"
+               value="120.50"
+               data-component="body">
+    <br>
+<p>optional Custom amount for negotiable payment requests. Example: <code>120.50</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>payment_method</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="payment_method"                data-endpoint="POSTapi-v1-payment-requests--uuid_id--settle"
+               value="mobile_money"
+               data-component="body">
+    <br>
+<p>The payment method to use. Example: <code>mobile_money</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>phone_number</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="phone_number"                data-endpoint="POSTapi-v1-payment-requests--uuid_id--settle"
+               value="+233201234567"
+               data-component="body">
+    <br>
+<p>The phone number for mobile money payments. Example: <code>+233201234567</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>account_number</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="account_number"                data-endpoint="POSTapi-v1-payment-requests--uuid_id--settle"
+               value="1234567890"
+               data-component="body">
+    <br>
+<p>optional Account number for bank transfers. Example: <code>1234567890</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>callback_url</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="callback_url"                data-endpoint="POSTapi-v1-payment-requests--uuid_id--settle"
+               value="https://myapp.com/payment/callback"
+               data-component="body">
+    <br>
+<p>optional URL to redirect to after payment. Example: <code>https://myapp.com/payment/callback</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>metadata</code></b>&nbsp;&nbsp;
+<small>object</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="metadata"                data-endpoint="POSTapi-v1-payment-requests--uuid_id--settle"
+               value=""
+               data-component="body">
+    <br>
+<p>optional Additional payment metadata.</p>
+        </div>
+        </form>
+
+                <h1 id="payment-webhooks">Payment Webhooks</h1>
+
+    
+
+                                <h2 id="payment-webhooks-POSTapi-v1-webhooks-payment--provider-">Handle payment webhook from providers.</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>This endpoint receives webhook notifications from payment providers
+when payment status changes occur.</p>
+
+<span id="example-requests-POSTapi-v1-webhooks-payment--provider-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost/api/v1/webhooks/payment/dummy" \
+    --header "Authorization: Bearer Bearer {YOUR_TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/v1/webhooks/payment/dummy"
+);
+
+const headers = {
+    "Authorization": "Bearer Bearer {YOUR_TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-v1-webhooks-payment--provider-">
+            <blockquote>
+            <p>Example response (200, Webhook processed successfully):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;status&quot;: &quot;success&quot;,
+    &quot;message&quot;: &quot;Webhook processed successfully&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Invalid webhook data):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;status&quot;: &quot;error&quot;,
+    &quot;message&quot;: &quot;Invalid webhook data&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, Unknown provider):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;status&quot;: &quot;error&quot;,
+    &quot;message&quot;: &quot;Unknown payment provider&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-v1-webhooks-payment--provider-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-v1-webhooks-payment--provider-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-webhooks-payment--provider-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-v1-webhooks-payment--provider-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v1-webhooks-payment--provider-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-v1-webhooks-payment--provider-" data-method="POST"
+      data-path="api/v1/webhooks/payment/{provider}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-webhooks-payment--provider-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-v1-webhooks-payment--provider-"
+                    onclick="tryItOut('POSTapi-v1-webhooks-payment--provider-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-v1-webhooks-payment--provider-"
+                    onclick="cancelTryOut('POSTapi-v1-webhooks-payment--provider-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-v1-webhooks-payment--provider-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/v1/webhooks/payment/{provider}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="POSTapi-v1-webhooks-payment--provider-"
+               value="Bearer Bearer {YOUR_TOKEN}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer Bearer {YOUR_TOKEN}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-v1-webhooks-payment--provider-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-v1-webhooks-payment--provider-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>provider</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="provider"                data-endpoint="POSTapi-v1-webhooks-payment--provider-"
+               value="dummy"
+               data-component="url">
+    <br>
+<p>The payment provider name (dummy, paystack, flutterwave, etc.). Example: <code>dummy</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="payment-webhooks-POSTapi-v1-webhooks-payment--provider---event-">Handle specific webhook events (if providers support it).</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>Some providers might send different webhook URLs for different events.
+This method handles event-specific webhooks.</p>
+
+<span id="example-requests-POSTapi-v1-webhooks-payment--provider---event-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost/api/v1/webhooks/payment/paystack/payment.success" \
+    --header "Authorization: Bearer Bearer {YOUR_TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/v1/webhooks/payment/paystack/payment.success"
+);
+
+const headers = {
+    "Authorization": "Bearer Bearer {YOUR_TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-v1-webhooks-payment--provider---event-">
+            <blockquote>
+            <p>Example response (200, Event webhook processed successfully):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;status&quot;: &quot;success&quot;,
+    &quot;message&quot;: &quot;Webhook processed successfully&quot;,
+    &quot;payment_id&quot;: &quot;9d2f8e1a-5c3b-4a7d-8f9e-1a2b3c4d5e6f&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Invalid webhook data):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;status&quot;: &quot;error&quot;,
+    &quot;message&quot;: &quot;Invalid webhook data&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, Unknown provider):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;status&quot;: &quot;error&quot;,
+    &quot;message&quot;: &quot;Unknown payment provider&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-v1-webhooks-payment--provider---event-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-v1-webhooks-payment--provider---event-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-webhooks-payment--provider---event-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-v1-webhooks-payment--provider---event-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v1-webhooks-payment--provider---event-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-v1-webhooks-payment--provider---event-" data-method="POST"
+      data-path="api/v1/webhooks/payment/{provider}/{event}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-webhooks-payment--provider---event-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-v1-webhooks-payment--provider---event-"
+                    onclick="tryItOut('POSTapi-v1-webhooks-payment--provider---event-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-v1-webhooks-payment--provider---event-"
+                    onclick="cancelTryOut('POSTapi-v1-webhooks-payment--provider---event-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-v1-webhooks-payment--provider---event-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/v1/webhooks/payment/{provider}/{event}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="POSTapi-v1-webhooks-payment--provider---event-"
+               value="Bearer Bearer {YOUR_TOKEN}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer Bearer {YOUR_TOKEN}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-v1-webhooks-payment--provider---event-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-v1-webhooks-payment--provider---event-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>provider</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="provider"                data-endpoint="POSTapi-v1-webhooks-payment--provider---event-"
+               value="paystack"
+               data-component="url">
+    <br>
+<p>The payment provider name. Example: <code>paystack</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>event</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="event"                data-endpoint="POSTapi-v1-webhooks-payment--provider---event-"
+               value="payment.success"
+               data-component="url">
+    <br>
+<p>The event type (payment.success, payment.failed, etc.). Example: <code>payment.success</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="payment-webhooks-POSTapi-v1-webhooks-payment--provider--test">Test webhook endpoint for development.</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>This endpoint can be used to test webhook processing during development.</p>
+
+<span id="example-requests-POSTapi-v1-webhooks-payment--provider--test">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost/api/v1/webhooks/payment/dummy/test" \
+    --header "Authorization: Bearer Bearer {YOUR_TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"reference\": \"DUMMY_123_456\",
+    \"status\": \"success\",
+    \"amount\": \"100.50\",
+    \"currency\": \"GHS\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/v1/webhooks/payment/dummy/test"
+);
+
+const headers = {
+    "Authorization": "Bearer Bearer {YOUR_TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "reference": "DUMMY_123_456",
+    "status": "success",
+    "amount": "100.50",
+    "currency": "GHS"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-v1-webhooks-payment--provider--test">
+</span>
+<span id="execution-results-POSTapi-v1-webhooks-payment--provider--test" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-v1-webhooks-payment--provider--test"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-webhooks-payment--provider--test"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-v1-webhooks-payment--provider--test" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v1-webhooks-payment--provider--test">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-v1-webhooks-payment--provider--test" data-method="POST"
+      data-path="api/v1/webhooks/payment/{provider}/test"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-webhooks-payment--provider--test', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-v1-webhooks-payment--provider--test"
+                    onclick="tryItOut('POSTapi-v1-webhooks-payment--provider--test');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-v1-webhooks-payment--provider--test"
+                    onclick="cancelTryOut('POSTapi-v1-webhooks-payment--provider--test');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-v1-webhooks-payment--provider--test"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/v1/webhooks/payment/{provider}/test</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="POSTapi-v1-webhooks-payment--provider--test"
+               value="Bearer Bearer {YOUR_TOKEN}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer Bearer {YOUR_TOKEN}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-v1-webhooks-payment--provider--test"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-v1-webhooks-payment--provider--test"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>provider</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="provider"                data-endpoint="POSTapi-v1-webhooks-payment--provider--test"
+               value="dummy"
+               data-component="url">
+    <br>
+<p>The payment provider name. Example: <code>dummy</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>reference</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="reference"                data-endpoint="POSTapi-v1-webhooks-payment--provider--test"
+               value="DUMMY_123_456"
+               data-component="body">
+    <br>
+<p>The payment reference to test. Example: <code>DUMMY_123_456</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>status</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="status"                data-endpoint="POSTapi-v1-webhooks-payment--provider--test"
+               value="success"
+               data-component="body">
+    <br>
+<p>The payment status to simulate. Example: <code>success</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>amount</code></b>&nbsp;&nbsp;
+<small>numeric</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="amount"                data-endpoint="POSTapi-v1-webhooks-payment--provider--test"
+               value="100.50"
+               data-component="body">
+    <br>
+<p>The payment amount. Example: <code>100.50</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>currency</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="currency"                data-endpoint="POSTapi-v1-webhooks-payment--provider--test"
+               value="GHS"
+               data-component="body">
+    <br>
+<p>The currency code. Example: <code>GHS</code></p>
         </div>
         </form>
 
