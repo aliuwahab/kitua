@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
@@ -63,6 +64,30 @@ class PaymentRequest extends Model implements HasMedia
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get all payments for this payment request.
+     */
+    public function payments(): MorphMany
+    {
+        return $this->morphMany(Payment::class, 'payable');
+    }
+
+    /**
+     * Get completed payments for this payment request.
+     */
+    public function completedPayments(): MorphMany
+    {
+        return $this->payments()->where('status', 'completed');
+    }
+
+    /**
+     * Get pending payments for this payment request.
+     */
+    public function pendingPayments(): MorphMany
+    {
+        return $this->payments()->whereIn('status', ['pending', 'processing']);
     }
 
     /**

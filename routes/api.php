@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\CountryController;
 use App\Http\Controllers\Api\V1\PaymentRequestController;
+use App\Http\Controllers\Api\V1\PaymentWebhookController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -43,6 +44,15 @@ Route::prefix('v1')->group(function () {
     // Public Routes (No Authentication Required)
     Route::get('/countries', [CountryController::class, 'index'])->name('countries.index');
     Route::get('/countries/{country}', [CountryController::class, 'show'])->name('countries.show');
+    
+    // Webhook Routes (No Authentication Required)
+    Route::prefix('webhooks')->name('webhooks.')->group(function () {
+        Route::post('/payment/{provider}', [PaymentWebhookController::class, 'handle'])->name('payment');
+        Route::post('/payment/{provider}/{event}', [PaymentWebhookController::class, 'handleEvent'])->name('payment.event');
+        
+        // Test webhook endpoint for development
+        Route::post('/payment/{provider}/test', [PaymentWebhookController::class, 'test'])->name('payment.test');
+    });
 
     // Protected Routes (Authenticated)
     Route::middleware('auth:sanctum')->group(function () {
@@ -87,6 +97,9 @@ Route::prefix('v1')->group(function () {
         // Separate PUT and PATCH operations (masterclass pattern)
         Route::put('payment-requests/{uuid}', [PaymentRequestController::class, 'replace']);
         Route::patch('payment-requests/{uuid}', [PaymentRequestController::class, 'update']);
+        
+        // Payment Settlement Route
+        Route::post('payment-requests/{uuid}/settle', [PaymentRequestController::class, 'settle'])->name('payment-requests.settle');
 
         // TODO: Add other protected routes here
         // - Payment Accounts management

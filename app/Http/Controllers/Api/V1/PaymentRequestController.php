@@ -5,16 +5,20 @@ namespace App\Http\Controllers\Api\V1;
 use App\Actions\PaymentRequest\CreatePaymentRequest;
 use App\Actions\PaymentRequest\UpdatePaymentRequest;
 use App\Actions\PaymentRequest\DeletePaymentRequest;
+use App\Actions\Payment\SettlePayment;
 use App\Http\Filters\V1\PaymentRequestFilter;
 use App\Http\Requests\Api\V1\StorePaymentRequestRequest;
 use App\Http\Requests\Api\V1\UpdatePaymentRequestRequest;
 use App\Http\Requests\Api\V1\ReplacePaymentRequestRequest;
+use App\Http\Requests\Api\V1\SettlePaymentRequest;
 use App\Http\Resources\V1\PaymentRequestResource;
+use App\Http\Resources\V1\PaymentResource;
 use App\Models\PaymentRequest;
 use App\Policies\V1\PaymentRequestPolicy;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
 
 class PaymentRequestController extends ApiController
 {
@@ -23,7 +27,8 @@ class PaymentRequestController extends ApiController
     public function __construct(
         private readonly CreatePaymentRequest $createPaymentRequest,
         private readonly UpdatePaymentRequest $updatePaymentRequest,
-        private readonly DeletePaymentRequest $deletePaymentRequest
+        private readonly DeletePaymentRequest $deletePaymentRequest,
+        private readonly SettlePayment $settlePayment
     ) {}
 
     /**
@@ -557,5 +562,136 @@ class PaymentRequestController extends ApiController
         }
 
         return $this->notFound('Payment request not found');
+    }
+
+    /**
+     * Settle a payment request
+     * 
+     * Initiate payment for a specific payment request. This creates a payment record 
+     * and initiates the payment process with the selected payment provider.
+     * 
+     * @group Payment Requests
+     * @authenticated
+     * 
+     * @urlParam uuid string required The UUID of the payment request to settle. Example: f47ac10b-58cc-4372-a567-0e02b2c3d479
+     * @bodyParam payment_method string required The payment method to use. Example: mobile_money
+     * @bodyParam phone_number string required The phone number for mobile money payments. Example: +233201234567
+     * @bodyParam amount numeric optional Custom amount for negotiable payment requests. Example: 120.50
+     * @bodyParam callback_url string optional URL to redirect to after payment. Example: https://myapp.com/payment/callback
+     * @bodyParam account_number string optional Account number for bank transfers. Example: 1234567890
+     * @bodyParam metadata object optional Additional payment metadata. Example: {"note": "Payment for lunch"}
+     * 
+     * @response status=200 scenario="Settlement initiated successfully" {
+     *   "data": {
+     *     "type": "payment",
+     *     "id": "9d2f8e1a-5c3b-4a7d-8f9e-1a2b3c4d5e6f",
+     *     "attributes": {
+     *       "amount": "150.00",
+     *       "formattedAmount": "GHS 150.00",
+     *       "currencyCode": "GHS",
+     *       "status": "processing",
+     *       "paymentMethod": "mobile_money",
+     *       "phoneNumber": "+233201234567",
+     *       "provider": "dummy",
+     *       "providerReference": "DUMMY_abc123_1692179400",
+     *       "authorizationUrl": "https://dummy-payment.test/pay?reference=DUMMY_abc123_1692179400&payment_id=9d2f8e1a-5c3b-4a7d-8f9e-1a2b3c4d5e6f",
+     *       "accessCode": "dummy_access_92179400",
+     *       "isCompleted": false,
+     *       "isFailed": false,
+     *       "isPending": true,
+     *       "initiatedAt": "2025-08-16T08:30:00Z",
+     *       "createdAt": "2025-08-16T08:30:00Z",
+     *       "updatedAt": "2025-08-16T08:30:00Z"
+     *     },
+     *     "relationships": {
+     *       "user": {
+     *         "data": {
+     *           "type": "user",
+     *           "id": 2
+     *         },
+     *         "links": {
+     *           "self": "/api/v1/users/2"
+     *         }
+     *       },
+     *       "paymentRequest": {
+     *         "data": {
+     *           "type": "paymentRequest",
+     *           "id": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+     *         },
+     *         "links": {
+     *           "self": "/api/v1/payment-requests/f47ac10b-58cc-4372-a567-0e02b2c3d479"
+     *         }
+     *       }
+     *     },
+     *     "links": {
+     *       "self": "/api/v1/payments/9d2f8e1a-5c3b-4a7d-8f9e-1a2b3c4d5e6f"
+     *     }
+     *   },
+     *   "message": "Payment settlement initiated successfully",
+     *   "status": 200
+     * }
+     * 
+     * @response status=422 scenario="Validation error" {
+     *   "message": "Validation failed",
+     *   "errors": {
+     *     "payment_method": ["Payment method is required."],
+     *     "phone_number": ["Phone number is required for mobile money payments."]
+     *   },
+     *   "status": 422
+     * }
+     * 
+     * @response status=403 scenario="Cannot settle own payment request" {
+     *   "message": "You cannot pay your own payment request",
+     *   "status": 403
+     * }
+     * 
+     * @response status=404 scenario="Payment request not found" {
+     *   "message": "Payment request not found",
+     *   "status": 404
+     * }
+     * 
+     * @response status=410 scenario="Payment request expired" {
+     *   "message": "Payment request has expired",
+     *   "status": 410
+     * }
+     */
+    public function settle(SettlePaymentRequest $request, PaymentRequest $uuid): JsonResponse
+    {
+        try {
+            // Execute payment settlement
+            $payment = $this->settlePayment->execute(
+                $uuid,
+                $request->user(),
+                $request->getPaymentData()
+            );
+
+            $paymentResource = new PaymentResource($payment->load('user', 'payable'));
+            
+            return response()->json([
+                'status' => 200,
+                'message' => 'Payment settlement initiated successfully',
+                'data' => $paymentResource->toArray(request())
+            ], 200);
+
+        } catch (ValidationException $e) {
+            return $this->error(
+                'Validation failed',
+                422,
+                $e->errors()
+            );
+
+        } catch (\Exception $e) {
+            // Map exception codes to appropriate HTTP status codes
+            $statusCode = 500; // Default to internal server error
+            $message = $e->getMessage();
+            
+            // Handle database constraint violations
+            if (str_contains($message, 'SQLSTATE[23000]')) {
+                $statusCode = 422; // Unprocessable Entity for data validation errors
+                $message = 'A payment already exists for this request';
+            }
+            
+            return $this->error($message, $statusCode);
+        }
     }
 }
